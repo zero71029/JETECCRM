@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <title>✿海貓食屋✿廠商後台</title>
+  <title>CRM</title>
   <style>
     body {
       background-color:#0d1326;
@@ -28,7 +28,7 @@
 
 <div id="timeCenter">Error</div>
 <script src="${pageContext.request.contextPath}/js/time.js"></script>
-<form action="${pageContext.request.contextPath}/backstage/home" method="post">
+<form action="${pageContext.request.contextPath}/home" method="post">
   <input type="text" placeholder="帳號" name="userName" value="AAA@AAA.com"><br>
   <input type="password" placeholder="密碼"name="userPassword" value="AAA"><br>
   <input type="submit" value="登入">

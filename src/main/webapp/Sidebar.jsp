@@ -1,12 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 8
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <!-- <%-- 頁首--%> -->
+    <header class="container-fluid mainColor headtop">
+        <div class="row">
+            <a href='${pageContext.request.contextPath}/backstage/shopBack.jsp' class='col-md-2'>CRM</a>
+            <div class='col-md-8'></div>
+            <span class='col-md-2' style="">${adminLogin.name} <a href="${pageContext.request.contextPath}/backstage/Signout">登出</a></span>
+        </div>
+
+    </header>
+    <!--側邊  -->
         <div class="col-md-2 navfix mainColor">
             <ul class="list-group">
                 <button class="list-group-item"
                     onclick="market()">
                     營銷模塊
                 </button>             
-                <button class="market">行銷計畫</button>                
+                <button class="market" onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/market'">行銷計畫</button>                
                 <button class="market">客戶開發</button>
                 
                 <button class="list-group-item"
@@ -43,9 +53,6 @@
                 $(".client").toggle();
                 $(".market").hide();
             }
-
-
-
         </script>
 
 

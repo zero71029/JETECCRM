@@ -36,16 +36,6 @@
                 </div>
             </div>
             <!-- <%-- 彈窗/////////////////////////////////////--%> -->
-
-
-
-            <!-- <%-- 頁首--%> -->
-            <header class="container-fluid mainColor headtop">
-                <a href='${pageContext.request.contextPath}/CRM.jsp' class='title' style=" text-decoration: none;">CRM</a>
-                <%-- <button class="userIcon"></button>--%>
-            </header>
-
-
             <!-- <%-- 插入側邊欄--%> -->
             <jsp:include page="/Sidebar.jsp"></jsp:include>
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
