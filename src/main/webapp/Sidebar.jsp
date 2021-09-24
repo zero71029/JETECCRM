@@ -16,7 +16,7 @@
                     onclick="market()">
                     營銷模塊
                 </button>             
-                <button class="market" onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/market'">行銷計畫</button>                
+                <button class="market" onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/MarketList'">行銷計畫</button>                
                 <button class="market">客戶開發</button>
                 
                 <button class="list-group-item"

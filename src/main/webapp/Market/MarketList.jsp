@@ -18,23 +18,80 @@
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
             <title>CRM客戶管理系統</title>
-        </head>
+            <style>
+                .item:hover {
+                    background-color: #afe3d5;
+                }
+            </style>
         </head>
 
         <body>
-
-
             <!-- <%-- 插入側邊欄--%> -->
             <jsp:include page="/Sidebar.jsp"></jsp:include>
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
             <div class="container-fluid">
                 <div class="row justify-content-end">
                     <div class="col-md-10">
+                        <!-- <%-- 抬頭按鈕--%> -->
+                        <div class="row">
+                            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off"
+                                    onclick="javascript:location.href='${pageContext.request.contextPath}/Market/Market.jsp'">
+                                <label class="btn btn-outline-primary state1" for="btncheck1">新增</label>
+
+                                <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+                                <label class="btn btn-outline-primary state2" for="btncheck2" onclick="sta()">刪除</label>
+
+                                <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="btncheck3"
+                                    onclick="javascript:location.href='${pageContext.request.contextPath}/backstage/product?pag=1&state=2'">XXX</label>
+                            </div>
+                        </div> <!-- <%-- 抬頭按鈕--%> -->
+                        <div class="col-lg-5">
+                            <div class="input-group mb-3" style="width: 95%; padding-left: 50px;">
+                                <input type="text" class="form-control" placeholder=" 名稱 or 所有人"
+                                    aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-secondary" type="button" id="selectProduct">搜索</button>
+                            </div>
+                        </div>
                         <!-- <%-- 中間主體--%> -->
+
+
+                        <table class="Table table-striped orderTable">
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>名稱</td>
+                                <td>客戶</td>
+                                <td>負責人</td>
+                                <td>類型</td>
+                                <td>階段</td>
+                                <td>機率</td>
+                                <td>開始時間</td>
+                                <td>終止時間</td>
+                            </tr>
+                            <c:if test="${not empty list}">
+                                <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}" var="s">
+                                    <tr class="item">
+                                        <td><input type="checkbox"></td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.name}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.client}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.user}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.type}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.stage}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.clinch}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.createtime}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.endtime}</td>
+                                    </tr>
+                                </c:forEach>
+                            </c:if>
+                        </table>
 
                     </div>
                 </div>
             </div>
         </body>
+        <script>
+        </script>
+
 
         </html>
