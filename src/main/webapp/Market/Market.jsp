@@ -15,15 +15,27 @@
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.rtl.min.css">
             <!-- <%-- jQuery放這裡 --%> -->
             <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
+            <!-- <%-- jQueryUI放這裡 --%> -->
+            <link rel="stylesheet"
+                href="${pageContext.request.contextPath}/jquery-ui-192/css/base/jquery-ui-1.9.2.custom.css">
+            <script src="${pageContext.request.contextPath}/jquery-ui-192/js/jquery-ui-1.9.2.custom.js"></script>
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+
+
             <title>CRM客戶管理系統</title>
         </head>
-        </head>
+        <style>
+            .cell {
+                background-color: #CCC;
+            }
+
+            .cellFrom {
+                width: 33%;
+            }
+        </style>
 
         <body>
-
-
             <!-- <%-- 插入側邊欄--%> -->
             <jsp:include page="/Sidebar.jsp"></jsp:include>
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
@@ -31,32 +43,199 @@
                 <div class="row justify-content-end">
                     <div class="col-md-10">
                         <!-- <%-- 中間主體--%> -->
-                        <div class="row">
-                            <form action="${pageContext.request.contextPath}/CRM/SaveMarket" method="post">
-                                <input type="hidden" name="id" value="${bean.id}">
-                                <div class="row">
-                                    <div class="col-md-6">所有人<input type="text" name="user" style="width: 100%;"value="${bean.user}" maxlength="20" required></div>
-                                    <div class="col-md-6">名稱<input type="text" name="name" style="width: 100%;"  value="${bean.name}" maxlength="50" required></div>
+                        <br>
+                        <!-- ${pageContext.request.contextPath}/CRM/SaveMarket -->
+                        <form action="" method="post" class="basefrom g-3 needs-validation" novalidate>
+                            <div class="row">
+                                <input type="hidden" name="id" value="${bean.marketid}">
+                                <div class="row" style="text-align: center;">
+
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10"
+                                        style="background-color: red;font-size: 1.5rem;color: white;">銷售機會</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">開始日期<input type="date" name="createtime" style="width: 100%;" value="${bean.createtime}" required></div>
-                                    <div class="col-md-6">結束日期<input type="date" name="endtime" style="width: 100%;" value="${bean.endtime}" required></div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">機會名稱*</div>
+                                    <input type="text" class="col-md-9 form-control " name="name" value="${bean.name}"
+                                        maxlength="50" required style="width: 75%;">
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">成本<input type="number" name="cost" style="width: 100%;" value="${bean.cost}" required></div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">客戶*</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="client"
+                                        value="${bean.client}" maxlength="20" required>
+                                    <div class="col-md-1 cell">機會編號</div>
+                                    <div class="col-md-4">${bean.marketid}</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">描述<textarea name="message" id="message" maxlength="9000"
-                                            style="width: 100%; height: 150px;" maxlength="1000" required>${bean.message} </textarea><br><br>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">聯絡人</div>
+                                    <input type="text" class=" form-control cellFrom col-md-4" name="" value=""
+                                        maxlength="20" required>
+
+                                    <div class="col-md-1 cell">負責人*</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="user"
+                                        value="${bean.user}" maxlength="20" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">聯絡人電話</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="" value=""
+                                        maxlength="20">
+                                    <div class="col-md-1 cell">類型</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="type"
+                                        value="${bean.type}" maxlength="100">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">聯絡人Email</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="" value=""
+                                        maxlength="20">
+                                    <div class="col-md-1 cell">來源</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="source"
+                                        value="${bean.source}" maxlength="100">
+                                </div>
+                                <!-- ////////////////////////////////////////////////////////////////////////////////// -->
+                                <div class="row">&nbsp;</div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">金額</div>
+                                    <input type="number" class="col-md-4 form-control cellFrom" name="cost"
+                                        value="${bean.cost}" maxlength="30">
+                                    <div class="col-md-1 cell">成交機率</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="clinch"
+                                        value="${bean.clinch}" maxlength="20">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">需求</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="need"
+                                        value="${bean.need}" maxlength="20">
+                                    <div class="col-md-1 cell">階段</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="stage"
+                                        value="${bean.stage}" maxlength="20">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">ROI分析</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="roianalyze"
+                                        value="${bean.roianalyze}" maxlength="100">
+                                    <div class="col-md-1 cell">..</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom" name="" value=""
+                                        maxlength="50">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">開始時間</div>
+                                    <input type="text" class="col-md-4  form-control cellFrom CreateTime"
+                                        name="createtime" readonly value="${bean.createtime}">
+                                    <div class="col-md-1 cell">結束時間</div>
+                                    <input type="text" class="col-md-4 form-control cellFrom EndTime" name="endtime"
+                                        value="${bean.endtime}" readonly>
+                                </div>
+                                <div class="row">&nbsp;</div>
+                                <!-- /////////////////////////////////////////////////////////////////////////// -->
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">描述*</div>
+                                    <textarea name="message" class="col-md-9" id="message" maxlength="9000"
+                                        style=" height: 150px;" required>${bean.message} </textarea><br><br>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <button type="submit" style="width: 100%;" class="btn btn-primary"
+                                            onclick="return window.confirm('確定修改')">新增/修改</button>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">新增/修改</button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
+                        <!-- ///////////////////////////////////////////////////////////////////////////// -->
+                        <hr>
+                        <form action="${pageContext.request.contextPath}/CRM/SaveRemark" method="post"
+                            class="row g-3 needs-validation" novalidate>
+                            <div class="row">
+                                <input type="hidden" name="marketid" value="${bean.marketid}">
+                                <input type="hidden" name="user" value="灰灰">
 
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-mb-3">
+                                        <label for="validationTextarea" class="form-label">備註</label>
+                                        <textarea class="form-control " id="validationTextarea" required name="remark"
+                                            maxlength="200"></textarea>
+                                        <div class="invalid-feedback">須填寫</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button style="width: 100%;" class="btn btn-primary" onclick="">確認</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-7">內容</div>
+                            <div class="col-md-1">創建人 </div>
+                            <div class="col-md-1"> 創建時間</div>
+                            <div class="col-md-1"></div>
+                        </div>
+                        <br>
+                        <c:if test="${not empty bean.mrb}">
+                            <c:forEach varStatus="loop" begin="0" end="${bean.mrb.size()-1}" items="${bean.mrb}"
+                                var="s">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-7">${s.remark}</div>
+                                    <div class="col-md-1">${s.user}</div>
+                                    <div class="col-md-1">${s.createtime}</div>
+                                    <div class="col-md-1">remove</div>
+                                </div>
+                            </c:forEach>
+                        </c:if>
                     </div>
                 </div>
             </div>
         </body>
+        <script>
+            // 日期UI
+            $(function () {
+                $(".EndTime").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "yy-mm-dd"
+                });
+                $(".CreateTime").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "yy-mm-dd"
+                });
+            });
+            function basefrom() {
+                if (confirm("確定修改")) $(".basefrom").submit();
+            }
+            //表單驗證
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })()
+
+        </script>
 
         </html>

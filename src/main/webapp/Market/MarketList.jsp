@@ -73,14 +73,14 @@
                                 <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}" var="s">
                                     <tr class="item">
                                         <td><input type="checkbox"></td>
-                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.name}</td>
-                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.client}</td>
-                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.user}</td>
-                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.type}</td>
-                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.stage}</td>
-                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.clinch}</td>
-                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.createtime}</td>
-                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.id}'">${s.endtime}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.name}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.client}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.user}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.type}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.stage}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.clinch}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.createtime}</td>
+                                        <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.endtime}</td>
                                     </tr>
                                 </c:forEach>
                             </c:if>

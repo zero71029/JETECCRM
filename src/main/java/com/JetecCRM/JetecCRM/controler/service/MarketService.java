@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JetecCRM.JetecCRM.model.MarketBean;
+import com.JetecCRM.JetecCRM.model.MarketRemarkBean;
+import com.JetecCRM.JetecCRM.repository.MarketRemarkRepository;
 import com.JetecCRM.JetecCRM.repository.MarketRepository;
 
 @Service
@@ -15,6 +17,8 @@ import com.JetecCRM.JetecCRM.repository.MarketRepository;
 public class MarketService {
 	@Autowired
 	MarketRepository mr;
+	@Autowired
+	MarketRemarkRepository mrr;
 	public void save(MarketBean marketBean) {		
 		mr.save(marketBean);		
 	}
@@ -25,6 +29,10 @@ public class MarketService {
 /////////////////////////////////////////////////////////////////////////////////////
 	public MarketBean getById(Integer id) {
 		return mr.getById(id);
+	}
+/////////////////////////////////////////////////////////////////////////////////////	
+	public void SaveRemark(MarketRemarkBean mrb) {
+		mrr.save(mrb);		
 	}
 
 }

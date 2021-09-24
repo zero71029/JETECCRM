@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.JetecCRM.JetecCRM.controler.service.MarketService;
 import com.JetecCRM.JetecCRM.model.MarketBean;
+import com.JetecCRM.JetecCRM.model.MarketRemarkBean;
 
 @Controller
 @RequestMapping("/CRM")
@@ -32,9 +33,17 @@ public class MarketControler {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@RequestMapping("/Market/{id}")
-	public String Market(Model model,@PathVariable("id")Integer id) {
-		model.addAttribute("bean",ms.getById(id));
+	public String Market(Model model, @PathVariable("id") Integer id) {
+		model.addAttribute("bean", ms.getById(id));
 		return "/Market/Market";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@RequestMapping("/SaveRemark")
+	public String SaveRemark(MarketRemarkBean mrb) {
+		System.out.println("存備註");
+		ms.SaveRemark(mrb);
+		return "redirect:/CRM//Market/"+mrb.getMarketid();
 	}
 
 }
