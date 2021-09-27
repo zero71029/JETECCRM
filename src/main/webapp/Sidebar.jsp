@@ -16,14 +16,15 @@
                     onclick="market()">
                     營銷模塊
                 </button>             
-                <button class="market" onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/MarketList'">行銷計畫</button>                
+                <button class="market" onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/MarketList'" >銷售機會</button>                
                 <button class="market">潛在客戶</button>
                 
                 <button class="list-group-item"
                     onclick="client()">
                     客戶管理
                 </button>
-                <button class="client">客戶訊息</button>                
+                <button class="client">客戶訊息</button>
+                <button class="client">聯絡人</button>                
                 <button class="client">流失客戶</button>
                 <button class="list-group-item"
                     onclick="javascript:location.href='${pageContext.request.contextPath}/backstage/userList/0'">

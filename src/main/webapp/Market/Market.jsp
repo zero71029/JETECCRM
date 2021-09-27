@@ -44,21 +44,28 @@
                     <div class="col-md-10">
                         <!-- <%-- 中間主體--%> -->
                         <br>
-                        <!-- ${pageContext.request.contextPath}/CRM/SaveMarket -->
-                        <form action="" method="post" class="basefrom g-3 needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-2">
+                                <a href="${pageContext.request.contextPath}/CRM/MarketList" style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
+                            </div>
+                        </div>
+                        <br>
+                        <form action="${pageContext.request.contextPath}/CRM/SaveMarket" method="post"
+                            class="basefrom g-3 needs-validation" novalidate>
                             <div class="row">
-                                <input type="hidden" name="id" value="${bean.marketid}">
+                                <input type="hidden" name="marketid" value="${bean.marketid}">
                                 <div class="row" style="text-align: center;">
 
                                     <div class="col-md-1"></div>
                                     <div class="col-md-10"
-                                        style="background-color: red;font-size: 1.5rem;color: white;">銷售機會</div>
+                                        style="background-color: blue;font-size: 1.5rem;color: white;border-radius: 5px 5px 0 0 ;">銷售機會</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">機會名稱*</div>
                                     <input type="text" class="col-md-9 form-control " name="name" value="${bean.name}"
-                                        maxlength="50" required style="width: 75%;">
+                                        maxlength="50" required style="width: 74%;">
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
@@ -72,7 +79,7 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">聯絡人</div>
                                     <input type="text" class=" form-control cellFrom col-md-4" name="" value=""
-                                        maxlength="20" required>
+                                        maxlength="20">
 
                                     <div class="col-md-1 cell">負責人*</div>
                                     <input type="text" class="col-md-4 form-control cellFrom" name="user"

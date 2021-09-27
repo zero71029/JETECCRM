@@ -1,18 +1,14 @@
 package com.JetecCRM.JetecCRM.model;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "marketremark")
@@ -26,7 +22,20 @@ public class MarketRemarkBean {
 	private Date createtime;//創建時間
 	
 
+	
+	@ManyToOne(targetEntity = MarketBean.class)
+	@JoinColumn(name = "marketid", referencedColumnName = "marketid", insertable = false, updatable = false)
+	private MarketBean mb;// 分類
+	
+	
+	
 
+	public MarketBean getMb() {
+		return mb;
+	}
+	public void setMb(MarketBean mb) {
+		this.mb = mb;
+	}
 	public Integer getMarketid() {
 		return marketid;
 	}

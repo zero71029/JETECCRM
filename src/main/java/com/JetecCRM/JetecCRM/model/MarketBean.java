@@ -38,8 +38,7 @@ public class MarketBean {
 
 	//
 	@JsonIgnore
-	@OneToMany(targetEntity = MarketRemarkBean.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "marketid", referencedColumnName = "marketid")
+	@OneToMany(mappedBy = "marketid", cascade = CascadeType.ALL)
 	private List<MarketRemarkBean> mrb;
 	
 	

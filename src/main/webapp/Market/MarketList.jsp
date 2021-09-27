@@ -44,7 +44,7 @@
 
                                 <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
                                 <label class="btn btn-outline-primary" for="btncheck3"
-                                    onclick="javascript:location.href='${pageContext.request.contextPath}/backstage/product?pag=1&state=2'">XXX</label>
+                                    onclick="">XXX</label>
                             </div>
                         </div> <!-- <%-- 抬頭按鈕--%> -->
                         <div class="col-lg-5">
@@ -72,7 +72,7 @@
                             <c:if test="${not empty list}">
                                 <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}" var="s">
                                     <tr class="item">
-                                        <td><input type="checkbox"></td>
+                                        <td><input type="checkbox" value="${s.marketid}" name="mak"></td>
                                         <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.name}</td>
                                         <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.client}</td>
                                         <td onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">${s.user}</td>
@@ -91,6 +91,26 @@
             </div>
         </body>
         <script>
+            // 勾選 
+            $("input[type=checkbox][name=mak]").change(function(){
+                console.log("ddddddddddddd");
+                
+
+
+
+
+            })
+            function sta(){
+                console.log("SSSSSSSSSSSSSSSSSSSSSSSS");
+                $("input[type=checkbox][name=mak]").each(function(index,value){
+                    console.log($("input[type=checkbox][name=mak]").val());
+                    console.log(value);
+                })
+
+
+
+            }
+
         </script>
 
 
