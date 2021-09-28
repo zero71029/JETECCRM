@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface MarketRemarkRepository extends JpaRepository<MarketRemarkBean, Integer>{
 List<MarketRemarkBean> findByMarketid(Integer marketid);
+
+
+void deleteByMarketid(Integer i);
 }

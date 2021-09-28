@@ -36,7 +36,7 @@
                         <div class="row">
                             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                                 <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off"
-                                    onclick="javascript:location.href='${pageContext.request.contextPath}/Market/Market.jsp'">
+                                    onclick="javascript:location.href='${pageContext.request.contextPath}/system/admin.jsp'">
                                 <label class="btn btn-outline-primary state1" for="btncheck1">新增</label>
 
                                 <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
@@ -49,7 +49,7 @@
                         <div class="col-lg-5">
                             <form action="${pageContext.request.contextPath}/CRM/selectMarket" method="post">
                                 <div class="input-group mb-3" style="width: 95%; padding-left: 50px;">
-                                    <input type="text" class="form-control" placeholder=" 名稱  or 客戶 or 聯絡人or 負責人"
+                                    <input type="text" class="form-control" placeholder=" 客戶名稱 or 公司 or 負責人 "
                                         aria-label="Recipient's username" aria-describedby="button-addon2" name="name">
                                     <button class="btn btn-outline-secondary" type="submit"
                                         id="selectProduct">搜索</button>
@@ -62,43 +62,40 @@
                         <table class="Table table-striped orderTable">
                             <tr>
                                 <td><input type="checkbox" id="activity"></td>
+                                <td>編號</td>
                                 <td>名稱</td>
-                                <td>客戶</td>
-                                <td>負責人</td>
-                                <td>類型</td>
-                                <td>階段</td>
-                                <td>機率</td>
-                                <td>開始時間</td>
-                                <td>終止時間</td>
+                                <td>部門</td>
+                                <td>職稱</td>
+                                <td>電話</td>
+                                <td>在職狀態</td>
                             </tr>
                             <c:if test="${not empty list}">
                                 <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}" var="s">
                                     <tr class="item">
-                                        <td><input type="checkbox" value="${s.marketid}" name="mak"></td>
+                                        <td><input type="checkbox" value="${s.adminid}" name="mak"></td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                            ${s.adminid}</td>
+                                        <td
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
                                             ${s.name}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
-                                            ${s.client}</td>
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+
+                                            ${s.department}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
-                                            ${s.user}</td>
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                       
+                                             ${s.position}
+
+                                        </td>
+
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
-                                            ${s.type}</td>
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                            ${s.phone}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
-                                            ${s.stage}</td>
-                                        <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
-                                            ${s.clinch}</td>
-                                        <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
-                                            ${s.createtime}</td>
-                                        <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
-                                            ${s.endtime}</td>
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                            ${s.state}</td>
                                     </tr>
                                 </c:forEach>
                             </c:if>
@@ -109,7 +106,7 @@
             </div>
         </body>
         <script>
-            $(".market").show();
+            $(".system").show();
             // 勾選單項
             var $all = $("input[name=mak]");
             $("input[type=checkbox][name=mak]").change(function () {

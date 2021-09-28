@@ -196,7 +196,7 @@
                                     <div class="col-md-7">${s.remark}</div>
                                     <div class="col-md-1">${s.user}</div>
                                     <div class="col-md-1">${s.createtime}</div>
-                                    <div class="col-md-1">remove</div>
+                                    <div class="col-md-1"><a href="javascript:delRemark(${s.id})" style="text-decoration: none;">remove</a></div>
                                 </div>
                             </c:forEach>
                         </c:if>
@@ -205,6 +205,8 @@
             </div>
         </body>
         <script>
+            $(".market").show();
+
             // 日期UI
             $(function () {
                 $(".EndTime").datepicker({
@@ -219,7 +221,7 @@
                 });
             });
             function basefrom() {
-                if (confirm("確定修改")) $(".basefrom").submit();
+                if (confirm("確定修改?")) $(".basefrom").submit();
             }
             //表單驗證
             // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -242,6 +244,12 @@
                         }, false)
                     })
             })()
+            // ${pageContext.request.contextPath}/CRM/delRemark/${s.id}
+            function delRemark(id){
+                if(confirm("確定刪除?")){
+                    window.location.href="${pageContext.request.contextPath}/CRM/delRemark/"+id+"/${bean.marketid}";
+                }
+            }
 
         </script>
 

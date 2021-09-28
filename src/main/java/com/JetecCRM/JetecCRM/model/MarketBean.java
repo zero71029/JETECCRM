@@ -8,9 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -39,12 +39,7 @@ public class MarketBean {
 	//
 	@JsonIgnore
 	@OneToMany(mappedBy = "marketid", cascade = CascadeType.ALL)
-	private List<MarketRemarkBean> mrb;
-	
-	
-	
-	
-	
+	private List<MarketRemarkBean> mrb;	
 
 	public List<MarketRemarkBean> getMrb() {
 		return mrb;
