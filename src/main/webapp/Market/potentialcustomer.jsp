@@ -37,6 +37,13 @@
                 border: 0px solid black;
                 /* width: 33%; */
             }
+            .btn a{
+                text-decoration: none;
+                text-align: center;
+                background-color: #BBB;
+                display: block;
+                
+            }
         </style>
 
         <body>
@@ -59,9 +66,13 @@
 
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">
+                            <div class="col-md-1 btn">
                                 <a href="${pageContext.request.contextPath}/CRM/PotentialCustomerList"
-                                    style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
+                                    style="text-decoration: none;text-align: center;background-color: #BBB;display: block;">＜</a>
+                            </div>
+                            <div class="col-md-1 btn">
+                                <a href="${pageContext.request.contextPath}/CRM/PotentialCustomerList"
+                                    style="text-decoration: none;text-align: center; background-color: #BBB;display: block;">轉成客戶</a>
                             </div>
                         </div>
                         <br>
@@ -289,7 +300,7 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-9 cell">
                                         <label for="validationTextarea" class="form-label">備註</label>
-                                        <textarea class="form-control " id="validationTextarea" required name="remark"
+                                        <textarea class="form-control " id="validationTextarea"  name="remark"
                                             maxlength="200">${bean.remark}</textarea>
                                     </div>
                                 </div>
@@ -308,6 +319,7 @@
 
                         <!-- ///////////////////////////////////////////////////////////////////////////// -->
                         <hr>
+                        <br><br><br>
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-9"
@@ -344,7 +356,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <input type="text" class=" form-control cellFrom tracktime" name="tracktime"
-                                        maxlength="20"  required>
+                                        maxlength="20" required>
                                 </div>
                                 <div class="col-md-2">
                                     <input type="text" class=" form-control cellFrom" name="remark" maxlength="190">
@@ -353,14 +365,27 @@
                                     <button style="width: 100%;" class="btn btn-primary" onclick="">新增</button>
                                 </div>
                             </div>
-                        </form>
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-9">
-                                <hr>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-9">
+                                    <hr>
+                                </div>
                             </div>
-                        </div>
+                        </form>
 
+                        <c:if test="${not empty bean.trackbean}">
+                            <c:forEach varStatus="loop" begin="0" end="${bean.trackbean.size()-1}" items="${bean.trackbean}" var="s">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1">${s.id}</div>
+                                    <div class="col-md-2">${s.trackdescribe}</div>
+                                    <div class="col-md-2">${s.result}</div>
+                                    <div class="col-md-2">${s.tracktime}</div>
+                                    <div class="col-md-2">${s.remark}</div>
+                                </div>
+                                <br>
+                            </c:forEach>
+                        </c:if>
                         <br>
                         <br><br><br><br><br>
                         <div class="row">&nbsp;</div>

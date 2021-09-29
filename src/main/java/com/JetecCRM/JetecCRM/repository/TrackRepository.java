@@ -6,4 +6,6 @@ import com.JetecCRM.JetecCRM.model.TrackBean;
 
 public interface TrackRepository extends JpaRepository<TrackBean, Integer>{
 
+	void deleteByCustomerid(Integer id);
+
 }

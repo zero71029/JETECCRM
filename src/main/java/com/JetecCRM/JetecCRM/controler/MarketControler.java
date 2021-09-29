@@ -51,8 +51,13 @@ public class MarketControler {
 	@RequestMapping("/potentialcustomer/{id}")
 	public String potentialcustomer(Model model, @PathVariable("id") Integer id) {
 		System.out.println("*****讀取潛在客戶細節****");
-		model.addAttribute("bean", PCS.getById(id));
+		if (id == 0) {
+			model.addAttribute("bean", new PotentialCustomerBean());
+		} else {
+			model.addAttribute("bean", PCS.getById(id));
+		}
 		model.addAttribute("admin", ar.findAll());
+
 		return "/Market/potentialcustomer";
 	}
 
@@ -65,6 +70,7 @@ public class MarketControler {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 存銷售機會
 	@RequestMapping("/SaveMarket")
 	public String SaveMarket(MarketBean marketBean) {
 		System.out.println(marketBean);
@@ -80,6 +86,7 @@ public class MarketControler {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//存備註
 	@RequestMapping("/SaveRemark")
 	public String SaveRemark(MarketRemarkBean mrb) {
 		System.out.println("存備註");
@@ -123,6 +130,26 @@ public class MarketControler {
 		System.out.println("存追蹤");
 		ms.SaveTrack(trackBean);
 		return "redirect:/CRM/potentialcustomer/" + trackBean.getCustomerid();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除潛在客戶
+	@RequestMapping("/delPotentialCustomer")
+	@ResponseBody
+	public String delPotentialCustomer(@RequestParam("id") List<Integer> id) {
+		System.out.println("*****刪除潛在客戶*****");
+		System.out.println(id.toString());
+		PCS.delPotentialCustomer(id);
+		return "刪除成功";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 搜索潛在客戶
+	@RequestMapping("/selectPotentialCustomer")
+	public String selectPotentialCustomer(Model model, @RequestParam("name") String name) {
+		System.out.println("搜索潛在客戶");
+		model.addAttribute("list", PCS.selectPotentialCustomer(name));
+		return "/Market/potentialcustomerList";
 	}
 
 }

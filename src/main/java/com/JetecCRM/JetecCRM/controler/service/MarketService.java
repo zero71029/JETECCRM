@@ -46,15 +46,13 @@ public class MarketService {
 /////////////////////////////////////////////////////////////////////////////////////	
 	// 刪除銷售機會
 	public void delMarket(List<Integer> id) {
-
 		for (Integer i : id) {
 			mrr.deleteByMarketid(i);
 			mr.deleteById(i);
 		}
-
 	}
 /////////////////////////////////////////////////////////////////////////////////////	
-//刪除銷售機會
+//搜索銷售機會
 	public List<MarketBean> selectMarket(String name) {
 		List<MarketBean> result= new ArrayList<MarketBean>();
 		boolean boo = true;
@@ -103,5 +101,7 @@ public class MarketService {
 	public void SaveTrack(TrackBean trackBean) {
 		tr.save(trackBean);
 	}
+
+
 
 }
