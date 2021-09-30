@@ -56,7 +56,7 @@ public class MarketControler {
 		} else {
 			model.addAttribute("bean", PCS.getById(id));
 		}
-		model.addAttribute("admin", ar.findAll());
+//		model.addAttribute("admin", ar.findAll());
 
 		return "/Market/potentialcustomer";
 	}

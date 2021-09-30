@@ -206,7 +206,6 @@
         </body>
         <script>
             $(".market").show();
-
             // 日期UI
             $(function () {
                 $(".EndTime").datepicker({

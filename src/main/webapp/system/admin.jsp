@@ -157,7 +157,6 @@
 
 
                                 <div class="row">
-
                                     <div class="col-md-1"></div>
                                     <div class="col-md-6">
                                         <button type="submit" style="width: 100%;"
@@ -177,7 +176,8 @@
                 </div>
             </div>
         </body>
-        <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
+        <!-- 驗證UI -->
+        <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
         <script>
             $(".system").show();
 
@@ -193,11 +193,11 @@
                 // 密碼驗證
                 jQuery.validator.setDefaults({
                     submitHandler: function () {
-                        if (confirm("題交確認"))form.submit();
+                        if (confirm("題交確認")) form.submit();
                     }
                 });
                 $.extend($.validator.messages, {
-                    required: "這是必填字段",                    
+                    required: "這是必填字段",
                     email: "請输入有效的電子郵件地址",
                     url: "请输入有效的网址",
                     date: "请输入有效的日期",
@@ -214,25 +214,14 @@
                     max: $.validator.format("请输入不大于 {0} 的数值"),
                     min: $.validator.format("请输入不小于 {0} 的数值")
                 });
-            $("#myform").validate({
-                rules: {
-                    password: "required",
-                    password_again: {
-                        equalTo: "#password"
+                $("#myform").validate({
+                    rules: {
+                        password: "required",
+                        password_again: {
+                            equalTo: "#password"
+                        }
                     }
-                }
-            });
-
-
-
-
-
-
-
-
-
-
-
+                });
 
             });
             function basefrom() {

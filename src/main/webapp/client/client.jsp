@@ -21,17 +21,41 @@
             <script src="${pageContext.request.contextPath}/jquery-ui-192/js/jquery-ui-1.9.2.custom.js"></script>
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
-
-
+            <!-- 台灣縣市二聯式選單 -->
+            <script src="${pageContext.request.contextPath}/js/jquery.twzipcode.min.js"></script>
+            <!-- 驗證UI -->
+            <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
             <title>CRM客戶管理系統</title>
         </head>
         <style>
             .cell {
-                background-color: #CCC;
+                border: 0px solid black;
+                border-bottom: 1px solid black;
+                margin-bottom: 5px;
+
             }
 
             .cellFrom {
-                width: 33%;
+                border: 0px solid black;
+                /* width: 33%; */
+            }
+
+            .btn a {
+                text-decoration: none;
+                text-align: center;
+                background-color: #BBB;
+                display: block;
+            }
+
+            .log {
+                text-align: center;
+                background-color: rgb(234, 169, 48);
+                color: white;
+                border-radius: 5px 5px 0 0;
+            }
+
+            .error {
+                color: red;
             }
         </style>
 
@@ -46,211 +70,410 @@
                         <br>
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">
-                                <a href="${pageContext.request.contextPath}/CRM/MarketList" style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
+                            <div class="col-md-10">
+                                <h3>各戶</h3>
                             </div>
                         </div>
-                        <br>
-                        <form action="${pageContext.request.contextPath}/CRM/SaveMarket" method="post"
-                            class="basefrom g-3 needs-validation" novalidate>
-                            <div class="row">
-                                <input type="hidden" name="marketid" value="${bean.marketid}">
-                                <div class="row" style="text-align: center;">
-
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-10"
-                                        style="background-color: blue;font-size: 1.5rem;color: white;border-radius: 5px 5px 0 0 ;">銷售機會</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">機會名稱*</div>
-                                    <input type="text" class="col-md-9 form-control " name="name" value="${bean.name}"
-                                        maxlength="50" required style="width: 74%;">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">客戶*</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="client"
-                                        value="${bean.client}" maxlength="20" required>
-                                    <div class="col-md-1 cell">機會編號</div>
-                                    <div class="col-md-4">${bean.marketid}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">聯絡人</div>
-                                    <input type="text" class=" form-control cellFrom col-md-4" name="" value=""
-                                        maxlength="20">
-
-                                    <div class="col-md-1 cell">負責人*</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="user"
-                                        value="${bean.user}" maxlength="20" required>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">聯絡人電話</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="" value=""
-                                        maxlength="20">
-                                    <div class="col-md-1 cell">類型</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="type"
-                                        value="${bean.type}" maxlength="100">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">聯絡人Email</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="" value=""
-                                        maxlength="20">
-                                    <div class="col-md-1 cell">來源</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="source"
-                                        value="${bean.source}" maxlength="100">
-                                </div>
-                                <!-- ////////////////////////////////////////////////////////////////////////////////// -->
-                                <div class="row">&nbsp;</div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">金額</div>
-                                    <input type="number" class="col-md-4 form-control cellFrom" name="cost"
-                                        value="${bean.cost}" maxlength="30">
-                                    <div class="col-md-1 cell">成交機率</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="clinch"
-                                        value="${bean.clinch}" maxlength="20">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">需求</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="need"
-                                        value="${bean.need}" maxlength="20">
-                                    <div class="col-md-1 cell">階段</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="stage"
-                                        value="${bean.stage}" maxlength="20">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">ROI分析</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="roianalyze"
-                                        value="${bean.roianalyze}" maxlength="100">
-                                    <div class="col-md-1 cell">..</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="" value=""
-                                        maxlength="50">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">開始時間</div>
-                                    <input type="text" class="col-md-4  form-control cellFrom CreateTime"
-                                        name="createtime" readonly value="${bean.createtime}">
-                                    <div class="col-md-1 cell">結束時間</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom EndTime" name="endtime"
-                                        value="${bean.endtime}" readonly>
-                                </div>
-                                <div class="row">&nbsp;</div>
-                                <!-- /////////////////////////////////////////////////////////////////////////// -->
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">描述*</div>
-                                    <textarea name="message" class="col-md-9" id="message" maxlength="9000"
-                                        style=" height: 150px;" required>${bean.message} </textarea><br><br>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-10">
-                                        <button type="submit" style="width: 100%;" class="btn btn-primary"
-                                            onclick="return window.confirm('確定修改')">新增/修改</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <!-- ///////////////////////////////////////////////////////////////////////////// -->
-                        <hr>
-                        <form action="${pageContext.request.contextPath}/CRM/SaveRemark" method="post"
-                            class="row g-3 needs-validation" novalidate>
-                            <div class="row">
-                                <input type="hidden" name="marketid" value="${bean.marketid}">
-                                <input type="hidden" name="user" value="灰灰">
-
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-mb-3">
-                                        <label for="validationTextarea" class="form-label">備註</label>
-                                        <textarea class="form-control " id="validationTextarea" required name="remark"
-                                            maxlength="200"></textarea>
-                                        <div class="invalid-feedback">須填寫</div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button style="width: 100%;" class="btn btn-primary" onclick="">確認</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-7">內容</div>
-                            <div class="col-md-1">創建人 </div>
-                            <div class="col-md-1"> 創建時間</div>
-                            <div class="col-md-1"></div>
+                            <div class="col-md-1 btn">
+                                <a href="${pageContext.request.contextPath}/CRM/ClientList"
+                                    style="text-decoration: none;text-align: center;background-color: #BBB;display: block;">＜</a>
+                            </div>
+
+                            <div class="col-md-1 btn">
+                                <a href="javascript:"
+                                    style="text-decoration: none;text-align: center;background-color: #BBB;display: block;">..</a>
+                            </div>
+
                         </div>
                         <br>
-                        <c:if test="${not empty bean.mrb}">
-                            <c:forEach varStatus="loop" begin="0" end="${bean.mrb.size()-1}" items="${bean.mrb}"
-                                var="s">
+                        <form action="${pageContext.request.contextPath}/CRM/SaveClient" method="post" id="myform"
+                            class="basefrom g-3 ">
+                            <div class="row">
+                                <input type="hidden" name="clientid" value="${bean.clientid}">
+
+
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-7">${s.remark}</div>
-                                    <div class="col-md-1">${s.user}</div>
-                                    <div class="col-md-1">${s.createtime}</div>
-                                    <div class="col-md-1"><a href="javascript:delRemark(${s.id})" style="text-decoration: none;">remove</a></div>
+                                    <div class="col-md-9 log">基本資訊</div>
                                 </div>
-                            </c:forEach>
-                        </c:if>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">名稱*</div>
+                                    <div class="col-md-5 cell">
+                                        <input type="text" class=" form-control cellFrom" name="name"
+                                            value="${bean.name}" maxlength="20" required>
+                                    </div>
+
+                                    <div class="col-md-1 cell">負責人*</div>
+                                    <div class="col-md-2 cell">
+                                        <select name="user" class="form-select cellFrom"
+                                            aria-label="Default select example">
+                                            <option value="無" ${bean.user=="無" ?"selected":null}>無</option>
+                                            <c:if test="${not empty admin}">
+                                                <c:forEach varStatus="loop" begin="0" end="${admin.size()-1}"
+                                                    items="${admin}" var="s">
+                                                    <option value="${s.name}" ${bean.user==s.name ?"selected":null}>
+                                                        ${s.name}</option>
+                                                </c:forEach>
+                                            </c:if>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">電話</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="phone"
+                                            value="${bean.phone}" maxlength="20">
+                                    </div>
+                                    <div class="col-md-1 cell">聯絡人</div>
+                                    <div class="col-md-2 cell"><input type="text" class=" form-control cellFrom" name=""
+                                            value="" maxlength="20">
+                                    </div>
+
+
+                                    <div class="col-md-1 cell">客戶編號</div>
+                                    <div class="col-md-2 cell">${bean.clientid}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">Email</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="email"
+                                            value="${bean.email}" maxlength="100">
+                                    </div>
+                                    <div class="col-md-1 cell">聯絡人手機</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="" value=""
+                                            maxlength="20">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">傳真</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="fax" value="${bean.fax}"
+                                            maxlength="20">
+                                    </div>
+                                    <div class="col-md-1 cell">聯絡人職務</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="" value=""
+                                            maxlength="20">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">統一編號</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="uniformnumber"
+                                            value="${bean.uniformnumber}" maxlength="20">
+                                    </div>
+                                    <div class="col-md-1 cell">員工人數</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="peoplenumber"
+                                            value="${bean.peoplenumber}" maxlength="20">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">類別</div>
+                                    <div class="col-md-2 cell">
+
+
+                                        <select name="sort" class="form-select cellFrom"
+                                            aria-label="Default select example">
+                                            <option value="客戶" ${bean.sort=="客戶" ?"selected":null} class="selItemOff">客戶
+                                            </option>
+                                            <option value="潛在客戶" ${bean.sort=="潛在客戶" ?"selected":null}
+                                                class="selItemOff">潛在客戶</option>
+                                            <option value="經銷商" ${bean.sort=="經銷商" ?"selected":null} class="selItemOff">
+                                                經銷商</option>
+                                            <option value="分析師" ${bean.sort=="分析師" ?"selected":null} class="selItemOff">
+                                                分析師</option>
+                                            <option value="競爭對手" ${bean.sort=="競爭對手" ?"selected":null}
+                                                class="selItemOff">競爭對手</option>
+                                            <option value="整合商" ${bean.sort=="整合商" ?"selected":null} class="selItemOff">
+                                                整合商</option>
+                                            <option value="投資人" ${bean.sort=="投資人" ?"selected":null} class="selItemOff">
+                                                投資人</option>
+                                            <option value="合作夥伴" ${bean.sort=="合作夥伴" ?"selected":null}
+                                                class="selItemOff">合作夥伴</option>
+                                            <option value="媒體" ${bean.sort=="媒體" ?"selected":null} class="selItemOff">媒體
+                                            </option>
+                                            <option value="其他" ${bean.sort=="其他" ?"selected":null} class="selItemOff">其他
+                                            </option>
+                                        </select>
+
+
+
+                                    </div>
+                                    <div class="col-md-1 cell">產業</div>
+                                    <div class="col-md-2 cell">
+                                        <select name="industry" class="form-select cellFrom"
+                                            aria-label="Default select example">
+                                            <option value="農業" ${bean.industry=="農業" ?"selected":null}
+                                                class="selItemOff"> 農業</option>
+                                            <option value="服裝" ${bean.industry=="服裝" ?"selected":null}
+                                                class="selItemOff"> 服裝</option>
+                                            <option value="金融" ${bean.industry=="金融" ?"selected":null}
+                                                class="selItemOff"> 金融</option>
+                                            <option value="生技" ${bean.industry=="生技" ?"selected":null}
+                                                class="selItemOff"> 生技</option>
+                                            <option value="化工" ${bean.industry=="化工" ?"selected":null}
+                                                class="selItemOff"> 化工</option>
+                                            <option value="通訊" ${bean.industry=="通訊" ?"selected":null}
+                                                class="selItemOff"> 通訊</option>
+                                            <option value="建築" ${bean.industry=="建築" ?"selected":null}
+                                                class="selItemOff"> 建築</option>
+                                            <option value="顧問" ${bean.industry=="顧問" ?"selected":null}
+                                                class="selItemOff"> 顧問</option>
+                                            <option value="教育" ${bean.industry=="教育" ?"selected":null}
+                                                class="selItemOff"> 教育</option>
+                                            <option value="電子" ${bean.industry=="電子" ?"selected":null}
+                                                class="selItemOff"> 電子</option>
+                                            <option value="能源" ${bean.industry=="能源" ?"selected":null}
+                                                class="selItemOff"> 能源</option>
+                                            <option value="工程" ${bean.industry=="工程" ?"selected":null}
+                                                class="selItemOff"> 工程</option>
+                                            <option value="娛樂" ${bean.industry=="娛樂" ?"selected":null}
+                                                class="selItemOff"> 娛樂</option>
+                                            <option value="環境" ${bean.industry=="環境" ?"selected":null}
+                                                class="selItemOff"> 環境</option>
+                                            <option value="政府" ${bean.industry=="政府" ?"selected":null}
+                                                class="selItemOff"> 政府</option>
+                                            <option value="旅館" ${bean.industry=="旅館" ?"selected":null}
+                                                class="selItemOff"> 旅館</optionv>
+                                            <option value="保險" ${bean.industry=="保險" ?"selected":null}
+                                                class="selItemOff"> 保險</optionv>
+                                            <option value="機械" ${bean.industry=="機械" ?"selected":null}
+                                                class="selItemOff"> 機械</optionv>
+                                            <option value="製造" ${bean.industry=="製造" ?"selected":null}
+                                                class="selItemOff"> 製造</optionv>
+                                            <option value="媒體" ${bean.industry=="媒體" ?"selected":null}
+                                                class="selItemOff"> 媒體</optionv>
+                                            <option value="零售" ${bean.industry=="零售" ?"selected":null}
+                                                class="selItemOff"> 零售</option>
+                                            <option value="貨運" ${bean.industry=="貨運" ?"selected":null}
+                                                class="selItemOff"> 貨運</option>
+                                            <option value="科技" ${bean.industry=="科技" ?"selected":null}
+                                                class="selItemOff"> 科技</option>
+                                            <option value="電信" ${bean.industry=="電信" ?"selected":null}
+                                                class="selItemOff"> 電信</option>
+                                            <option value="非營利" ${bean.industry=="非營利" ?"selected":null}
+                                                class="selItemOff">非營利</option>
+                                            <option value="食品飲料" ${bean.industry=="食品飲料" ?"selected":null}
+                                                class="selItemOff">食品飲料</option>
+                                            <option value="醫療保健" ${bean.industry=="醫療保健" ?"selected":null}
+                                                class="selItemOff">醫療保健</option>
+                                            <option value="交通運輸" ${bean.industry=="交通運輸" ?"selected":null}
+                                                class="selItemOff">交通運輸</option>
+                                            <option value="公共事業" ${bean.industry=="公共事業" ?"selected":null}
+                                                class="selItemOff">公共事業</option>
+                                            <option value="其他" ${bean.industry=="其他" ?"selected":null}
+                                                class="selItemOff"> 其他</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">網站</div>
+                                    <div class="col-md-5 cell">
+                                        <input type="text" class=" form-control cellFrom" name="url" value="${bean.url}"
+                                            maxlength="100">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">備註</div>
+                                    <div class="col-md-5 cell">
+                                        <textarea name="remark" class="col-md-9" id="message" maxlength="450"
+                                            style="width: 100%; ">${bean.remark}</textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-8"></div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-9 log">地址資訊</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">帳單城市</div>
+                                    <div class="col-md-3 cell">
+                                        <div class="row" id="twzipcode"></div>
+                                    </div>
+                                    <div class="col-md-1 cell">送貨城市</div>
+                                    <div class="col-md-3 cell">
+                                        <div class="row" id="twzipcode2"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell">帳單地址</div>
+                                    <div class="col-md-3 cell">
+                                        <input type="text" class=" form-control cellFrom" name="billaddress"
+                                            value="${bean.billaddress}" maxlength="20">
+                                    </div>
+                                    <div class="col-md-1 cell">送貨地址</div>
+                                    <div class="col-md-3 cell">
+                                        <input type="text" class=" form-control cellFrom" name="deliveraddress"
+                                            value="${bean.deliveraddress}" maxlength="20">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3">
+                                    <button type="submit" style="width: 100%;" class="btn btn-primary">送出</button>
+                                </div>
+                                <div class="col-md-1 "></div>
+                                <div class="col-md-3 "><input type="checkbox" name="" id="SameAddress" value="SSS">同帳單地址</div>
+                            </div>
+                        </form>
+
+
+                        <!-- ///////////////////////////////////////////////////////////////////////////// -->
+                        <hr>
+                        <br><br><br>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 log">
+                                <h5>聯絡人</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-1">編號</div>
+                            <div class="col-md-2">描述</div>
+                            <div class="col-md-2">結果</div>
+                            <div class="col-md-2">時間</div>
+                            <div class="col-md-2">備註</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9">
+                                <hr>
+                            </div>
+                        </div>
+                        <form action="${pageContext.request.contextPath}/CRM/SaveTrack" method="post"
+                            class="row g-3 needs-validation" novalidate>
+                            <input type="hidden" name="clientid" value="${bean.clientid}">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-1">編號</div>
+                                <div class="col-md-2">
+                                    <input type="text" class=" form-control cellFrom" name="trackdescribe" required
+                                        maxlength="190">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class=" form-control cellFrom" name="result" maxlength="90">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class=" form-control cellFrom tracktime" name="tracktime"
+                                        maxlength="20" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class=" form-control cellFrom" name="remark" maxlength="190">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-9">
+                                    <hr>
+                                </div>
+                            </div>
+                        </form>
+         
+                        <br>
+                        <br><br><br><br><br>
+                        <div class="row">&nbsp;</div>
+
                     </div>
+
                 </div>
             </div>
         </body>
         <script>
-            $(".market").show();
 
+            $(".client").show();
             // 日期UI
             $(function () {
-                $(".EndTime").datepicker({
+                $(".contacttime").datepicker({
                     changeMonth: true,
                     changeYear: true,
-                    dateFormat: "yy-mm-dd"
+                    dateFormat: "yy-mm-dd",
+                    beforeShow: function (input, inst) {
+                        inst.dpDiv.css({ marginTop: -input.offsetHeight + 'px' });
+                    }
                 });
-                $(".CreateTime").datepicker({
+                $(".tracktime").datepicker({
                     changeMonth: true,
                     changeYear: true,
-                    dateFormat: "yy-mm-dd"
+                    dateFormat: "yy-mm-dd",
+                    beforeShow: function (input, inst) {
+                        inst.dpDiv.css({ marginTop: -input.offsetHeight - 210 + 'px' });
+                    }
                 });
+                // 密碼驗證
+                jQuery.validator.setDefaults({
+                    submitHandler: function () {
+                        if (confirm("題交確認")) form.submit();
+                    }
+                });
+                $.extend($.validator.messages, {
+                    required: "這是必填字段",
+                    email: "請输入有效的電子郵件地址",
+                    url: "请输入有效的网址",
+                    date: "请输入有效的日期",
+                    dateISO: "请输入有效的日期 (YYYY-MM-DD)",
+                    number: "请输入有效的数字",
+                    digits: "只能输入数字",
+                    creditcard: "请输入有效的信用卡号码",
+                    equalTo: "你的输入不相同",
+                    extension: "请输入有效的后缀",
+                    maxlength: $.validator.format("最多可以输入 {0} 个字符"),
+                    minlength: $.validator.format("最少要输入 {0} 个字符"),
+                    rangelength: $.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
+                    range: $.validator.format("请输入范围在 {0} 到 {1} 之间的数值"),
+                    max: $.validator.format("请输入不大于 {0} 的数值"),
+                    min: $.validator.format("请输入不小于 {0} 的数值")
+                });
+                $("#myform").validate();
             });
-            function basefrom() {
-                if (confirm("確定修改?")) $(".basefrom").submit();
-            }
-            //表單驗證
-            // Example starter JavaScript for disabling form submissions if there are invalid fields
-            (function () {
-                'use strict'
-
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.querySelectorAll('.needs-validation')
-
-                // Loop over them and prevent submission
-                Array.prototype.slice.call(forms)
-                    .forEach(function (form) {
-                        form.addEventListener('submit', function (event) {
-                            if (!form.checkValidity()) {
-                                event.preventDefault()
-                                event.stopPropagation()
-                            }
-
-                            form.classList.add('was-validated')
-                        }, false)
-                    })
-            })()
-            // ${pageContext.request.contextPath}/CRM/delRemark/${s.id}
-            function delRemark(id){
-                if(confirm("確定刪除?")){
-                    window.location.href="${pageContext.request.contextPath}/CRM/delRemark/"+id+"/${bean.marketid}";
-                }
-            }
-
+            // 地區ui
+            $("#twzipcode").twzipcode({
+                countySel: "${bean.billcity}",
+                districtSel: "${bean.billtown}",
+                "zipcodeIntoDistrict": true,
+                // "css": ["city form-control", "town form-control"],
+                "countyName": "billcity", // 指定城市 select name
+                "districtName": "billtown", // 指定地區 select name
+                "zipcodeName": "billpostal" // 指定號碼 select name
+            });
+            $("#twzipcode2").twzipcode({
+                countySel: "${bean.delivercity}",
+                districtSel: "${bean.delivertown}",
+                "zipcodeIntoDistrict": true,
+                // "css": ["city form-control", "town form-control"],
+                "countyName": "delivercity", // 指定城市 select name
+                "districtName": "delivertown", // 指定地區 select name
+                "zipcodeName": "deliverpostal" // 指定號碼 select name
+            });
+            $("#SameAddress").change(function(){
+                
+                console.log($("#SameAddress:checked").val());
+            })
+            
+            
         </script>
 
         </html>
