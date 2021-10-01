@@ -8,26 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
-
-
-
+import com.JetecCRM.JetecCRM.repository.ClientRepository;
 
 @Component
 public class BeanContextListener implements ServletContextListener {
-	@Autowired	
+	@Autowired
 	AdminRepository ar;
-	
-    @Override
-    public void contextInitialized(ServletContextEvent sce) {    	
-        System.out.println("bean context 初始化");       
-       ServletContext app = sce.getServletContext();
-       app.setAttribute("admin", ar.findAll());
-    }
+	@Autowired
+	ClientRepository cr;
 
+	@Override
+	public void contextInitialized(ServletContextEvent sce) {
+		System.out.println("bean context 初始化");
+		ServletContext app = sce.getServletContext();
+		app.setAttribute("admin", ar.findAll());
+		app.setAttribute("client", cr.findAll());
+	}
 
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("bean context 销毁");
-    }
+	@Override
+	public void contextDestroyed(ServletContextEvent sce) {
+		System.out.println("bean context 销毁");
+	}
 
 }

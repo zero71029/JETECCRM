@@ -100,7 +100,6 @@ public class MarketControler {
 	@ResponseBody
 	public String delMarket(@RequestParam("id") List<Integer> id) {
 		System.out.println("*****刪除銷售機會*****");
-		System.out.println(id.toString());
 		ms.delMarket(id);
 		return "刪除成功";
 	}

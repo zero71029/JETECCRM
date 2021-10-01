@@ -27,7 +27,9 @@ public class MarketBean {
 	private String message;// 描述
 	private Integer cost;// 花費
 	private String client;// 客戶
-	private String contactperson;// 聯絡人
+	private String contactname;// 聯絡人
+	private String contactphone;// 聯絡人電話
+	private String contactmoblie;// 聯絡人手機
 	private String type;// 類型
 	private String source;// 機會來源
 	private String clinch;// 成交機率
@@ -40,6 +42,34 @@ public class MarketBean {
 	@JsonIgnore
 	@OneToMany(mappedBy = "marketid", cascade = CascadeType.ALL)
 	private List<MarketRemarkBean> mrb;	
+
+
+	
+	
+
+	public String getContactname() {
+		return contactname;
+	}
+
+	public void setContactname(String contactname) {
+		this.contactname = contactname;
+	}
+
+	public String getContactphone() {
+		return contactphone;
+	}
+
+	public void setContactphone(String contactphone) {
+		this.contactphone = contactphone;
+	}
+
+	public String getContactmoblie() {
+		return contactmoblie;
+	}
+
+	public void setContactmoblie(String contactmoblie) {
+		this.contactmoblie = contactmoblie;
+	}
 
 	public List<MarketRemarkBean> getMrb() {
 		return mrb;
@@ -57,13 +87,8 @@ public class MarketBean {
 		this.client = client;
 	}
 
-	public String getContactperson() {
-		return contactperson;
-	}
 
-	public void setContactperson(String contactperson) {
-		this.contactperson = contactperson;
-	}
+
 
 	public String getType() {
 		return type;
@@ -181,7 +206,7 @@ public class MarketBean {
 	public String toString() {
 		return "MarketBean [marketid=" + marketid + ", name=" + name + ", user=" + user + ", createtime=" + createtime
 				+ ", endtime=" + endtime + ", message=" + message + ", cost=" + cost + ", client=" + client
-				+ ", contactperson=" + contactperson + ", type=" + type + ", source=" + source + ", clinch=" + clinch
+				+  ", type=" + type + ", source=" + source + ", clinch=" + clinch
 				+ ", stage=" + stage + ", need=" + need + ", roianalyze=" + roianalyze + ", ccc=" + ccc + "]";
 	}
 

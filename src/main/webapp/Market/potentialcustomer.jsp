@@ -67,11 +67,11 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-1 btn">
-                                <a href="${pageContext.request.contextPath}/CRM/PotentialCustomerList"
+                                <a href="javascript:history.back()"
                                     style="text-decoration: none;text-align: center;background-color: #BBB;display: block;">＜</a>
                             </div>
                             <div class="col-md-1 btn">
-                                <a href="${pageContext.request.contextPath}/CRM/PotentialCustomerList"
+                                <a href=""
                                     style="text-decoration: none;text-align: center; background-color: #BBB;display: block;">轉成客戶</a>
                             </div>
                         </div>

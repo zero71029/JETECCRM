@@ -80,14 +80,14 @@ public class MarketService {
 			if (boo)result.add(p);
 		}
 		// 用聯絡人搜索
-		for (MarketBean p : mr.findByContactpersonLikeIgnoreCase("%" + name + "%")) {
-			for (MarketBean bean : result) {
-				if (bean.getMarketid() == p.getMarketid()) {
-					boo = false;
-				}
-			}
-			if (boo)result.add(p);
-		}
+//		for (MarketBean p : mr.findByContactpersonLikeIgnoreCase("%" + name + "%")) {
+//			for (MarketBean bean : result) {
+//				if (bean.getMarketid() == p.getMarketid()) {
+//					boo = false;
+//				}
+//			}
+//			if (boo)result.add(p);
+//		}
 		
 		return result;
 	}

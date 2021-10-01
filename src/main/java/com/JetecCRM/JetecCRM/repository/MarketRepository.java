@@ -15,7 +15,7 @@ public interface MarketRepository extends JpaRepository<MarketBean, Integer>{
 	List<MarketBean>findByUserLikeIgnoreCase(String string);
 
 	List<MarketBean> findByClientLikeIgnoreCase(String string);
-
-	List<MarketBean> findByContactpersonLikeIgnoreCase(String string);
+	
+	List<MarketBean> findByClient(String name);
 
 }

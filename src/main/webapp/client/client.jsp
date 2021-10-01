@@ -57,6 +57,14 @@
             .error {
                 color: red;
             }
+
+            .contact {
+                margin: 10px 0;
+            }
+
+            .contact:hover {
+                background-color: rgb(234, 169, 48);
+            }
         </style>
 
         <body>
@@ -77,7 +85,7 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-1 btn">
-                                <a href="${pageContext.request.contextPath}/CRM/ClientList"
+                                <a href="javascript:history.back()"
                                     style="text-decoration: none;text-align: center;background-color: #BBB;display: block;">＜</a>
                             </div>
 
@@ -131,8 +139,17 @@
                                             value="${bean.phone}" maxlength="20">
                                     </div>
                                     <div class="col-md-1 cell">聯絡人</div>
-                                    <div class="col-md-2 cell"><input type="text" class=" form-control cellFrom" name=""
-                                            value="" maxlength="20">
+                                    <div class="col-md-2 cell">
+                                        <select name="contact" class="form-select cellFrom"
+                                            aria-label="Default select example">
+                                            <c:if test="${not empty bean.contact}">
+                                                <c:forEach varStatus="loop" begin="0" end="${bean.contact.size()-1}"
+                                                    items="${bean.contact}" var="s">
+                                                    <option value="${s.name}" ${bean.user==s.name ?"selected":null}>
+                                                        ${s.name}</option>
+                                                </c:forEach>
+                                            </c:if>
+                                        </select>
                                     </div>
 
 
@@ -148,9 +165,7 @@
                                             value="${bean.email}" maxlength="100">
                                     </div>
                                     <div class="col-md-1 cell">聯絡人手機</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="" value=""
-                                            maxlength="20">
+                                    <div class="col-md-2 cell moblie">${bean.contact[0].moblie}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -161,9 +176,8 @@
                                             maxlength="20">
                                     </div>
                                     <div class="col-md-1 cell">聯絡人職務</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="" value=""
-                                            maxlength="20">
+                                    <div class="col-md-2 cell jobtitle">
+                                        ${bean.contact[0].jobtitle}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -296,10 +310,10 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1">&nbsp;</div>
                                     <div class="col-md-8"></div>
                                 </div>
-                                <br>
+                                <br><br>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-9 log">地址資訊</div>
@@ -328,22 +342,27 @@
                                             value="${bean.deliveraddress}" maxlength="20">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-1"></div>
-                                <div class="col-md-3">
-                                    <button type="submit" style="width: 100%;" class="btn btn-primary">送出</button>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-3">
+                                        <button type="submit" style="width: 100%;" class="btn btn-primary">送出</button>
+                                    </div>
+                                    <div class="col-md-1 "></div>
+                                    <div class="col-md-3 ">
+                                        <input type="checkbox" name="" id="SameAddress" value="SSS">
+                                        <label for="SameAddress">同帳單地址</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-1 "></div>
-                                <div class="col-md-3 "><input type="checkbox" name="" id="SameAddress" value="SSS">同帳單地址</div>
                             </div>
                         </form>
+                        <div class="row">
+                            <div class="col-md-1">&nbsp;</div>
+                            <div class="col-md-8"></div>
+                        </div>
 
-
-                        <!-- ///////////////////////////////////////////////////////////////////////////// -->
+                        <!-- ///////////////////////////////聯絡人/////////////////////////////////// -->
                         <hr>
-                        <br><br><br>
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-9 log">
@@ -352,11 +371,14 @@
                         </div>
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-1">編號</div>
-                            <div class="col-md-2">描述</div>
-                            <div class="col-md-2">結果</div>
-                            <div class="col-md-2">時間</div>
-                            <div class="col-md-2">備註</div>
+                            <div class="col-md-9 row">
+                                <div class="col-md-2">名稱</div>
+                                <div class="col-md-2">職務</div>
+                                <div class="col-md-2">電話</div>
+                                <div class="col-md-2">手機</div>
+                                <div class="col-md-2">Email</div>
+                                <div class="col-md-2">備註</div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-1"></div>
@@ -364,41 +386,130 @@
                                 <hr>
                             </div>
                         </div>
-                        <form action="${pageContext.request.contextPath}/CRM/SaveTrack" method="post"
-                            class="row g-3 needs-validation" novalidate>
-                            <input type="hidden" name="clientid" value="${bean.clientid}">
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-1">編號</div>
-                                <div class="col-md-2">
-                                    <input type="text" class=" form-control cellFrom" name="trackdescribe" required
-                                        maxlength="190">
+                        <c:if test="${not empty bean.contact}">
+                            <c:forEach varStatus="loop" begin="0" end="${bean.contact.size()-1}" items="${bean.contact}"
+                                var="s">
+                                <div class="row ">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-9 row contact"
+                                        onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/contact/${s.contactid}'">
+                                        <div class="col-md-2">${s.name}</div>
+                                        <div class="col-md-2">${s.jobtitle}</div>
+                                        <div class="col-md-2">${s.phone}</div>
+                                        <div class="col-md-2">${s.moblie}</div>
+                                        <div class="col-md-2">Email</div>
+                                        <div class="col-md-2">${s.remark}</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <input type="text" class=" form-control cellFrom" name="result" maxlength="90">
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="text" class=" form-control cellFrom tracktime" name="tracktime"
-                                        maxlength="20" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="text" class=" form-control cellFrom" name="remark" maxlength="190">
-                                </div>
+                            </c:forEach>
+                        </c:if>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 row contact"
+                                onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/contact/0'">
+                                <div class="col-md-2">新增</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2"></div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-9">
-                                    <hr>
-                                </div>
-                            </div>
-                        </form>
-         
+                        </div>
+
+                        <!-- ///////////////////////////////銷售機會/////////////////////////////////// -->
+                        <hr>
                         <br>
-                        <br><br><br><br><br>
-                        <div class="row">&nbsp;</div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 log">
+                                <h5>銷售機會</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 row">
+                                <div class="col-md-2">編號</div>
+                                <div class="col-md-2">名稱</div>
+                                <div class="col-md-2">聯絡人</div>
+                                <div class="col-md-2">負責人</div>
+                                <div class="col-md-2">金額</div>
+                                <div class="col-md-2">階段</div>
+                            </div>
+                        </div>
+                        <div class="row">                             
+                                <c:if test="${not empty market}">
+                                    <c:forEach varStatus="loop" begin="0" end="${market.size()-1}"
+                                        items="${market}" var="s">
+                                        <div class="row ">
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-9 row contact"
+                                                onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                                <div class="col-md-2">${s.marketid}</div>
+                                                <div class="col-md-2">${s.name}</div>
+                                                <div class="col-md-2">${s.contactname}</div>
+                                                <div class="col-md-2">${s.user}</div>
+                                                <div class="col-md-2">${s.cost}</div>
+                                                <div class="col-md-2">${s.stage}</div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </c:if> 
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 row contact"
+                                onclick="javascript:location.href='${pageContext.request.contextPath}/Market/Market.jsp'">
+                                <div class="col-md-2">新增</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9">
+                                <hr>
+                            </div>
+                        </div>
+                        <!-- ///////////////////////////////報價單/////////////////////////////////// -->
+                        <hr>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 log">
+                                <h5>報價單</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 row">
+                                <div class="col-md-2">編號</div>
+                                <div class="col-md-2">名稱</div>
+                                <div class="col-md-2">聯絡人</div>
+                                <div class="col-md-2">負責人</div>
+                                <div class="col-md-2">金額</div>
+                                <div class="col-md-2">階段</div>
+                            </div>
+                        </div>
+                        <!-- ///////////////////////////////合約/////////////////////////////////// -->
+                        <hr>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 log">
+                                <h5>銷售機會</h5>
+                            </div>
+                        </div>
 
+
+
+
+
+
+                        <!-- ////////////////////////////////////////////////////////////////// -->
                     </div>
-
                 </div>
             </div>
         </body>
@@ -468,12 +579,36 @@
                 "districtName": "delivertown", // 指定地區 select name
                 "zipcodeName": "deliverpostal" // 指定號碼 select name
             });
-            $("#SameAddress").change(function(){
-                
-                console.log($("#SameAddress:checked").val());
+            //同帳單地址
+            $("#SameAddress").change(function () {
+                if ($("#SameAddress:checked").val() == "SSS") {
+                    $("select[name='delivercity']").val($("select[name='billcity']").val());
+                    $("select[name='delivercity']").change();
+                    $("select[name='delivertown']").val($("select[name='billtown']").val());
+                    $("input[name='deliveraddress']").val($("input[name='billaddress']").val());
+                }
             })
-            
-            
+
+            var moblie = new Object;
+            var jobtitle = new Object;
+        </script>
+
+        <c:if test="${not empty bean.contact}">
+            <c:forEach varStatus="loop" begin="0" end="${bean.contact.size()-1}" items="${bean.contact}" var="s">
+                <script>
+                    moblie['${s.name}'] = '${s.moblie}';
+                    jobtitle['${s.name}'] = '${s.jobtitle}';
+                </script>
+            </c:forEach>
+        </c:if>
+        <script>
+            $("select[name='contact']").change(function () {
+                var s = $("select[name='contact']").val();
+                $(".moblie").text(moblie[s]);
+                $(".jobtitle").text(jobtitle[s]);
+
+            });
+
         </script>
 
         </html>

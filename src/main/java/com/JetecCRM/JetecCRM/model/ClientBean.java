@@ -1,17 +1,23 @@
 package com.JetecCRM.JetecCRM.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "client")
 public class ClientBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer 	clientid;//
+	private Integer clientid;//
 	private String name;//
 	private String sort;//類別
 	private String url;//網站
@@ -34,6 +40,22 @@ public class ClientBean {
 	
 	
 	
+	
+	
+	
+	@JsonIgnore
+	@OneToMany(targetEntity = ContactBean.class   ,mappedBy = "clientid", cascade = CascadeType.ALL)
+	private List<ContactBean> contact;	
+	
+	
+	
+	
+	public List<ContactBean> getContact() {
+		return contact;
+	}
+	public void setContact(List<ContactBean> contact) {
+		this.contact = contact;
+	}
 	public String getUser() {
 		return user;
 	}

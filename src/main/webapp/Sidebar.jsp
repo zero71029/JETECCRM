@@ -25,7 +25,7 @@
                     客戶管理
                 </button>
                 <button class="client" onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/ClientList'">客戶訊息</button>
-                <button class="client">聯絡人</button>
+                <button class="client" onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/ContactList'">聯絡人</button>
                 <button class="client">流失客戶</button>
                 <button class="list-group-item" onclick="javascript:location.href=''">
                     服務管理
