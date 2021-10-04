@@ -10,10 +10,12 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JetecCRM.JetecCRM.model.AgreementBean;
 import com.JetecCRM.JetecCRM.model.MarketBean;
 import com.JetecCRM.JetecCRM.model.MarketRemarkBean;
 import com.JetecCRM.JetecCRM.model.QuotationBean;
 import com.JetecCRM.JetecCRM.model.TrackBean;
+import com.JetecCRM.JetecCRM.repository.AgreementRepository;
 import com.JetecCRM.JetecCRM.repository.MarketRemarkRepository;
 import com.JetecCRM.JetecCRM.repository.MarketRepository;
 import com.JetecCRM.JetecCRM.repository.QuotationRepository;
@@ -30,6 +32,10 @@ public class MarketService {
 	TrackRepository tr;
 	@Autowired
 	QuotationRepository qr;
+	@Autowired
+	AgreementRepository ar;
+	
+	
 
 	public void save(MarketBean marketBean) {
 		mr.save(marketBean);
@@ -120,10 +126,27 @@ public class MarketService {
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取報價單細節
-	public Object getQuotationById(Integer id) {
-	
+	public QuotationBean getQuotationById(Integer id) {	
 		return qr.getById(id);
 	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//報價單列表
+	public List<QuotationBean> getQuotationList() {
+		Sort sort =  Sort.by(Direction.DESC,"quotationid");		
+		return qr.findAll(sort);
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//存合約	
+	public void SaveAgreement(AgreementBean aBean) {
+		ar.save(aBean);
+		
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取合約細節
+	public AgreementBean getAgreementBeanById(Integer id) {		
+		return ar.getById(id);
+	}
+	
 
 
 

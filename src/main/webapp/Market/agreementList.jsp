@@ -36,7 +36,7 @@
                         <div class="row">
                             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                                 <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off"
-                                    onclick="javascript:location.href='${pageContext.request.contextPath}/client/client.jsp'">
+                                    onclick="javascript:location.href='${pageContext.request.contextPath}/Market/Market.jsp'">
                                 <label class="btn btn-outline-primary state1" for="btncheck1">新增</label>
 
                                 <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
@@ -47,9 +47,9 @@
                             </div>
                         </div> <!-- <%-- 抬頭搜索--%> -->
                         <div class="col-lg-5">
-                            <form action="${pageContext.request.contextPath}/CRM/selectclient" method="post">
+                            <form action="${pageContext.request.contextPath}/CRM/selectMarket" method="post">
                                 <div class="input-group mb-3" style="width: 95%; padding-left: 50px;">
-                                    <input type="text" class="form-control" placeholder=" 名稱  or 統編 or 負責人or 電話"
+                                    <input type="text" class="form-control" placeholder=" 名稱  or 客戶 or 聯絡人or 負責人"
                                         aria-label="Recipient's username" aria-describedby="button-addon2" name="name">
                                     <button class="btn btn-outline-secondary" type="submit"
                                         id="selectProduct">搜索</button>
@@ -63,39 +63,42 @@
                             <tr>
                                 <td><input type="checkbox" id="activity"></td>
                                 <td>編號</td>
-                                <td>客戶名稱</td>
-                                <td>統編</td>
-                                <td>負責人</td>                                
-                                <td>類別</td>
-                                <td>電話</td>
-                                <td>產業</td>                                
+                                <td>客戶</td>
+                                <td>負責人</td>
+                                <td>開始時間</td>
+                                <td>終止時間</td>
+                                <td>聯絡人</td>
+                                <td>狀態</td>
+                          
                             </tr>
                             <c:if test="${not empty list}">
                                 <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}" var="s">
                                     <tr class="item">
-                                        <td><input type="checkbox" value="${s.clientid}" name="mak"></td>
+                                        <td><input type="checkbox" value="${s.marketid}" name="mak"></td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/client/${s.clientid}'">
-                                            ${s.clientid}</td>
-                                        <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/client/${s.clientid}'">
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
                                             ${s.name}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/client/${s.clientid}'">
-                                            ${s.uniformnumber}</td>
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                            ${s.client}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/client/${s.clientid}'">
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
                                             ${s.user}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/client/${s.clientid}'">
-                                            ${s.sort}</td>
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                            ${s.type}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/client/${s.clientid}'">
-                                            ${s.phone}</td>
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                            ${s.stage}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/client/${s.clientid}'">
-                                            ${s.industry}</td>
-
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                            ${s.clinch}</td>
+                                        <td
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                            ${s.createtime}</td>
+                                        <td
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                            ${s.endtime}</td>
                                     </tr>
                                 </c:forEach>
                             </c:if>
@@ -106,7 +109,7 @@
             </div>
         </body>
         <script>
-            $(".client").show();
+            $(".market").show();
             // 勾選單項
             var $all = $("input[name=mak]");
             $("input[type=checkbox][name=mak]").change(function () {
@@ -124,7 +127,7 @@
                 if ($zx.length == 0) {
                     alert("須勾選要刪除項目");
                 } else {
-                    if (confirm("警告 ! 確定刪除?")) {
+                    if (confirm("警告 ! 確定修改?")) {
                         var parm = "";
                         for (var a = 0; a < $zx.length; a++) {
                             parm += "id=" + $($zx[a]).val();
@@ -132,7 +135,7 @@
                         }
                         console.log(parm);
                         $.ajax({
-                            url: '${pageContext.request.contextPath}/CRM/delClient',//接受請求的Servlet地址
+                            url: '${pageContext.request.contextPath}/CRM/delMarket',//接受請求的Servlet地址
                             type: 'POST',
                             data: parm,
                             // dataType:"json",
@@ -143,7 +146,7 @@
 
                             success: function (json) {
                                 alert(json);
-                                window.location.href = "${pageContext.request.contextPath}/CRM/ClientList";
+                                window.location.href = "${pageContext.request.contextPath}/CRM/MarketList";
                             },
                             error: function (returndata) {
                                 console.log(returndata);

@@ -1,5 +1,7 @@
 package com.JetecCRM.JetecCRM.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +21,10 @@ public interface QuotationRepository extends JpaRepository<QuotationBean, Intege
 	@Modifying
 	@Query(value ="alter table quotationdetail AUTO_INCREMENT=2", nativeQuery=true)
 	void alterINCREMENT();
+
+	List<QuotationBean> findByName(String name);
+
+	
 
 
 }

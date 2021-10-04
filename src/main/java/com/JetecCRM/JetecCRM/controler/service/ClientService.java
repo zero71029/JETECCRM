@@ -6,12 +6,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.JetecCRM.JetecCRM.model.ClientBean;
 import com.JetecCRM.JetecCRM.model.ContactBean;
 import com.JetecCRM.JetecCRM.model.MarketBean;
+import com.JetecCRM.JetecCRM.model.QuotationBean;
 import com.JetecCRM.JetecCRM.repository.ClientRepository;
 import com.JetecCRM.JetecCRM.repository.ContactRepository;
 import com.JetecCRM.JetecCRM.repository.MarketRepository;
+import com.JetecCRM.JetecCRM.repository.QuotationRepository;
 
 @Service
 @Transactional
@@ -23,6 +26,8 @@ public class ClientService {
 	ContactRepository contactRepository;
 	@Autowired
 	MarketRepository mr;
+	@Autowired
+	QuotationRepository qr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存客戶
@@ -40,6 +45,15 @@ public class ClientService {
 //讀取客戶細節
 	public ClientBean getById(Integer id) {
 		return cr.getById(id);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除客戶
+	public void delClient(List<Integer> id) {
+		for (Integer i : id) {
+			cr.deleteById(i);
+		}
+
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +79,7 @@ public class ClientService {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//讀取聯絡人by名稱 ajax
+//讀取聯絡人by名稱
 	public List<ContactBean> selectContactByClientName(String name) {
 		return contactRepository.findByCompany(name);
 	}
@@ -82,7 +96,7 @@ public class ClientService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 搜索聯絡人
 	public List<ContactBean> selectContact(String name) {
-		List<ContactBean> result= new ArrayList<ContactBean>();
+		List<ContactBean> result = new ArrayList<ContactBean>();
 		boolean boo = true;
 		// 搜索名稱
 		for (ContactBean p : contactRepository.findByNameLikeIgnoreCase("%" + name + "%")) {
@@ -121,12 +135,13 @@ public class ClientService {
 		}
 
 		return result;
-		
+
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //搜索客戶
 	public List<ClientBean> selectclient(String name) {
-		List<ClientBean> result= new ArrayList<ClientBean>();
+		List<ClientBean> result = new ArrayList<ClientBean>();
 		boolean boo = true;
 		// 搜索名稱
 		for (ClientBean p : cr.findByNameLikeIgnoreCase("%" + name + "%")) {
@@ -166,10 +181,17 @@ public class ClientService {
 
 		return result;
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取銷售機會by公司
-	public List<MarketBean> getMarketListByClient(String name) {		
+	public List<MarketBean> getMarketListByClient(String name) {
 		return mr.findByClient(name);
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取報價單by公司
+	public List<QuotationBean> getQuotationByClient(String name) {
+		// TODO Auto-generated method stub
+		return qr.findByName(name);
 	}
 
 }

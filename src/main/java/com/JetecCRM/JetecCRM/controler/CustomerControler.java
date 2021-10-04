@@ -14,6 +14,7 @@ import com.JetecCRM.JetecCRM.controler.service.ClientService;
 import com.JetecCRM.JetecCRM.model.ClientBean;
 import com.JetecCRM.JetecCRM.model.ContactBean;
 import com.JetecCRM.JetecCRM.model.MarketBean;
+import com.JetecCRM.JetecCRM.model.QuotationBean;
 
 @Controller
 @RequestMapping("/CRM")
@@ -48,12 +49,13 @@ public class CustomerControler {
 		if (id == 0) {
 			model.addAttribute("bean", new ClientBean());
 			model.addAttribute("market", new MarketBean());
+			model.addAttribute("quotation", new QuotationBean());
 		} else {
-			ClientBean cb =cs.getById(id);
-			model.addAttribute("bean", cb);
-			model.addAttribute("market", cs.getMarketListByClient(cb.getName()));
+			ClientBean cb = cs.getById(id);
+			model.addAttribute("bean", cb);//讀取客戶細節
+			model.addAttribute("market", cs.getMarketListByClient(cb.getName()));//讀取銷售機會by公司
+			model.addAttribute("quotation", cs.getQuotationByClient(cb.getName()));//讀取報價單by公司
 		}
-		
 
 		return "/client/client";
 	}
@@ -65,6 +67,16 @@ public class CustomerControler {
 		System.out.println("搜索客戶");
 		model.addAttribute("list", cs.selectclient(name));
 		return "/client/clientList";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除客戶
+	@RequestMapping("/delClient")
+	@ResponseBody
+	public String delClient(@RequestParam("id") List<Integer> id) {
+		System.out.println("*****刪除客戶*****");
+		cs.delClient(id);
+		return "刪除成功";
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -127,17 +127,16 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">公司名稱</div>
                                     <div class="col-md-3 cell">
-                                        <select name="company" class="form-select cellFrom"
-                                            aria-label="Default select example">
-                                            <option value="無" ${bean.user=="無" ?"selected":null}>無</option>
+                                        <input type="text" class="col-md-4 form-control cellFrom client" name="company"
+                                            list="company" value="${bean.company}" maxlength="20" required>
+                                        <datalist id="company">
                                             <c:if test="${not empty client}">
                                                 <c:forEach varStatus="loop" begin="0" end="${client.size()-1}"
                                                     items="${client}" var="s">
-                                                    <option value="${s.name}" ${bean.company==s.name ?"selected":null}>
-                                                        ${s.name}</option>
+                                                    <option value="${s.name}">
                                                 </c:forEach>
                                             </c:if>
-                                        </select>
+                                        </datalist>
                                     </div>
                                     <div class="col-md-2"></div>
                                     <div class="col-md-1 cell">聯絡人編號</div>

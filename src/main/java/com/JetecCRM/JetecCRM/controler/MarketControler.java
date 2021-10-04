@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.JetecCRM.JetecCRM.controler.service.ClientService;
 import com.JetecCRM.JetecCRM.controler.service.MarketService;
 import com.JetecCRM.JetecCRM.controler.service.PotentialCustomerService;
+import com.JetecCRM.JetecCRM.model.AgreementBean;
 import com.JetecCRM.JetecCRM.model.MarketBean;
 import com.JetecCRM.JetecCRM.model.MarketRemarkBean;
 import com.JetecCRM.JetecCRM.model.PotentialCustomerBean;
@@ -26,6 +28,8 @@ public class MarketControler {
 	MarketService ms;
 	@Autowired
 	PotentialCustomerService PCS;
+	@Autowired
+	ClientService cs;
 	@Autowired
 	AdminRepository ar;
 
@@ -63,7 +67,7 @@ public class MarketControler {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//銷售機會
+//銷售機會列表
 	@RequestMapping("/MarketList")
 	public String Market(Model model) {
 		model.addAttribute("list", ms.getList());
@@ -175,9 +179,7 @@ public class MarketControler {
 		System.out.println("存報價單");
 		System.out.println(qBean);
 		System.out.println(qBean.getQdb());
-		
-		
-		
+
 		ms.SaveQuotation(qBean);
 		return "redirect:/CRM/Quotation/1";
 	}
@@ -187,15 +189,52 @@ public class MarketControler {
 	@RequestMapping("/Quotation/{id}")
 	public String Quotation(Model model, @PathVariable("id") Integer id) {
 		System.out.println("*****讀取報價單細節****");
-		
+
 		if (id == 0) {
 			model.addAttribute("bean", new QuotationBean());
 		} else {
-			model.addAttribute("bean", ms.getQuotationById(id));
+			QuotationBean qBean = ms.getQuotationById(id);
+			model.addAttribute("bean", qBean);
+			model.addAttribute("contact", cs.selectContactByClientName(qBean.getName()));// 讀取聯絡人by客戶
 		}
 //model.addAttribute("admin", ar.findAll());
 
 		return "/Market/Quotation";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//報價單列表
+	@RequestMapping("/QuotationList")
+	public String QuotationList(Model model) {
+		model.addAttribute("list", ms.getQuotationList());
+		return "/Market/QuotationList";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//存合約	
+	@RequestMapping("/SaveAgreement")
+	public String SaveAgreement(AgreementBean aBean) {
+		System.out.println("存合約");
+		System.out.println(aBean);
+		ms.SaveAgreement(aBean);
+		return "redirect:/CRM/Agreement/1";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取合約細節
+	@RequestMapping("/Agreement/{id}")
+	public String Agreement(Model model, @PathVariable("id") Integer id) {
+		System.out.println("*****讀取合約細節****");
+
+		if (id == 0) {
+			model.addAttribute("bean", new AgreementBean());
+		} else {			
+			model.addAttribute("bean", ms.getAgreementBeanById(id));
+
+		}
+//model.addAttribute("admin", ar.findAll());
+
+		return "/Market/agreement";
 	}
 
 }

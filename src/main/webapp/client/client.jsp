@@ -140,16 +140,18 @@
                                     </div>
                                     <div class="col-md-1 cell">聯絡人</div>
                                     <div class="col-md-2 cell">
-                                        <select name="contact" class="form-select cellFrom"
-                                            aria-label="Default select example">
+
+                                        <input type="text" class="col-md-4 form-control cellFrom  contactname" name="contact"
+                                            list="company" value="${bean.contact[0].name}" maxlength="20" required>
+                                        <datalist id="company">
                                             <c:if test="${not empty bean.contact}">
                                                 <c:forEach varStatus="loop" begin="0" end="${bean.contact.size()-1}"
                                                     items="${bean.contact}" var="s">
-                                                    <option value="${s.name}" ${bean.user==s.name ?"selected":null}>
-                                                        ${s.name}</option>
+                                                    <option value="${s.name}">
                                                 </c:forEach>
                                             </c:if>
-                                        </select>
+                                        </datalist>
+
                                     </div>
 
 
@@ -436,24 +438,24 @@
                                 <div class="col-md-2">階段</div>
                             </div>
                         </div>
-                        <div class="row">                             
-                                <c:if test="${not empty market}">
-                                    <c:forEach varStatus="loop" begin="0" end="${market.size()-1}"
-                                        items="${market}" var="s">
-                                        <div class="row ">
-                                            <div class="col-md-1"></div>
-                                            <div class="col-md-9 row contact"
-                                                onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
-                                                <div class="col-md-2">${s.marketid}</div>
-                                                <div class="col-md-2">${s.name}</div>
-                                                <div class="col-md-2">${s.contactname}</div>
-                                                <div class="col-md-2">${s.user}</div>
-                                                <div class="col-md-2">${s.cost}</div>
-                                                <div class="col-md-2">${s.stage}</div>
-                                            </div>
+                        <div class="row">
+                            <c:if test="${not empty market}">
+                                <c:forEach varStatus="loop" begin="0" end="${market.size()-1}" items="${market}"
+                                    var="s">
+                                    <div class="row ">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-9 row contact"
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Market/${s.marketid}'">
+                                            <div class="col-md-2">${s.marketid}</div>
+                                            <div class="col-md-2">${s.name}</div>
+                                            <div class="col-md-2">${s.contactname}</div>
+                                            <div class="col-md-2">${s.user}</div>
+                                            <div class="col-md-2">${s.cost}</div>
+                                            <div class="col-md-2">${s.stage}</div>
                                         </div>
-                                    </c:forEach>
-                                </c:if> 
+                                    </div>
+                                </c:forEach>
+                            </c:if>
                         </div>
                         <div class="row">
                             <div class="col-md-1"></div>
@@ -467,12 +469,7 @@
                                 <div class="col-md-2"></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-9">
-                                <hr>
-                            </div>
-                        </div>
+
                         <!-- ///////////////////////////////報價單/////////////////////////////////// -->
                         <hr>
                         <br>
@@ -486,12 +483,31 @@
                             <div class="col-md-1"></div>
                             <div class="col-md-9 row">
                                 <div class="col-md-2">編號</div>
-                                <div class="col-md-2">名稱</div>
+                                <div class="col-md-2">報價日期</div>
                                 <div class="col-md-2">聯絡人</div>
-                                <div class="col-md-2">負責人</div>
+                                <div class="col-md-2">電話</div>
                                 <div class="col-md-2">金額</div>
-                                <div class="col-md-2">階段</div>
+                                <div class="col-md-2">負責人</div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <c:if test="${not empty quotation}">
+                                <c:forEach varStatus="loop" begin="0" end="${quotation.size()-1}" items="${quotation}"
+                                    var="s">
+                                    <div class="row ">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-9 row contact"
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/Quotation/${s.quotationid}'">
+                                            <div class="col-md-2">${s.quotationid}</div>
+                                            <div class="col-md-2">${s.createtime}</div>
+                                            <div class="col-md-2">${s.contactname}</div>
+                                            <div class="col-md-2">${s.user}</div>
+                                            <div class="col-md-2">${s.quotationid}</div>
+                                            <div class="col-md-2">${s.user}</div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </c:if>
                         </div>
                         <!-- ///////////////////////////////合約/////////////////////////////////// -->
                         <hr>
@@ -499,7 +515,18 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-9 log">
-                                <h5>銷售機會</h5>
+                                <h5>合約</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 row">
+                                <div class="col-md-2">合約編號</div>
+                                <div class="col-md-2">負責人</div>
+                                <div class="col-md-2">生效日</div>
+                                <div class="col-md-2">終止日</div>
+                                <div class="col-md-2">負責人</div>
+                                <div class="col-md-2">狀態</div>
                             </div>
                         </div>
 
@@ -602,8 +629,8 @@
             </c:forEach>
         </c:if>
         <script>
-            $("select[name='contact']").change(function () {
-                var s = $("select[name='contact']").val();
+            $("input[name='contact']").change(function () {
+                var s = $("input[name='contact']").val();
                 $(".moblie").text(moblie[s]);
                 $(".jobtitle").text(jobtitle[s]);
 

@@ -1,7 +1,5 @@
 ﻿
-https://jetecbk.com.tw:8443/login.php3?previous_page=index
-jetecbk.com.tw
-OwY567Hi
+
 
 
 本機wordpress
@@ -10,6 +8,7 @@ OwY567Hi
 密碼：
 123456
 
+前台ftp
 主機：www.jetec.com.tw
 ID：86973785
 密碼：JETEC52872028
@@ -33,9 +32,16 @@ http://www.jetecbk.com.tw/BulletinBoard/control_panel/control_panel.php
 帳密的密碼：jetec23729418+++
 
 
-業務後台
-入口:https://jetecbk.com.tw:8443/login_up.php3 
-帳號:jetecbk.com.tw  /  密碼: OwY567Hi
+統一編號: 52872028
 
+Pchome虛擬主機加值服務(後台)
+帳號：jetecmarketing@gmail.com
+密碼：Jetec52872028
+
+
+業務後台
+https://jetecbk.com.tw:8443/login.php3?previous_page=index
+jetecbk.com.tw
+OwY567Hi
 
 z:/新資料版本2020_7月之後所有資料都放在這\E槽\共用資料\00-慈雯\0_YOTTA SENSE上架產品

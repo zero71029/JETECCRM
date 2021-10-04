@@ -18,6 +18,9 @@
                 </button>
                 <button class="market"
                     onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/MarketList'">銷售機會</button>
+                
+                <button class="market"
+                    onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/QuotationList'">報價單</button>
                 <button class="market"
                     onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/PotentialCustomerList'">潛在客戶</button>
 

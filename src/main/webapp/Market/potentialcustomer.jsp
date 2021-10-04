@@ -37,12 +37,13 @@
                 border: 0px solid black;
                 /* width: 33%; */
             }
-            .btn a{
+
+            .btn a {
                 text-decoration: none;
                 text-align: center;
                 background-color: #BBB;
                 display: block;
-                
+
             }
         </style>
 
@@ -111,8 +112,19 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">公司*</div>
                                     <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="company"
-                                            value="${bean.company}" maxlength="20" required>
+                                        <input type="text" class="col-md-4 form-control cellFrom client" name="company"
+                                            list="company" value="${bean.company}" maxlength="20" required>
+                                        <datalist id="company">
+                                            <c:if test="${not empty client}">
+                                                <c:forEach varStatus="loop" begin="0" end="${client.size()-1}"
+                                                    items="${client}" var="s">
+                                                    <option value="${s.name}">
+                                                </c:forEach>
+                                            </c:if>
+                                        </datalist>
+
+
+
                                     </div>
                                     <div class="col-md-1 cell">部門</div>
                                     <div class="col-md-2 cell"><input type="text" class=" form-control cellFrom"
@@ -300,7 +312,7 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-9 cell">
                                         <label for="validationTextarea" class="form-label">備註</label>
-                                        <textarea class="form-control " id="validationTextarea"  name="remark"
+                                        <textarea class="form-control " id="validationTextarea" name="remark"
                                             maxlength="200">${bean.remark}</textarea>
                                     </div>
                                 </div>
@@ -374,7 +386,8 @@
                         </form>
 
                         <c:if test="${not empty bean.trackbean}">
-                            <c:forEach varStatus="loop" begin="0" end="${bean.trackbean.size()-1}" items="${bean.trackbean}" var="s">
+                            <c:forEach varStatus="loop" begin="0" end="${bean.trackbean.size()-1}"
+                                items="${bean.trackbean}" var="s">
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1">${s.id}</div>

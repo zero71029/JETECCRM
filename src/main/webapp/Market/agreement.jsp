@@ -31,13 +31,17 @@
             .cell {
                 border: 0px solid black;
                 border-bottom: 1px solid black;
-                margin-bottom: 5px;
+                /* margin-bottom: 5px; */
 
             }
 
             .cellFrom {
                 border: 0px solid black;
                 /* width: 33%; */
+            }
+            .cellbackground{
+                background-color: #BBB;
+                border-bottom: 1px solid black;
             }
 
             .btn a {
@@ -79,7 +83,7 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-10">
-                                <h3>報價單</h3>
+                                <h3>合約</h3>
                             </div>
                         </div>
                         <div class="row">
@@ -96,10 +100,10 @@
 
                         </div>
                         <br>
-                        <form action="${pageContext.request.contextPath}/CRM/SaveQuotation" method="post" id="myform"
+                        <form action="${pageContext.request.contextPath}/CRM/SaveAgreement" method="post" id="myform"
                             class="basefrom g-3 ">
                             <div class="row">
-                                <input type="hidden" name="quotationid" value="${bean.quotationid}">
+                                <input type="hidden" name="agreementid" value="${bean.agreementid}">
 
 
                                 <div class="row">
@@ -108,10 +112,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">客戶*</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class="form-control cellFrom client" name="name"
-                                            list="company" value="${bean.name}" maxlength="20" required>
+                                    <div class="col-md-1 cellbackground">客戶*</div>
+                                    <div class="col-md-5 cell">
+                                        <input type="text" class="form-control cellFrom client" name="company"
+                                            list="company" value="${bean.company}" maxlength="20" required>
                                         <datalist id="company">
                                             <c:if test="${not empty client}">
                                                 <c:forEach varStatus="loop" begin="0" end="${client.size()-1}"
@@ -121,10 +125,8 @@
                                             </c:if>
                                         </datalist>
                                     </div>
-                                    <div class="col-md-1 cell">報價日期</div>
-                                    <div class="col-md-2 cell">${bean.createtime}</div>
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">負責人*</div>
+                                    <div class="col-md-1 cellbackground">負責人*</div>
                                     <div class="col-md-2 cell">
                                         <select name="user" class="form-select cellFrom"
                                             aria-label="Default select example">
@@ -143,12 +145,12 @@
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">電話</div>
+                                    <div class="col-md-1 cellbackground">電話</div>
                                     <div class="col-md-2 cell">
                                         <input type="text" class=" form-control cellFrom" name="phone"
                                             value="${bean.phone}" maxlength="20">
                                     </div>
-                                    <div class="col-md-1 cell">聯絡人</div>
+                                    <div class="col-md-1 cellbackground">聯絡人</div>
                                     <div class="col-md-2 cell">
                                         <select name="contactname" class="form-select cellFrom contactname"
                                             aria-label="Default select example">
@@ -166,18 +168,18 @@
                                     </div>
 
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">報價單編號</div>
-                                    <div class="col-md-2 cell">${bean.quotationid}
+                                    <div class="col-md-1 cellbackground">合約編號</div>
+                                    <div class="col-md-2 cell">${bean.agreementid}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">Email</div>
+                                    <div class="col-md-1 cellbackground">Email</div>
                                     <div class="col-md-2 cell">
                                         <input type="text" class=" form-control cellFrom" name="email"
                                             value="${bean.email}" maxlength="50">
                                     </div>
-                                    <div class="col-md-1 cell">聯絡人手機</div>
+                                    <div class="col-md-1 cellbackground">聯絡人手機</div>
                                     <div class="col-md-2 cell">
                                         <input type="text" class=" form-control cellFrom contactmoblie"
                                             name="contactmoblie" value="${bean.contactmoblie}" maxlength="20">
@@ -186,94 +188,125 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell">傳真</div>
+                                    <div class="col-md-1 cellbackground">傳真</div>
                                     <div class="col-md-2 cell">
                                         <input type="text" class=" form-control cellFrom" name="fax" value="${bean.fax}"
                                             maxlength="20">
                                     </div>
-                                    <div class="col-md-1 cell">聯絡人職務</div>
+                                    <div class="col-md-1 cell cellbackground" >聯絡人職務</div>
                                     <div class="col-md-2 cell">
                                         <input type="text" class=" form-control cellFrom contactjobtitle"
                                             name="contactjobtitle" value="${bean.contactjobtitle}" maxlength="20">
                                     </div>
                                 </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-1 cell">備註</div>
-                                <div class="col-md-5 cell">
-                                    <textarea name="remark" class="col-md-9" id="message" maxlength="450"
-                                        style="width: 100%; ">${bean.remark}</textarea>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-1">&nbsp;</div>
-                                <div class="col-md-8"></div>
-                            </div>
-                            <br><br>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-6 log">xxxx</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-6 cell row">
-                                    <div class="col-md-2 ">商品型號</div>
-                                    <div class="col-md-2 ">商品規格</div>
-                                    <div class="col-md-2 ">單價</div>
-                                    <div class="col-md-2 ">數量</div>
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-2 ">金額</div>
-                                </div>
-                            </div>
-                            <div>
-                                <c:if test="${not empty bean.qdb}">
-                                    <c:forEach varStatus="loop" begin="0" end="${bean.qdb.size()-1}" items="${bean.qdb}"
-                                        var="s">
-                                        <div class="row">
-                                            <div class="col-md-1"></div>
-                                            <div class="col-md-6  row">
-                                                <div class="col-md-2 "><input value="${s.product}" type="text"
-                                                        name="qdb[${loop.index}].product"></div>
-                                                <div class="col-md-2 "><input value="${s.producttype}" type="text"
-                                                        name="qdb[${loop.index}].producttype"></div>
-                                                <div class="col-md-2 "><input value="${s.price}" type="number"
-                                                        name="qdb[${loop.index}].price"></div>
-                                                <div class="col-md-2 "><input value="${s.num}" type="number"
-                                                        name="qdb[${loop.index}].num"></div>
-                                                <div class="col-md-2 "><input value="${s.total}" type="number"
-                                                        name="qdb[${loop.index}].total"></div>
-                                            </div>
-                                            <div class="col-md-1">✚</div>
-                                        </div><br>
-                                    </c:forEach>
-                                </c:if>
-
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-6  row">
-                                        <div class="col-md-2 "><input type="text" name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].product">
-                                        </div>
-                                        <div class="col-md-2 "><input type="text" name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].producttype">
-                                        </div>
-                                        <div class="col-md-2 "><input type="number"
-                                                name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].price"></div>
-                                        <div class="col-md-2 "><input type="number"
-                                                name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].num"></div>
-                                        <div class="col-md-2 "><input type="number"
-                                                name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].total"></div>
+                                    <div class="col-md-1 cellbackground ">起始日</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom createtime" name="createtime" value="${bean.createtime}"
+                                            maxlength="20" readonly>
                                     </div>
-                                    <div class="col-md-1">✚</div><br>
+                                    <div class="col-md-1 cell cellbackground" >終止日</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom endtime"
+                                            name="endtime" value="${bean.endtime}" maxlength="20" readonly>
+                                    </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-1">&nbsp;</div>
+                                    <div class="col-md-8"></div>
+                                </div>
+                                <br><br>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-6 log">地址</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-1">&nbsp;</div>
+                                    <div class="col-md-1 cellbackground">地址</div>
+                                    <div class="col-md-2 cell" id="twzipcode"></div>
+                                    <div class="col-md-3 cell">
+                                        <input type="text" class=" form-control cellFrom contactjobtitle"
+                                            name="address" value="${bean.address}" maxlength="20">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1">&nbsp;</div>
+                                    <div class="col-md-8"></div>
+                                </div>
+                                <br><br>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-6 log">合約內容</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell" style="background-color: #BBB;">特殊條款</div>
+                                    <div class="col-md-5 cell"> <textarea name="specialterms" class="col-md-9" id="specialterms"
+                                            maxlength="450" style="width: 100%; ">${bean.specialterms}</textarea></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell" style="background-color: #BBB;">描述</div>
+                                    <div class="col-md-5 cell"> <textarea name="agreementdescribe" class="col-md-9" id="agreementdescribe"
+                                            maxlength="450" style="width: 100%; ">${bean.agreementdescribe}</textarea></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1">&nbsp;</div>
+                                    <div class="col-md-8"></div>
+                                </div>
+                                <br><br>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-6 log">簽約資訊</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cellbackground">客戶簽約人</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="agreementname"
+                                            value="${bean.agreementname}" maxlength="50">
+                                    </div>
+                                    <div class="col-md-1 cellbackground">公司簽約人</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom "
+                                            name="companyname" value="${bean.companyname}" maxlength="20">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cellbackground">客戶簽約人職稱</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom" name="agreementjobtitle"
+                                            value="${bean.agreementjobtitle}" maxlength="50">
+                                    </div>
+                                    <div class="col-md-1 cellbackground">公司簽約人職稱</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom "
+                                            name="companyjobtitle" value="${bean.companyjobtitle}" maxlength="20">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cellbackground">客戶簽約日期</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom agreementtime" name="agreementtime"
+                                            value="${bean.agreementtime}" maxlength="50" readonly>
+                                    </div>
+                                    <div class="col-md-1 cellbackground">公司簽約日期</div>
+                                    <div class="col-md-2 cell">
+                                        <input type="text" class=" form-control cellFrom companytime"
+                                            name="companytime" value="${bean.companytime}" maxlength="20" readonly>
+                                    </div>
+                                </div>
+
                             </div>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-6"></div>
-                            </div>
-                            <br><br><br><br><br>
+
+
+
+
+                            <br>
 
 
                             <div class="row">
@@ -284,7 +317,7 @@
                                 </div>
                             </div>
 
-
+                            <br><br><br>
 
 
                             <!-- ////////////////////////////////////////////////////////////////// -->
@@ -312,11 +345,22 @@
 
 
         <script>
+            // 地區ui
+            $("#twzipcode").twzipcode({
+                countySel: "${bean.city}",
+                districtSel: "${bean.postal}",
+                "zipcodeIntoDistrict": true,
+                // "css": ["city form-control", "town form-control"],
+                "countyName": "city", // 指定城市 select name
+                "districtName": "town", // 指定地區 select name
+                "zipcodeName": "postal" // 指定號碼 select name
+            });
 
             $(".market").show();
-            // 日期UI
+
             $(function () {
-                $(".contacttime").datepicker({
+                // 日期UI
+                $(".createtime").datepicker({
                     changeMonth: true,
                     changeYear: true,
                     dateFormat: "yy-mm-dd",
@@ -324,7 +368,7 @@
                         inst.dpDiv.css({ marginTop: -input.offsetHeight + 'px' });
                     }
                 });
-                $(".tracktime").datepicker({
+                $(".endtime").datepicker({
                     changeMonth: true,
                     changeYear: true,
                     dateFormat: "yy-mm-dd",
@@ -332,6 +376,24 @@
                         inst.dpDiv.css({ marginTop: -input.offsetHeight - 210 + 'px' });
                     }
                 });
+                $(".agreementtime").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "yy-mm-dd",
+                    beforeShow: function (input, inst) {
+                        inst.dpDiv.css({ marginTop: -input.offsetHeight + 'px' });
+                    }
+                });
+                $(".companytime").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "yy-mm-dd",
+                    beforeShow: function (input, inst) {
+                        inst.dpDiv.css({ marginTop: -input.offsetHeight - 210 + 'px' });
+                    }
+                });
+
+
                 // 密碼驗證
                 jQuery.validator.setDefaults({
                     submitHandler: function () {
@@ -368,9 +430,9 @@
             });
             //改變各戶端後  一起改變聯絡人
             $(".client").on('change', function () {
-                console.log($("input[name='name']").val());
+                console.log($("input[name='company']").val());
                 $.ajax({
-                    url: '${pageContext.request.contextPath}/CRM/selectContactByClientName/' + $("input[name='name']").val(),//接受請求的Servlet地址
+                    url: '${pageContext.request.contextPath}/CRM/selectContactByClientName/' + $("input[name='company']").val(),//接受請求的Servlet地址
                     type: 'POST',
                     // data: formData,
                     // async: false,//同步請求

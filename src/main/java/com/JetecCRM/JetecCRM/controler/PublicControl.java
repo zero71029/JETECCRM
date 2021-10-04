@@ -12,7 +12,7 @@ public class PublicControl {
 	public String index() {
 		return "redirect:/time.jsp";
 	}
-	@RequestMapping(path = {"/home"})
+	@RequestMapping(path = {"/home", "/CRM" })
 	public String join() {
 		return "redirect:/CRM.jsp";
 	}
