@@ -6,13 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.JetecCRM.JetecCRM.model.ClientBean;
 import com.JetecCRM.JetecCRM.model.ContactBean;
 import com.JetecCRM.JetecCRM.model.MarketBean;
 import com.JetecCRM.JetecCRM.repository.ClientRepository;
 import com.JetecCRM.JetecCRM.repository.ContactRepository;
-import com.JetecCRM.JetecCRM.repository.MarketRemarkRepository;
 import com.JetecCRM.JetecCRM.repository.MarketRepository;
 
 @Service

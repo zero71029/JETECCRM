@@ -31,7 +31,8 @@
             }
 
             .cellFrom {
-                width: 33%;
+                border: 0px solid black;
+                /* width: 33%; */
             }
 
             /* 彈窗 */
@@ -148,44 +149,57 @@
                         <br>
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">
-                                <a href="javascript:history.back()"
-                                    style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
+                            <div class="col-md-1">
+                                <button onclick="javascript:history.back()" style=" width: 100px;">＜</a>
+                            </div>
+                            <!-- $("#xxx").attr("action","xxxxx.action"); -->
+                            <div class="col-md-1">
+                                <button style=" width: 100px;"      onclick="javascript:goquotation()"        >建立報價單</button>
                             </div>
                         </div>
                         <br>
                         <form action="${pageContext.request.contextPath}/CRM/SaveMarket" method="post"
-                            class="basefrom g-3 needs-validation" novalidate>
+                            class="basefrom g-3 needs-validation AAA" >
 
                             <div class="row">
                                 <input type="hidden" name="marketid" value="${bean.marketid}">
                                 <div class="row" style="text-align: center;">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-10"
-                                        style="background-color: blue;font-size: 1.5rem;color: white;border-radius: 5px 5px 0 0 ;">
+                                    <div class="col-md-8"
+                                        style="background-color: rgb(102, 102, 102);font-size: 1.5rem;color: white;border-radius: 5px 5px 0 0 ;">
                                         基本資料</div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">機會名稱*</div>
-                                    <input type="text" class="col-md-9 form-control " name="name" value="${bean.name}"
-                                        maxlength="50" required style="width: 74%;">
+                                    <div class="col-md-7 ">
+                                        <input type="text" class=" form-control cellFrom" name="name"
+                                            value="${bean.name}" maxlength="20">
+                                    </div>
                                 </div>
+
+
+
+
+
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">公司名*</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom client" name="client"
-                                        list="company" value="${bean.client}" maxlength="20" required>
-                                    <datalist id="company">
-                                        <c:if test="${not empty client}">
-                                            <c:forEach varStatus="loop" begin="0" end="${client.size()-1}"
-                                                items="${client}" var="s">
-                                                <option value="${s.name}">
-                                            </c:forEach>
-                                        </c:if>
-                                    </datalist>
+                                    <div class="col-md-3 ">
+                                        <input type="text" class="col-md-4 form-control cellFrom client" name="client"
+                                            list="company" value="${bean.client}" maxlength="20" required>
+                                        <datalist id="company">
+                                            <c:if test="${not empty client}">
+                                                <c:forEach varStatus="loop" begin="0" end="${client.size()-1}"
+                                                    items="${client}" var="s">
+                                                    <option value="${s.name}">
+                                                </c:forEach>
+                                            </c:if>
+                                        </datalist>
+                                    </div>
                                     <div class="col-md-1 cell">機會編號</div>
-                                    <div class="col-md-4">${bean.marketid}</div>
+                                    <div class="col-md-3">${bean.marketid}</div>
                                 </div>
 
 
@@ -196,192 +210,343 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">聯絡人</div>
-                                    <input type="text" class=" form-control cellFrom col-md-4" name="contactname"
-                                        value="${bean.contactname}" maxlength="20" readonly onclick="contact()">
-
+                                    <div class="col-md-3 ">
+                                        <input type="text" class=" form-control cellFrom col-md-4" name="contactname"
+                                            value="${bean.contactname}" maxlength="20" readonly onclick="contact()">
+                                    </div>
                                     <div class="col-md-1 cell">負責人*</div>
-                                    <select name="user" class="form-select cellFrom"
-                                        aria-label="Default select example">
-                                        <option value="無" ${bean.user=="無" ?"selected":null}>無</option>
-                                        <c:if test="${not empty admin}">
-                                            <c:forEach varStatus="loop" begin="0" end="${admin.size()-1}"
-                                                items="${admin}" var="s">
-                                                <option value="${s.name}" ${bean.user==s.name ?"selected":null}>
-                                                    ${s.name}</option>
-                                            </c:forEach>
-                                        </c:if>
-                                    </select>
+                                    <div class="col-md-3 ">
+                                        <select name="user" class="form-select cellFrom"
+                                            aria-label="Default select example">
+                                            <option value="無" ${bean.user=="無" ?"selected":null}>無</option>
+                                            <c:if test="${not empty admin}">
+                                                <c:forEach varStatus="loop" begin="0" end="${admin.size()-1}"
+                                                    items="${admin}" var="s">
+                                                    <option value="${s.name}" ${bean.user==s.name ?"selected":null}>
+                                                        ${s.name}</option>
+                                                </c:forEach>
+                                            </c:if>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">聯絡人電話</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="contactphone"
-                                        value="${bean.contactphone}" maxlength="20">
+                                    <div class="col-md-3 ">
+                                        <input type="text" class="col-md- form-control cellFrom" name="contactphone"
+                                            value="${bean.contactphone}" maxlength="20">
+                                    </div>
                                     <div class="col-md-1 cell">產業類別</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="type"
-                                        value="${bean.type}" maxlength="100">
+                                    <div class="col-md-3 ">
+                                        <select name="type" class=" form-select cellFrom">
+                                            <option ${bean.type=="尚未分類" ?"selected":null} value="尚未分類">請選擇...</option>
+                                            <option ${bean.type=="生產 製造" ?"selected":null} value="生產 製造">生產 製造</option>
+                                            <option ${bean.type=="工程公司" ?"selected":null} value="工程公司">工程公司</option>
+                                            <option ${bean.type=="學校 user" ?"selected":null} value="學校 user">學校 user
+                                            </option>
+                                            <option ${bean.type=="研究單位" ?"selected":null} value="研究單位">研究單位</option>
+                                            <option ${bean.type=="電子業" ?"selected":null} value="電子業">電子業</option>
+                                            <option ${bean.type=="光電產業" ?"selected":null} value="光電產業">光電產業</option>
+                                            <option ${bean.type=="半導體業" ?"selected":null} value="半導體業">半導體業</option>
+                                            <option ${bean.type=="公家機關" ?"selected":null} value="公家機關">公家機關</option>
+                                            <option ${bean.type=="機械設備製造" ?"selected":null} value="機械設備製造">機械設備製造
+                                            </option>
+                                            <option ${bean.type=="生技製藥" ?"selected":null} value="生技製藥">生技製藥</option>
+                                            <option ${bean.type=="食品加工" ?"selected":null} value="食品加工">食品加工</option>
+                                            <option ${bean.type=="醫院/醫療" ?"selected":null} value="醫院/醫療">醫院/醫療</option>
+                                            <option ${bean.type=="物流/倉儲" ?"selected":null} value="物流/倉儲">物流/倉儲</option>
+                                            <option ${bean.type=="畜牧/農業" ?"selected":null} value="畜牧/農業">畜牧/農業</option>
+                                            <option ${bean.type=="公共/消費性環境" ?"selected":null} value="公共/消費性環境">公共/消費性環境
+                                            </option>
+                                            <option ${bean.type=="製紙業" ?"selected":null} value="製紙業">製紙業</option>
+                                            <option ${bean.type=="紡織業" ?"selected":null} value="紡織業">紡織業</option>
+                                            <option ${bean.type=="化工業" ?"selected":null} value="化工業">化工業</option>
+                                            <option ${bean.type=="金屬加工" ?"selected":null} value="金屬加工">金屬加工</option>
+                                            <option ${bean.type=="冷凍空調" ?"selected":null} value="冷凍空調">冷凍空調</option>
+                                            <option ${bean.type=="航太/造船" ?"selected":null} value="航太/造船">航太/造船</option>
+                                            <option ${bean.type=="環保相關" ?"selected":null} value="環保相關">環保相關</option>
+                                            <option ${bean.type=="水處理/水資源" ?"selected":null} value="水處理/水資源">水處理/水資源
+                                            </option>
+                                            <option ${bean.type=="石化能源" ?"selected":null} value="石化能源">石化能源</option>
+                                            <option ${bean.type=="印刷" ?"selected":null} value="印刷">印刷</option>
+                                            <option ${bean.type=="其它" ?"selected":null} value="其它">其它(請填寫)</option>
+                                            <option ${bean.type=="業主" ?"selected":null} value="業主">業主</option>
+                                            <option ${bean.type=="設備換修" ?"selected":null} value="設備換修">設備換修</option>
+                                        </select>
+
+
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">聯絡人手機</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="contactmoblie"
-                                        value="${bean.contactmoblie}" maxlength="20">
+                                    <div class="col-md-3 ">
+                                        <input type="text" class=" form-control cellFrom" name="contactmoblie"
+                                            value="${bean.contactmoblie}" maxlength="20">
+                                    </div>
                                     <div class="col-md-1 cell">來源</div>
-                                    <select class="col-md-4 form-select cellFrom" name="source">
-                                        <option value="自己打來" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            自己打來</option>
-                                        <option value="員工推薦" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            員工推薦</option>
-                                        <option value="外部推薦" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            外部推薦</option>
-                                        <option value="合作夥伴" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            合作夥伴</option>
-                                        <option value="公共關係" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            公共關係</option>
-                                        <option value="研討會 - 內部" class="selItemOff" ${bean.source==s.name
-                                            ?"selected":null}>研討會 - 內部 </option>
-                                        <option value="研討會 - 合作夥伴" class="selItemOff" ${bean.source==s.name
-                                            ?"selected":null}>研討會 - 合作夥伴 </option>
-                                        <option value="廣告" class="selItemOff" ${bean.source==s.name ?"selected":null}>廣告
-                                        </option>
-                                        <option value="參展" class="selItemOff" ${bean.source==s.name ?"selected":null}>參展
-                                        </option>
-                                        <option value="網絡" class="selItemOff" ${bean.source==s.name ?"selected":null}>網絡
-                                        </option>
-                                        <option value="口碑" class="selItemOff" ${bean.source==s.name ?"selected":null}>口碑
-                                        </option>
-                                        <option value="其他" class="selItemOff" ${bean.source==s.name ?"selected":null}>其他
-                                        </option>
-                                    </select>
-
+                                    <div class="col-md-3 ">
+                                        <select class="form-select cellFrom" name="source">
+                                            <option value="自己打來" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                自己打來</option>
+                                            <option value="員工推薦" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                員工推薦</option>
+                                            <option value="外部推薦" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                外部推薦</option>
+                                            <option value="合作夥伴" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                合作夥伴</option>
+                                            <option value="公共關係" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                公共關係</option>
+                                            <option value="研討會 - 內部" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>研討會 - 內部 </option>
+                                            <option value="研討會 - 合作夥伴" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>研討會 - 合作夥伴 </option>
+                                            <option value="廣告" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>廣告
+                                            </option>
+                                            <option value="參展" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>參展
+                                            </option>
+                                            <option value="網絡" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>網絡
+                                            </option>
+                                            <option value="口碑" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>口碑
+                                            </option>
+                                            <option value="其他" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>其他
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <!-- ////////////////////////////////////////////////////////////////////////////////// -->
                                 <div class="row">&nbsp;</div>
                                 <div class="row" style="text-align: center;">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-10"
-                                        style="background-color: blue;font-size: 1.5rem;color: white;border-radius: 5px 5px 0 0 ;">
+                                    <div class="col-md-8"
+                                        style="background-color: rgb(102, 102, 102);font-size: 1.5rem;color: white;border-radius: 5px 5px 0 0 ;">
                                         需求</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">產品類別</div>
-                                    <select name="Product_Type" id="Product_Type" class="col-md-4 form-select cellFrom">
-                                        <option value="尚未分類" selected="selected">請選擇...</option>
-                                        <option value="大型顯示器">大型顯示器</option>
-                                        <option value="空氣品質">空氣品質</option>
-                                        <option value="流量-AICHI">流量-AICHI</option>
-                                        <option value="流量-RGL">流量-RGL</option>
-                                        <option value="流量-Siargo">流量-Siargo</option>
-                                        <option value="流量-其他">流量-其他</option>
-                                        <option value="記錄器">記錄器</option>
-                                        <option value="資料收集器-JETEC">資料收集器-JETEC</option>
-                                        <option value="資料收集器-其他">資料收集器-其他</option>
-                                        <option value="溫濕-JETEC">溫濕-JETEC</option>
-                                        <option value="溫濕-GALLTEC">溫濕-GALLTEC</option>
-                                        <option value="溫濕-E+E">溫濕-E+E</option>
-                                        <option value="溫濕-其他">溫濕-其他</option>
-                                        <option value="紅外線">紅外線</option>
-                                        <option value="壓力-JETEC">壓力-JETEC</option>
-                                        <option value="壓力-HUBA">壓力-HUBA</option>
-                                        <option value="壓力-COPAL">壓力-COPAL</option>
-                                        <option value="壓力-其他">壓力-其他</option>
-                                        <option value="差壓">差壓</option>
-                                        <option value="氣體-JETEC">氣體-JETEC</option>
-                                        <option value="氣體-Senko">氣體-Senko</option>
-                                        <option value="氣體-GASDNA">氣體-GASDNA</option>
-                                        <option value="氣體-手持">氣體-手持</option>
-                                        <option value="氣體-其他">氣體-其他</option>
-                                        <option value="氣象儀器-土壤/pH">氣象儀器-土壤/pH</option>
-                                        <option value="氣象儀器-日照/紫外線">氣象儀器-日照/紫外線</option>
-                                        <option value="氣象儀器-風速/風向">氣象儀器-風速/風向</option>
-                                        <option value="氣象儀器-雨量">氣象儀器-雨量</option>
-                                        <option value="氣象儀器-其他">氣象儀器-其他</option>
-                                        <option value="水質相關">水質相關</option>
-                                        <option value="液位/料位-JETEC">液位/料位-JETEC</option>
-                                        <option value="液位/料位-DINEL">液位/料位-DINEL</option>
-                                        <option value="液位/料位-HONDA">液位/料位-HONDA</option>
-                                        <option value="液位/料位-其他">液位/料位-其他</option>
-                                        <option value="溫度貼紙">溫度貼紙</option>
-                                        <option value="溫控器-TOHO">溫控器-TOHO</option>
-                                        <option value="溫控器-其他">溫控器-其他</option>
-                                        <option value="感溫線棒">感溫線棒</option>
-                                        <option value="無線傳輸">無線傳輸</option>
-                                        <option value="編碼器/電位計">編碼器/電位計</option>
-                                        <option value="能源管理控制">能源管理控制</option>
-                                        <option value="食品">食品</option>
-                                        <option value="其它">其它</option>
-                                    </select>
+                                    <div class="col-md-3 ">
+                                        <select name="producttype" id="Product_Type" class=" form-select cellFrom">
+                                            <option ${bean.producttype=="尚未分類" ?"selected":null} value="尚未分類"
+                                                selected="selected">請選擇...</option>
+                                            <option ${bean.producttype=="大型顯示器" ?"selected":null} value="大型顯示器">大型顯示器
+                                            </option>
+                                            <option ${bean.producttype=="空氣品質" ?"selected":null} value="空氣品質">空氣品質
+                                            </option>
+                                            <option ${bean.producttype=="流量-AICHI" ?"selected":null} value="流量-AICHI">
+                                                流量-AICHI</option>
+                                            <option ${bean.producttype=="流量-RGL" ?"selected":null} value="流量-RGL">流量-RGL
+                                            </option>
+                                            <option ${bean.producttype=="流量-Siargo" ?"selected":null} value="流量-Siargo">
+                                                流量-Siargo</option>
+                                            <option ${bean.producttype=="流量-其他" ?"selected":null} value="流量-其他">流量-其他
+                                            </option>
+                                            <option ${bean.producttype=="記錄器" ?"selected":null} value="記錄器">記錄器</option>
+                                            <option ${bean.producttype=="資料收集器-JETEC" ?"selected":null}
+                                                value="資料收集器-JETEC">
+                                                資料收集器-JETEC</option>
+                                            <option ${bean.producttype=="資料收集器-其他" ?"selected":null} value="資料收集器-其他">
+                                                資料收集器-其他</option>
+                                            <option ${bean.producttype=="溫濕-JETEC" ?"selected":null} value="溫濕-JETEC">
+                                                溫濕-JETEC</option>
+                                            <option ${bean.producttype=="溫濕-GALLTEC" ?"selected":null}
+                                                value="溫濕-GALLTEC">
+                                                溫濕-GALLTEC</option>
+                                            <option ${bean.producttype=="溫濕-E+E" ?"selected":null} value="溫濕-E+E">溫濕-E+E
+                                            </option>
+                                            <option ${bean.producttype=="溫濕-其他" ?"selected":null} value="溫濕-其他">溫濕-其他
+                                            </option>
+                                            <option ${bean.producttype=="紅外線" ?"selected":null} value="紅外線">紅外線</option>
+                                            <option ${bean.producttype=="壓力-JETEC" ?"selected":null} value="壓力-JETEC">
+                                                壓力-JETEC</option>
+                                            <option ${bean.producttype=="壓力-HUBA" ?"selected":null} value="壓力-HUBA">
+                                                壓力-HUBA
+                                            </option>
+                                            <option ${bean.producttype=="壓力-COPAL" ?"selected":null} value="壓力-COPAL">
+                                                壓力-COPAL</option>
+                                            <option ${bean.producttype=="壓力-其他" ?"selected":null} value="壓力-其他">壓力-其他
+                                            </option>
+                                            <option ${bean.producttype=="差壓" ?"selected":null} value="差壓">差壓</option>
+                                            <option ${bean.producttype=="氣體-JETEC" ?"selected":null} value="氣體-JETEC">
+                                                氣體-JETEC</option>
+                                            <option ${bean.producttype=="氣體-Senko" ?"selected":null} value="氣體-Senko">
+                                                氣體-Senko</option>
+                                            <option ${bean.producttype=="氣體-GASDNA" ?"selected":null} value="氣體-GASDNA">
+                                                氣體-GASDNA</option>
+                                            <option ${bean.producttype=="氣體-手持" ?"selected":null} value="氣體-手持">氣體-手持
+                                            </option>
+                                            <option ${bean.producttype=="氣體-其他" ?"selected":null} value="氣體-其他">氣體-其他
+                                            </option>
+                                            <option ${bean.producttype=="氣象儀器-土壤/pH" ?"selected":null}
+                                                value="氣象儀器-土壤/pH">
+                                                氣象儀器-土壤/pH</option>
+                                            <option ${bean.producttype=="氣象儀器-日照/紫外線" ?"selected":null}
+                                                value="氣象儀器-日照/紫外線">
+                                                氣象儀器-日照/紫外線</option>
+                                            <option ${bean.producttype=="氣象儀器-風速/風向" ?"selected":null}
+                                                value="氣象儀器-風速/風向">
+                                                氣象儀器-風速/風向</option>
+                                            <option ${bean.producttype=="氣象儀器-雨量" ?"selected":null} value="氣象儀器-雨量">
+                                                氣象儀器-雨量
+                                            </option>
+                                            <option ${bean.producttype=="氣象儀器-其他" ?"selected":null} value="氣象儀器-其他">
+                                                氣象儀器-其他
+                                            </option>
+                                            <option ${bean.producttype=="水質相關" ?"selected":null} value="水質相關">水質相關
+                                            </option>
+                                            <option ${bean.producttype=="液位/料位-JETEC" ?"selected":null}
+                                                value="液位/料位-JETEC">
+                                                液位/料位-JETEC</option>
+                                            <option ${bean.producttype=="液位/料位-DINEL" ?"selected":null}
+                                                value="液位/料位-DINEL">
+                                                液位/料位-DINEL</option>
+                                            <option ${bean.producttype=="液位/料位-HONDA" ?"selected":null}
+                                                value="液位/料位-HONDA">
+                                                液位/料位-HONDA</option>
+                                            <option ${bean.producttype=="液位/料位-其他" ?"selected":null} value="液位/料位-其他">
+                                                液位/料位-其他</option>
+                                            <option ${bean.producttype=="溫度貼紙" ?"selected":null} value="溫度貼紙">溫度貼紙
+                                            </option>
+                                            <option ${bean.producttype=="溫控器-TOHO" ?"selected":null} value="溫控器-TOHO">
+                                                溫控器-TOHO</option>
+                                            <option ${bean.producttype=="溫控器-其" ?"selected":null} value="溫控器-其他">溫控器-其他
+                                            </option>
+                                            <option ${bean.producttype=="感溫線棒" ?"selected":null} value="感溫線棒">感溫線棒
+                                            </option>
+                                            <option ${bean.producttype=="無線傳輸" ?"selected":null} value="無線傳輸">無線傳輸
+                                            </option>
+                                            <option ${bean.producttype=="編碼器/電位計" ?"selected":null} value="編碼器/電位計">
+                                                編碼器/電位計
+                                            </option>
+                                            <option ${bean.producttype=="能源管理控制" ?"selected":null} value="能源管理控制">能源管理控制
+                                            </option>
+                                            <option ${bean.producttype=="食品" ?"selected":null} value="食品">食品</option>
+                                            <option ${bean.producttype=="其它" ?"selected":null} value="其它">其它</option>
+                                        </select>
+                                    </div>
                                     <div class="col-md-1 cell">產品名稱</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="" value=""
-                                        maxlength="20">
+                                    <div class="col-md-3 ">
+                                        <input type="text" class=" form-control cellFrom" name="product"
+                                            value="${bean.product}" maxlength="20">
+                                    </div>
                                 </div>
 
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">預算</div>
-                                    <input type="number" class="col-md-4 form-control cellFrom" name="cost"
-                                        value="${bean.cost}" maxlength="30">
+                                    <div class="col-md-3 ">
+                                        <input type="number" class=" form-control cellFrom" name="cost"
+                                            value="${bean.cost}" maxlength="30">
+                                    </div>
                                     <div class="col-md-1 cell">成交機率</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="clinch"
-                                        value="${bean.clinch}" maxlength="20">
+                                    <div class="col-md-3 ">
+                                        <input type="text" class=" form-control cellFrom" name="clinch"
+                                            value="${bean.clinch}" maxlength="20">
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">需求</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="need"
-                                        value="${bean.need}" maxlength="20">
+                                    <div class="col-md-3 ">
+                                        <input type="text" class=" form-control cellFrom" name="need"
+                                            value="${bean.need}" maxlength="20">
+                                    </div>
                                     <div class="col-md-1 cell">階段</div>
+                                    <div class="col-md-3 ">
+                                        <select class=" form-select cellFrom" name="stage">
+                                            <option value="尚未處理" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                尚未處理</option>
+                                            <option value="需求確認" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                需求確認</option>
+                                            <option value="聯繫中" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                聯繫中 </option>
+                                            <option value="處理中" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                處理中</option>
+                                            <option value="已報價" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                已報價</option>
+                                            <option value="成功結案" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                成功結案</option>
+                                            <option value="失敗結案" class="selItemOff" ${bean.source==s.name
+                                                ?"selected":null}>
+                                                失敗結案</option>
+                                        </select>
 
-                                    <select class="col-md-4 form-select cellFrom" name="stage">
-                                        <option value="尚未處理" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            尚未處理</option>
-                                        <option value="需求確認" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            需求確認</option>
-                                        <option value="聯繫中" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            聯繫中 </option>
-                                        <option value="處理中" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            處理中</option>
-                                        <option value="已報價" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            已報價</option>
-                                        <option value="成功結案" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            成功結案</option>
-                                        <option value="失敗結案" class="selItemOff" ${bean.source==s.name ?"selected":null}>
-                                            失敗結案</option>
-                                    </select>
-
-
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">ROI分析</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="roianalyze"
-                                        value="${bean.roianalyze}" maxlength="100">
+                                    <div class="col-md-3 ">
+                                        <input type="text" class=" form-control cellFrom" name="roianalyze"
+                                            value="${bean.roianalyze}" maxlength="100">
+                                    </div>
                                     <div class="col-md-1 cell">..</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom" name="" value=""
-                                        maxlength="50">
+                                    <div class="col-md-3 ">
+                                        <input type="text" class=" form-control cellFrom" name="" value=""
+                                            maxlength="50">
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">開始時間</div>
-                                    <input type="text" class="col-md-4  form-control cellFrom CreateTime"
-                                        name="createtime" readonly value="${bean.createtime}">
+                                    <div class="col-md-3 ">
+                                        <input type="text" class="  form-control cellFrom CreateTime" name="createtime"
+                                            readonly value="${bean.createtime}">
+                                    </div>
                                     <div class="col-md-1 cell">結束時間</div>
-                                    <input type="text" class="col-md-4 form-control cellFrom EndTime" name="endtime"
-                                        value="${bean.endtime}" readonly>
+                                    <div class="col-md-3 ">
+                                        <input type="text" class=" form-control cellFrom EndTime" name="endtime"
+                                            value="${bean.endtime}" readonly>
+                                    </div>
                                 </div>
                                 <div class="row">&nbsp;</div>
                                 <!-- /////////////////////////////////////////////////////////////////////////// -->
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell">描述*</div>
-                                    <textarea name="message" class="col-md-9" id="message" maxlength="9000"
-                                        style=" height: 150px;" required>${bean.message} </textarea><br><br>
+                                    <div class="col-md-7 ">
+                                        <textarea name="message" class="col-md-12" id="message" maxlength="9000"
+                                            style=" height: 150px;" required>${bean.message}</textarea>
+                                    </div><br><br> 
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-8">
                                         <button type="submit" style="width: 100%;" class="btn btn-primary"
                                             onclick="return window.confirm('確定修改')">新增/修改</button>
                                     </div>
@@ -397,22 +562,24 @@
                                 <input type="hidden" name="user" value="灰灰">
 
                                 <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-mb-3">
+                                    <div class="col-md-1"></div>                                    
+                                    <div class="col-md-8">
                                         <label for="validationTextarea" class="form-label">備註</label>
-                                        <textarea class="form-control " id="validationTextarea" required name="remark"
+                                        <textarea class="form-control" id="validationTextarea" required name="remark"
                                             maxlength="200"></textarea>
                                         <div class="invalid-feedback">須填寫</div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <button style="width: 100%;" class="btn btn-primary" onclick="">確認</button>
-                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>                                    
+                                    <div class="col-md-8">
+                                    <button style="width: 100%;" class="btn btn-primary" onclick="">確認</button></div>
                                 </div>
                             </div>
                         </form>
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-7">內容</div>
+                            <div class="col-md-6">內容</div>
                             <div class="col-md-1">創建人 </div>
                             <div class="col-md-1"> 創建時間</div>
                             <div class="col-md-1"></div>
@@ -423,7 +590,7 @@
                                 var="s">
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-7">${s.remark}</div>
+                                    <div class="col-md-6">${s.remark}</div>
                                     <div class="col-md-1">${s.user}</div>
                                     <div class="col-md-1">${s.createtime}</div>
                                     <div class="col-md-1"><a href="javascript:delRemark(${s.id})"
@@ -431,6 +598,15 @@
                                 </div>
                             </c:forEach>
                         </c:if>
+                        <br><br><br><br><br>
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-7"></div>
+                            <div class="col-md-1"> </div>
+                            <div class="col-md-1">&nbsp;</div>
+                            <div class="col-md-1"></div>
+                        </div>
 
                     </div>
                 </div>
@@ -533,6 +709,11 @@
                 $("input[name='contactname']").val($("input[name='catin']").val());
                 $("input[name='contactphone']").val("");
                 $("input[name='contactmoblie']").val("");
+            }
+            //建立報價單
+            function goquotation(){
+                $(".AAA").attr("action","${pageContext.request.contextPath}/CRM/goQuotation.action");
+                $(".AAA").submit();
             }
 
 

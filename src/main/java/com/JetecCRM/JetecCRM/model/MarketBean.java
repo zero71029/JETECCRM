@@ -37,7 +37,8 @@ public class MarketBean {
 	private String need;// 需求確認
 	private String roianalyze;// ROI分析
 	private Date ccc;// 創建時間
-
+	private String product;//
+	private String producttype;//
 	//
 	@JsonIgnore
 	@OneToMany(mappedBy = "marketid", cascade = CascadeType.ALL)
@@ -46,6 +47,22 @@ public class MarketBean {
 
 	
 	
+
+	public String getProduct() {
+		return product;
+	}
+
+	public void setProduct(String product) {
+		this.product = product;
+	}
+
+	public String getProducttype() {
+		return producttype;
+	}
+
+	public void setProducttype(String producttype) {
+		this.producttype = producttype;
+	}
 
 	public String getContactname() {
 		return contactname;

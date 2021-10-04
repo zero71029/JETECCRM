@@ -3,15 +3,20 @@ package com.JetecCRM.JetecCRM.controler.service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JetecCRM.JetecCRM.model.MarketBean;
 import com.JetecCRM.JetecCRM.model.MarketRemarkBean;
+import com.JetecCRM.JetecCRM.model.QuotationBean;
 import com.JetecCRM.JetecCRM.model.TrackBean;
 import com.JetecCRM.JetecCRM.repository.MarketRemarkRepository;
 import com.JetecCRM.JetecCRM.repository.MarketRepository;
+import com.JetecCRM.JetecCRM.repository.QuotationRepository;
 import com.JetecCRM.JetecCRM.repository.TrackRepository;
 
 @Service
@@ -23,14 +28,17 @@ public class MarketService {
 	MarketRemarkRepository mrr;
 	@Autowired
 	TrackRepository tr;
+	@Autowired
+	QuotationRepository qr;
 
 	public void save(MarketBean marketBean) {
 		mr.save(marketBean);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////
-	public List<MarketBean> getList() {
-		return mr.findAll();
+	public List<MarketBean> getList() {		
+		Sort sort =  Sort.by(Direction.DESC,"marketid");		
+		return mr.findAll( sort);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +108,21 @@ public class MarketService {
 //存追蹤
 	public void SaveTrack(TrackBean trackBean) {
 		tr.save(trackBean);
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//存報價單
+	public void SaveQuotation(QuotationBean qBean) {
+		qr.save(qBean);
+//		qr.delNull();
+//		qr.alterINCREMENT();
+		
+		
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取報價單細節
+	public Object getQuotationById(Integer id) {
+	
+		return qr.getById(id);
 	}
 
 

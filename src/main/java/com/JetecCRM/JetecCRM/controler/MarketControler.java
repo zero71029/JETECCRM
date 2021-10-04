@@ -15,6 +15,7 @@ import com.JetecCRM.JetecCRM.controler.service.PotentialCustomerService;
 import com.JetecCRM.JetecCRM.model.MarketBean;
 import com.JetecCRM.JetecCRM.model.MarketRemarkBean;
 import com.JetecCRM.JetecCRM.model.PotentialCustomerBean;
+import com.JetecCRM.JetecCRM.model.QuotationBean;
 import com.JetecCRM.JetecCRM.model.TrackBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 
@@ -149,6 +150,52 @@ public class MarketControler {
 		System.out.println("搜索潛在客戶");
 		model.addAttribute("list", PCS.selectPotentialCustomer(name));
 		return "/Market/potentialcustomerList";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//轉換
+	@RequestMapping("/goQuotation.action")
+	public String goQuotation(MarketBean marketBean, Model model) {
+		System.out.println(marketBean);
+		QuotationBean qBean = new QuotationBean();
+		qBean.setName(marketBean.getClient());
+		qBean.setPhone(marketBean.getContactphone());
+		qBean.setContactname(marketBean.getContactname());
+		qBean.setContactmoblie(marketBean.getContactmoblie());
+		qBean.setRemark(marketBean.getMessage());
+		qBean.setUser(marketBean.getUser());
+		model.addAttribute("bean", qBean);
+		return "/Market/Quotation";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//存報價單
+	@RequestMapping("/SaveQuotation")
+	public String SaveQuotation(QuotationBean qBean) {
+		System.out.println("存報價單");
+		System.out.println(qBean);
+		System.out.println(qBean.getQdb());
+		
+		
+		
+		ms.SaveQuotation(qBean);
+		return "redirect:/CRM/Quotation/1";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取報價單細節
+	@RequestMapping("/Quotation/{id}")
+	public String Quotation(Model model, @PathVariable("id") Integer id) {
+		System.out.println("*****讀取報價單細節****");
+		
+		if (id == 0) {
+			model.addAttribute("bean", new QuotationBean());
+		} else {
+			model.addAttribute("bean", ms.getQuotationById(id));
+		}
+//model.addAttribute("admin", ar.findAll());
+
+		return "/Market/Quotation";
 	}
 
 }

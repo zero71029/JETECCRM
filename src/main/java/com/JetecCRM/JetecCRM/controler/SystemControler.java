@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.JetecCRM.JetecCRM.controler.service.SystemService;
 import com.JetecCRM.JetecCRM.model.AdminBean;
-import com.JetecCRM.JetecCRM.model.PotentialCustomerBean;
 
 @Controller
 @RequestMapping("/CRM")

@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JetecCRM.JetecCRM.model.MarketBean;
 import com.JetecCRM.JetecCRM.model.PotentialCustomerBean;
-import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.PotentialCustomerRepository;
 import com.JetecCRM.JetecCRM.repository.TrackRepository;
 
