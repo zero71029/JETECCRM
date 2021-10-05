@@ -3,10 +3,10 @@
         <!-- <%-- 頁首--%> -->
         <header class="container-fluid mainColor headtop">
             <div class="row">
-                <a href='${pageContext.request.contextPath}/CRM.jsp' class='col-md-2'>CRM</a>
+                <a href='${pageContext.request.contextPath}/CRM' class='col-md-2'>CRM</a>
                 <div class='col-md-8'></div>
-                <span class='col-md-2' style="">${adminLogin.name} <a
-                        href="${pageContext.request.contextPath}/backstage/Signout">登出</a></span>
+                <span class='col-md-2' style="font-size: 2.5rem;">${user.name} <a
+                        href="${pageContext.request.contextPath}/Signout">登出</a></span>
             </div>
 
         </header>
@@ -40,7 +40,8 @@
                     系統管理
                 </button>
                 <button class="system"
-                    onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminList'">員工管理</button>
+                    onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminList'">員工管理</button>
+                    <button class="system" onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboardList'">公佈欄</button>
 
             </ul>
         </div>

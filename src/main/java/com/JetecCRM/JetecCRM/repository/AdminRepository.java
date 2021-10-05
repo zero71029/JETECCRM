@@ -6,4 +6,8 @@ import com.JetecCRM.JetecCRM.model.AdminBean;
 
 public interface AdminRepository extends JpaRepository<AdminBean, Integer>{
 
+	boolean existsByEmailAndPassword(String userName, String userPassword);
+
+	AdminBean findByEmailAndPassword(String userName, String userPassword);
+
 }

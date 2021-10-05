@@ -3,17 +3,18 @@ package com.JetecCRM.JetecCRM.controler.service;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.model.AgreementBean;
 import com.JetecCRM.JetecCRM.model.MarketBean;
 import com.JetecCRM.JetecCRM.model.MarketRemarkBean;
 import com.JetecCRM.JetecCRM.model.QuotationBean;
+import com.JetecCRM.JetecCRM.model.QuotationDetailBean;
 import com.JetecCRM.JetecCRM.model.TrackBean;
 import com.JetecCRM.JetecCRM.repository.AgreementRepository;
 import com.JetecCRM.JetecCRM.repository.MarketRemarkRepository;
@@ -34,6 +35,8 @@ public class MarketService {
 	QuotationRepository qr;
 	@Autowired
 	AgreementRepository ar;
+	@Autowired
+	ZeroTools zTools;
 	
 	
 
@@ -118,6 +121,14 @@ public class MarketService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //存報價單
 	public void SaveQuotation(QuotationBean qBean) {
+		System.out.println(qBean.getQdb());
+		for(QuotationDetailBean qdb : qBean.getQdb()) {
+			if(qdb.getId() == null || qdb.getId().length() == 0) {
+				qdb.setId(zTools.getUUID());
+				qdb.setQuotationid(qBean.getQuotationid());
+			}
+
+		}
 		qr.save(qBean);
 //		qr.delNull();
 //		qr.alterINCREMENT();

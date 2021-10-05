@@ -229,7 +229,7 @@
                                     <div class="col-md-2 ">金額</div>
                                 </div>
                             </div>
-                            <div>
+                            <div class="pdb">
                                 <c:if test="${not empty bean.qdb}">
                                     <c:forEach varStatus="loop" begin="0" end="${bean.qdb.size()-1}" items="${bean.qdb}"
                                         var="s">
@@ -247,17 +247,19 @@
                                                 <div class="col-md-2 "><input value="${s.total}" type="number"
                                                         name="qdb[${loop.index}].total"></div>
                                             </div>
-                                            <div class="col-md-1">✚</div>
-                                        </div><br>
+
+                                        </div>
                                     </c:forEach>
                                 </c:if>
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-6  row">
-                                        <div class="col-md-2 "><input type="text" name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].product">
+                                        <div class="col-md-2 "><input type="text"
+                                                name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].product">
                                         </div>
-                                        <div class="col-md-2 "><input type="text" name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].producttype">
+                                        <div class="col-md-2 "><input type="text"
+                                                name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].producttype">
                                         </div>
                                         <div class="col-md-2 "><input type="number"
                                                 name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].price"></div>
@@ -266,7 +268,8 @@
                                         <div class="col-md-2 "><input type="number"
                                                 name="qdb[${bean.qdb.size()==null?0:bean.qdb.size()}].total"></div>
                                     </div>
-                                    <div class="col-md-1">✚</div><br>
+                                    <div class="col-md-1" onclick="newpdb()" style="color: blue;">✚</div><br>
+                                    <div class="col-md-1" onclick="newpdb()" style="color: blue;">-</div><br>
                                 </div>
                             </div>
                             <div class="row">
@@ -395,6 +398,19 @@
 
             });
 
+            //新增數量
+            var index = ${ bean.qdb.size() == null ? 0 : bean.qdb.size()};
+            function newpdb() {
+                index++;
+                $(".pdb").append('<div class="row"><div class="col-md-1"></div><div class="col-md-6  row">' +
+                '<div class="col-md-2 "><input type="text"  name="qdb['+index+'].product"></div>' +
+                '<div class="col-md-2 "><input type="text"  name="qdb['+index+'].producttype"></div>' +
+                '<div class="col-md-2 "><input type="number"name="qdb['+index+'].price"></div>' +
+                '<div class="col-md-2 "><input type="number"name="qdb['+index+'].num"></div>' +
+                '<div class="col-md-2 "><input type="number"name="qdb['+index+'].total"></div>' +
+                '</div><div class="col-md-1" onclick="newpdb()" style="color: blue;">✚</div><br></div>');
+
+            }
 
 
 

@@ -2,8 +2,6 @@ package com.JetecCRM.JetecCRM.model;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,8 +12,8 @@ import javax.persistence.Table;
 public class QuotationDetailBean {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id ;//
+
+	private String id ;//
 	private Integer quotationid;	
 	private String product;	
 	private String producttype;	
@@ -33,13 +31,20 @@ public class QuotationDetailBean {
 	
 	
 	
-	public Integer getId() {
+
+
+	public QuotationBean getQb() {
+		return qb;
+	}
+	public void setQb(QuotationBean qb) {
+		this.qb = qb;
+	}
+	public String getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
-
 	public Integer getQuotationid() {
 		return quotationid;
 	}

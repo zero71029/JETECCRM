@@ -31,6 +31,43 @@
                 <div class="row justify-content-end">
                     <div class="col-md-10">
                         <!-- <%-- 中間主體--%> -->
+                        <h1>公佈欄</h1>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-8 row">
+                                <c:if test="${not empty list}">
+                                    <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}"
+                                        var="s">
+
+                                        <table border="2" class="table">
+
+                                            <tr class="table-primary">
+                                                <td class="table-primary" colspan="2">${s.theme}</td>
+                                            </tr>
+                                            <tr style="position: relative;">
+                                                <td td class="table-primary" style=" height: 100px; width: 100px;"> 發佈者: <br> ${s.user}
+                                                </td>
+                                                <td>${s.content}<span
+                                                        style="position: absolute ; right: 0%; bottom: 0%;">${s.createtime}</span>
+                                                </td>
+                                            </tr><br><br>
+
+                                        </table><br>
+
+                                    </c:forEach>
+                                </c:if>
+
+
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+
+
+
+
+
+
+
 
                     </div>
                 </div>

@@ -58,7 +58,7 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-10">
-                                <h3>員工資料</h3>
+                                <h3>公佈欄</h3>
                             </div>
                         </div>
 
@@ -72,98 +72,46 @@
                             </div>
                         </div>
                         <br>
-                        <form action="${pageContext.request.contextPath}/CRM/SaveAdmin" method="post" id="myform"
+                        <form action="${pageContext.request.contextPath}/system/SaveBillboard" method="post" id="myform"
                             class="basefrom g-3 needs-validation">
                             <div class="row">
-                                <input type="hidden" name="adminid" value="${bean.adminid}">
+                                <input type="hidden" name="billboardid" value="${bean.billboardid}">
+                                <input type="hidden" name="user" value="${user.name}">
 
-
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">名稱*</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="name"
-                                            value="${bean.name}" maxlength="20" required>
-                                        <div class="invalid-tooltip">須輸入</div>
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">編號</div>
-                                    <div class="col-md-2 cell">${bean.adminid}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">電話*</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="phone"
-                                            value="${bean.phone}" maxlength="20" required>
-                                        <div class="invalid-tooltip">須輸入</div>
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">Email</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="email" class=" form-control cellFrom" name="email"
-                                            value="${bean.email}" maxlength="90">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">地址</div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">主題*</div>
                                     <div class="col-md-5 cell">
-                                        <input type="text" class=" form-control cellFrom" name="address"
-                                            value="${bean.address}" maxlength="100">
+                                        <input type="text" class=" form-control cellFrom" name="theme"
+                                            value="${bean.theme}" maxlength="90" required>                                        
                                     </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">發佈者</div>
+                                    <div class="col-md-1 cell">${bean.user}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
+                                    <div class="col-md-5 cell ">
+                                        <textarea class="cellFrom" name="content"  cols="65" rows="10" required maxlength="450">${bean.content}</textarea>
+                                    </div>
+                                 
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">狀態</div>
                                     <div class="col-md-2 cell">
                                         <select input type="text" class=" form-select cellFrom" name="state">
-                                            <option ${bean.state=="在職" ?"selected":null} class="selItemOff">在職</option>
-                                            <option ${bean.state=="留職停薪" ?"selected":null} class="selItemOff">留職停薪</option>
-                                            <option ${bean.state=="離職" ?"selected":null} class="selItemOff">離職</option>
-                                            <option ${bean.state=="試用" ?"selected":null} class="selItemOff">試用</option>
-                                            <option ${bean.state=="合約到期" ?"selected":null} class="selItemOff">合約到期</option>
-                                            <option ${bean.state=="退休" ?"selected":null} class="selItemOff">退休</option>                                           
+                                            <option ${bean.state=="發佈" ?"selected":null} class="selItemOff">發佈</option>
+                                            <option ${bean.state=="下架" ?"selected":null} class="selItemOff">下架</option>                                      
                                         </select>
                                     </div>
-                                    <div class="col-md-1 cell cellbackgroud">職位</div>
-                                    <div class="col-md-2 cell">
-                                            <select input type="text" class=" form-select cellFrom" name="position">
-                                                <option ${bean.position=="職員" ?"selected":null} class="selItemOff">職員</option>
-                                                <option ${bean.position=="主管" ?"selected":null} class="selItemOff">主管</option> 
-                                            </select>
+                                    <div class="col-md-1 cell cellbackgroud">日期</div>
+                                    <div class="col-md-2 cell">${bean.createtime}
+
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud"> 部門</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="department"
-                                            value="${bean.department}" maxlength="20">
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">直屬主管</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="director"
-                                            value="${bean.director}" maxlength="20">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">密碼</div>
-                                    <div class="col-md-2 cell position-relative">
-                                        <input type="password" class=" form-control cellFrom" name="password"
-                                            id="password" value="${bean.password}" maxlength="20">
-                                        <div class="invalid-tooltip">
-                                            須輸入密碼
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">密碼確認</div>
-                                    <div class="col-md-2 cell position-relative">
-                                        <input type="password" class=" form-control cellFrom" name="password_again"
-                                            id="password_again" value="${bean.password}" maxlength="20">
-                                        <div class="invalid-tooltip">
-                                            須輸入密碼
-                                        </div>
-                                    </div>
-                                </div>
+          
 
 
 
