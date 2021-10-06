@@ -236,6 +236,8 @@
                                         <div class="row">
                                             <div class="col-md-1"></div>
                                             <div class="col-md-6  row">
+                                                <input type="hidden" name="qdb[${loop.index}].id" value="${s.id}">
+                                                <input type="hidden" name="qdb[${loop.index}].quotationid" value="${s.quotationid}">
                                                 <div class="col-md-2 "><input value="${s.product}" type="text"
                                                         name="qdb[${loop.index}].product"></div>
                                                 <div class="col-md-2 "><input value="${s.producttype}" type="text"
@@ -243,7 +245,7 @@
                                                 <div class="col-md-2 "><input value="${s.price}" type="number"
                                                         name="qdb[${loop.index}].price"></div>
                                                 <div class="col-md-2 "><input value="${s.num}" type="number"
-                                                        name="qdb[${loop.index}].num"></div>
+                                                        name="qdb[${loop.index}].num"></div>.
                                                 <div class="col-md-2 "><input value="${s.total}" type="number"
                                                         name="qdb[${loop.index}].total"></div>
                                             </div>

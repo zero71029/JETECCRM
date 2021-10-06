@@ -2,6 +2,10 @@ package com.JetecCRM.JetecCRM.controler;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.JetecCRM.JetecCRM.controler.service.SystemService;
 import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
+import com.JetecCRM.JetecCRM.repository.AdminRepository;
+import com.google.api.client.http.HttpRequest;
 
 @Controller
 @RequestMapping("/system")
@@ -20,6 +26,9 @@ public class SystemControler {
 
 	@Autowired
 	SystemService ss;
+	@Autowired
+	AdminRepository ar;
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取員工列表
@@ -42,11 +51,30 @@ public class SystemControler {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存員工
 	@RequestMapping("/SaveAdmin")
-	public String SaveAdmin(AdminBean abean) {
-		System.out.println("*****儲存員工*****");
-		System.out.println(abean);
+	public String SaveAdmin(AdminBean abean,HttpServletRequest req) {
+		System.out.println("*****儲存員工*****");		
 		ss.SaveAdmin(abean);
+		ServletContext sce = req.getServletContext();
+		sce.setAttribute("admin", ar.findAll());
+		
+		
+		
+		
 		return "redirect:/system/adminList";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除員工
+	@RequestMapping("/delAdmin")
+	@ResponseBody
+	public String delAdmin(@RequestParam("id") List<Integer> id,HttpServletRequest sce) {
+		System.out.println("*****刪除員工*****");
+		ss.delAdmin(id,sce);
+		
+		
+		
+		
+		return "刪除成功";
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

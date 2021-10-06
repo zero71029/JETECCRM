@@ -2,7 +2,10 @@ package com.JetecCRM.JetecCRM.controler.service;
 
 import java.util.List;
 
-import org.apache.logging.log4j.util.StringBuilderFormattable;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -39,14 +42,23 @@ public class SystemService {
 //儲存員工
 	public void SaveAdmin(AdminBean abean) {
 		ar.save(abean);
+	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除員工
+	public void delAdmin(List<Integer> id, HttpServletRequest sce) {
+		for (Integer i : id) {
+			ar.deleteById(i);
+		}
+		ServletContext app = sce.getServletContext();
+		app.setAttribute("admin", ar.findAll());
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
 	public List<BillboardBean> getBillboardList(String state) {
 		Sort sort = Sort.by(Direction.DESC, "billboardid");
-		return br.getByState(state,sort);
+		return br.getByState(state, sort);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,13 +84,14 @@ public class SystemService {
 
 		return br.getById(id);
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //刪除公佈欄
 	public void delBillboard(List<Integer> id) {
-		for (Integer i : id) {	
+		for (Integer i : id) {
 			br.deleteById(i);
 		}
-		
+
 	}
 
 }

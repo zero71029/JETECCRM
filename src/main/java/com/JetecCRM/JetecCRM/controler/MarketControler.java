@@ -180,8 +180,8 @@ public class MarketControler {
 		System.out.println(qBean);
 		System.out.println(qBean.getQdb());
 
-		ms.SaveQuotation(qBean);
-		return "redirect:/CRM/Quotation/1";
+		QuotationBean save  = ms.SaveQuotation(qBean);
+		return "redirect:/CRM/Quotation/" +save.getQuotationid();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

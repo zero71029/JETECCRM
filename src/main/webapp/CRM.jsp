@@ -48,7 +48,7 @@
                                                 <td td class="table-primary" style=" height: 100px; width: 100px;"> 發佈者: <br> ${s.user}
                                                 </td>
                                                 <td>${s.content}<span
-                                                        style="position: absolute ; right: 0%; bottom: 0%;">${s.createtime}</span>
+                                                        style="position: absolute ; right: 0%; bottom: 0%;">發佈時間:${s.createtime}</span>
                                                 </td>
                                             </tr><br><br>
 

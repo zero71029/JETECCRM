@@ -47,13 +47,13 @@
                             </div>
                         </div> <!-- <%-- 抬頭搜索--%> -->
                         <div class="col-lg-5">
-                            <form action="${pageContext.request.contextPath}/CRM/selectMarket" method="post">
-                                <div class="input-group mb-3" style="width: 95%; padding-left: 50px;">
+                            <form action="${pageContext.request.contextPath}/CRM/selectAdmin" method="post">
+                                <!-- <div class="input-group mb-3" style="width: 95%; padding-left: 50px;">
                                     <input type="text" class="form-control" placeholder=" 客戶名稱 or 公司 or 負責人 "
                                         aria-label="Recipient's username" aria-describedby="button-addon2" name="name">
                                     <button class="btn btn-outline-secondary" type="submit"
                                         id="selectProduct">搜索</button>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                         <!-- <%-- 中間主體--%> -->
@@ -74,17 +74,17 @@
                                     <tr class="item">
                                         <td><input type="checkbox" value="${s.adminid}" name="mak"></td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
                                             ${s.adminid}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
                                             ${s.name}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
 
                                             ${s.department}</td>
                                         <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
                                        
                                              ${s.position}
 
@@ -132,7 +132,7 @@
                         }
                         console.log(parm);
                         $.ajax({
-                            url: '${pageContext.request.contextPath}/CRM/delMarket',//接受請求的Servlet地址
+                            url: '${pageContext.request.contextPath}/system/delAdmin',//接受請求的Servlet地址
                             type: 'POST',
                             data: parm,
                             // dataType:"json",
@@ -143,7 +143,7 @@
 
                             success: function (json) {
                                 alert(json);
-                                window.location.href = "${pageContext.request.contextPath}/CRM/MarketList";
+                                window.location.href = "${pageContext.request.contextPath}/system/adminList";
                             },
                             error: function (returndata) {
                                 console.log(returndata);

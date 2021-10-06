@@ -14,7 +14,7 @@ public interface QuotationRepository extends JpaRepository<QuotationBean, Intege
 
 	@Transactional
 	@Modifying
-	@Query(value = "DELETE FROM quotationdetail where quotationid is null ", nativeQuery = true)
+	@Query(value = "DELETE FROM quotationdetail where product = '' ", nativeQuery = true)
 	void delNull();
 
 	@Transactional

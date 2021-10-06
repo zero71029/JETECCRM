@@ -20,7 +20,8 @@ public class BillboardBean {
 	private String content; //內容	
 	private String state; //狀態	
 	private Date createtime; //創造時間	
-	private String endtime; //結束時間
+	private String endtime; //結束時間	
+	
 	public Integer getBillboardid() {
 		return billboardid;
 	}

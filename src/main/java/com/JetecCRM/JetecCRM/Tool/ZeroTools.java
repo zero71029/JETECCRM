@@ -8,7 +8,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -199,6 +201,8 @@ public class ZeroTools {
 		}
 		return false;
 	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	
     /** 
      * 獲得一個UUID 
      * @return String UUID 
@@ -207,6 +211,15 @@ public class ZeroTools {
         String s = UUID.randomUUID().toString(); 
         //去掉“-”符號 
         return s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24); 
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+//時間格式畫
+    public  String getTime(Date date){ 
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    	
+    	
+   
+        return sdf.format(date); 
     }
     
 }

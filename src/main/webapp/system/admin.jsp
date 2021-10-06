@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <br>
-                        <form action="${pageContext.request.contextPath}/CRM/SaveAdmin" method="post" id="myform"
+                        <form action="${pageContext.request.contextPath}/system/SaveAdmin" method="post" id="myform"
                             class="basefrom g-3 needs-validation">
                             <div class="row">
                                 <input type="hidden" name="adminid" value="${bean.adminid}">
@@ -100,7 +100,7 @@
                                     <div class="col-md-1 cell cellbackgroud">Email</div>
                                     <div class="col-md-2 cell">
                                         <input type="email" class=" form-control cellFrom" name="email"
-                                            value="${bean.email}" maxlength="90">
+                                            value="${bean.email}" maxlength="90" required>
                                     </div>
                                 </div>
                                 <div class="row">

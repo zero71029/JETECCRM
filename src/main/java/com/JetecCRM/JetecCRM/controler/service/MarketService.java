@@ -120,17 +120,19 @@ public class MarketService {
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //存報價單
-	public void SaveQuotation(QuotationBean qBean) {
+	public QuotationBean SaveQuotation(QuotationBean qBean) {
 		System.out.println(qBean.getQdb());
 		for(QuotationDetailBean qdb : qBean.getQdb()) {
 			if(qdb.getId() == null || qdb.getId().length() == 0) {
 				qdb.setId(zTools.getUUID());
 				qdb.setQuotationid(qBean.getQuotationid());
 			}
-
 		}
-		qr.save(qBean);
-//		qr.delNull();
+		
+		QuotationBean save = qr.save(qBean);
+		qr.delNull();
+		return save;
+		
 //		qr.alterINCREMENT();
 		
 		
