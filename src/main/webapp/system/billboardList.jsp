@@ -64,6 +64,7 @@
                             <tr>
                                 <td><input type="checkbox" id="activity"></td>
                                 <td>編號</td>
+                                <td></td>
                                 <td>主題</td>
                                 <td>狀態</td>
                                 <td>日期</td>
@@ -75,6 +76,7 @@
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
                                             ${s.billboardid}</td>
+                                            <td style="color: red;" onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">${s.top}</td>
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
                                             ${s.theme}</td>

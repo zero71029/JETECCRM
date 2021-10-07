@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.JetecCRM.JetecCRM.controler.service.SystemService;
 import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
+import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.google.api.client.http.HttpRequest;
 
@@ -28,7 +29,6 @@ public class SystemControler {
 	SystemService ss;
 	@Autowired
 	AdminRepository ar;
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取員工列表
@@ -51,15 +51,12 @@ public class SystemControler {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存員工
 	@RequestMapping("/SaveAdmin")
-	public String SaveAdmin(AdminBean abean,HttpServletRequest req) {
-		System.out.println("*****儲存員工*****");		
+	public String SaveAdmin(AdminBean abean, HttpServletRequest req) {
+		System.out.println("*****儲存員工*****");
 		ss.SaveAdmin(abean);
 		ServletContext sce = req.getServletContext();
 		sce.setAttribute("admin", ar.findAll());
-		
-		
-		
-		
+
 		return "redirect:/system/adminList";
 	}
 
@@ -67,13 +64,10 @@ public class SystemControler {
 //刪除員工
 	@RequestMapping("/delAdmin")
 	@ResponseBody
-	public String delAdmin(@RequestParam("id") List<Integer> id,HttpServletRequest sce) {
+	public String delAdmin(@RequestParam("id") List<Integer> id, HttpServletRequest sce) {
 		System.out.println("*****刪除員工*****");
-		ss.delAdmin(id,sce);
-		
-		
-		
-		
+		ss.delAdmin(id, sce);
+
 		return "刪除成功";
 	}
 
@@ -124,5 +118,15 @@ public class SystemControler {
 		System.out.println("*****刪除公佈欄*****");
 		ss.delBillboard(id);
 		return "刪除成功";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//儲存公佈欄留言
+	@RequestMapping("/saveReply")
+	public String saveReply(BillboardReplyBean bean) {
+		System.out.println("*****儲存公佈欄留言*****");
+		System.out.println(bean);
+		ss.SaveReply(bean);
+		return "redirect:/billboardReply/"+bean.getBillboardid();
 	}
 }

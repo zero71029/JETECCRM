@@ -44,7 +44,7 @@ public class ClientBean {
 	
 	
 	@JsonIgnore
-	@OneToMany(targetEntity = ContactBean.class   ,mappedBy = "clientid", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = ContactBean.class ,mappedBy = "clientid", cascade = CascadeType.ALL)
 	private List<ContactBean> contact;	
 	
 	

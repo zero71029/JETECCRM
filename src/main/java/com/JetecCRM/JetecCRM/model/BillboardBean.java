@@ -1,12 +1,18 @@
 package com.JetecCRM.JetecCRM.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "billboard")
@@ -14,14 +20,63 @@ public class BillboardBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer billboardid;
-
 	private String user; //發表人	
 	private String theme; //主題	
 	private String content; //內容	
 	private String state; //狀態	
 	private Date createtime; //創造時間	
 	private String endtime; //結束時間	
+	private String time;//
+	private String top;//
+	private String readcount;//保留給已讀人數用
+	private String billtowngroup;
 	
+	@JsonIgnore
+	@OneToMany(targetEntity = BillboardReadBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
+	private List<BillboardReadBean> read;
+	@JsonIgnore
+	@OneToMany(targetEntity = BillboardReplyBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
+	private List<BillboardReplyBean> reply;
+	
+	
+	
+	public List<BillboardReplyBean> getReply() {
+		return reply;
+	}
+	public void setReply(List<BillboardReplyBean> reply) {
+		this.reply = reply;
+	}
+	public String getBilltowngroup() {
+		return billtowngroup;
+	}
+	public void setBilltowngroup(String billtowngroup) {
+		this.billtowngroup = billtowngroup;
+	}
+	public List<BillboardReadBean> getRead() {
+		return read;
+	}
+	public void setRead(List<BillboardReadBean> read) {
+		this.read = read;
+	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public String getTop() {
+		return top;
+	}
+	public void setTop(String top) {
+		this.top = top;
+	}
+	public String getReadcount() {
+		return readcount;
+	}
+	public void setReadcount(String readcount) {
+		this.readcount = readcount;
+	}
 	public Integer getBillboardid() {
 		return billboardid;
 	}
@@ -52,8 +107,9 @@ public class BillboardBean {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public Date getCreatetime() {
-		return createtime;
+	public String getCreatetime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		return sdf.format(createtime); 
 	}
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;

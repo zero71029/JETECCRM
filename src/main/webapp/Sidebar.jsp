@@ -3,7 +3,7 @@
         <!-- <%-- 頁首--%> -->
         <header class="container-fluid mainColor headtop">
             <div class="row">
-                <a href='${pageContext.request.contextPath}/CRM' class='col-md-2'>CRM</a>
+                <a href='${pageContext.request.contextPath}/' class='col-md-2'>CRM</a>
                 <div class='col-md-8'></div>
                 <span class='col-md-2' style="font-size: 2.5rem;">${user.name} <a class="Signout"
                         href="${pageContext.request.contextPath}/Signout">登出</a></span>
