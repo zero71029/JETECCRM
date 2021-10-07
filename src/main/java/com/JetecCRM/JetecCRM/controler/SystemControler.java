@@ -3,8 +3,8 @@ package com.JetecCRM.JetecCRM.controler;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.controler.service.SystemService;
 import com.JetecCRM.JetecCRM.model.AdminBean;
+import com.JetecCRM.JetecCRM.model.AuthorizeBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
-import com.google.api.client.http.HttpRequest;
+import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 
 @Controller
 @RequestMapping("/system")
@@ -29,6 +32,13 @@ public class SystemControler {
 	SystemService ss;
 	@Autowired
 	AdminRepository ar;
+	@Autowired
+	BillboardRepository br;
+	@Autowired
+	AuthorizeRepository authorizeRepository;
+
+	@Autowired
+	ZeroTools zTools;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取員工列表
@@ -92,10 +102,11 @@ public class SystemControler {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄
 	@RequestMapping("/SaveBillboard")
-	public String SaveBillboard(BillboardBean bean) {
+	public String SaveBillboard(BillboardBean bean, HttpSession session) {
 		System.out.println("*****儲存公佈欄*****");
 		System.out.println(bean);
-		ss.SaveBillboard(bean);
+		ss.SaveBillboard(bean,session);
+
 		return "redirect:/system/billboardList";
 	}
 
@@ -126,7 +137,41 @@ public class SystemControler {
 	public String saveReply(BillboardReplyBean bean) {
 		System.out.println("*****儲存公佈欄留言*****");
 		System.out.println(bean);
-		ss.SaveReply(bean);
-		return "redirect:/billboardReply/"+bean.getBillboardid();
+		if (ss.SaveReply(bean)) {
+			BillboardBean bb = br.getById(bean.getBillboardid());
+			AdminBean abean = ar.findByName(bb.getUser());
+
+			String mailTo = abean.getEmail();
+			String Subject = bean.getName() + "回覆留言";
+			String text = "主題 :" + bb.getTheme() + "<br>回覆 :" + bean.getContent();
+			StringBuilder maillist = new StringBuilder();
+			zTools.mail(mailTo, text, Subject, maillist.toString());
+		}
+
+		return "redirect:/billboardReply/" + bean.getBillboardid();
 	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//公佈欄授權
+	@RequestMapping("/authorize")
+	@ResponseBody
+	public String authorize(@RequestParam("adminid") Integer adminid) {
+		System.out.println("*****公佈欄授權*****");
+		String uuid = zTools.getUUID();
+		if (adminid != 0) {
+			AdminBean aBean = ar.getById(adminid);
+			String mailTo = aBean.getEmail();
+			String Subject = "公佈欄授權";
+			AuthorizeBean authorizeBean = new AuthorizeBean();
+			authorizeBean.setId(uuid);
+			authorizeBean.setUsed(aBean.getName());
+			authorizeRepository.save(authorizeBean);
+			String text = String.format("<a href='http://192.168.11.114:8081/authorize/%s'>點擊鍊接留言</a>", uuid);
+			String maillist = "";
+			zTools.mail(mailTo, text, Subject, maillist);
+		}
+		return String.format("http://192.168.11.114:8081/authorize/%s", uuid);
+	}
+
+
 }

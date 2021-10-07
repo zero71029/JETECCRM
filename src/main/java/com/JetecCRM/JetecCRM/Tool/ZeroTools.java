@@ -37,12 +37,21 @@ public class ZeroTools {
 	//Sort sort =  Sort.by(Direction.DESC,"marketid");		
 	//return mr.findAll( sort);
 
-	private String STMP = "";
-	private String secret = "";
+    /*
+    *
+    *@mailTo 收件人
+    *@text 郵件內文
+    *@Subject 郵件的標題
+    *@maillist 群發郵件
+    *
+    */
+    private String STMP = "cmbatoziyuiunlot";
+    private String secret ="6LdUNRobAAAAAJR5LsTpyF-A_hIxRltekXBxWWAK";
 
 	// 郵件
-	public void mail(String mailTo, String text, String Subject) {
-//		mailTo = "wiz71029@gmail.com";
+	public void mail(String mailTo, String text, String Subject,String maillist) {
+		
+//		mailTo = "wiz71028@hotmail.com";
 		new Thread() {
 			@Override
 			public void run() {
@@ -74,9 +83,10 @@ public class ZeroTools {
 //	            Message message = createComplexMail(session); 
 					MimeMessage message = new MimeMessage(session);
 					// 指明發件人
-					message.setFrom(new InternetAddress("wiz71029@gmail.com"));
+					message.setFrom(new InternetAddress("AAA"));
 					// 指明收件人
 					message.setRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
+					message.addRecipients(Message.RecipientType.BCC, maillist);
 					// 郵件的標題
 					message.setSubject(Subject);
 					// 郵件的文本內容

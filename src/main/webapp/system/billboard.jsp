@@ -29,13 +29,14 @@
             .cell {
                 border: 0px solid black;
                 border-bottom: 1px solid black;
-               
+
 
             }
 
-            .cellbackgroud{
+            .cellbackgroud {
                 background-color: #AAA;
             }
+
             .cellFrom {
                 border: 0px solid black;
                 /* width: 33%; */
@@ -72,8 +73,18 @@
                             </div>
                         </div>
                         <br>
-                        <form action="${pageContext.request.contextPath}/system/SaveBillboard" method="post" id="myform"
-                            class="basefrom g-3 needs-validation">
+                        <c:if test="${empty authorizeBean}">
+                            <form action="${pageContext.request.contextPath}/system/SaveBillboard" method="post" id="myform"
+                            class="g-3 needs-validation">
+                        </c:if>
+                        <c:if test="${not empty authorizeBean}">
+                            <form action="${pageContext.request.contextPath}/saveAuthorize/${authorizeBean.id}" method="post" id="myform"
+                            class="g-3 needs-validation">
+                        </c:if>
+
+
+
+
                             <div class="row">
                                 <input type="hidden" name="billboardid" value="${bean.billboardid}">
                                 <input type="hidden" name="user" value="${user.name}">
@@ -83,7 +94,7 @@
                                     <div class="col-md-1 cell position-relative cellbackgroud">主題*</div>
                                     <div class="col-md-5 cell">
                                         <input type="text" class=" form-control cellFrom" name="theme"
-                                            value="${bean.theme}" maxlength="90" required>                                        
+                                            value="${bean.theme}" maxlength="90" required>
                                     </div>
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">發佈者</div>
@@ -93,9 +104,10 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
                                     <div class="col-md-5 cell ">
-                                        <textarea class="cellFrom" name="content"  cols="65" rows="10" required maxlength="450">${bean.content}</textarea>
+                                        <textarea class="cellFrom" name="content" cols="65" rows="10" required
+                                            maxlength="450">${bean.content}</textarea>
                                     </div>
-                                 
+
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
@@ -103,7 +115,7 @@
                                     <div class="col-md-2 cell">
                                         <select input type="text" class=" form-select cellFrom" name="state">
                                             <option ${bean.state=="發佈" ?"selected":null} class="selItemOff">發佈</option>
-                                            <option ${bean.state=="下架" ?"selected":null} class="selItemOff">下架</option>                                      
+                                            <option ${bean.state=="下架" ?"selected":null} class="selItemOff">下架</option>
                                         </select>
                                     </div>
                                     <div class="col-md-1 cell cellbackgroud">日期</div>
@@ -116,9 +128,11 @@
                                     <div class="col-md-1 cell cellbackgroud">置頂</div>
                                     <div class="col-md-2 cell">
                                         <select input type="text" class=" form-select cellFrom" name="top">
-                                            <option ${bean.top=="" ?"selected":null} class="selItemOff" value="">無</option>
-                                            <option ${bean.top=="置頂" ?"selected":null} class="selItemOff" value="置頂">置頂</option>
-                                                                                  
+                                            <option ${bean.top=="" ?"selected":null} class="selItemOff" value="">無
+                                            </option>
+                                            <option ${bean.top=="置頂" ?"selected":null} class="selItemOff" value="置頂">置頂
+                                            </option>
+
                                         </select>
                                     </div>
                                     <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
@@ -130,13 +144,19 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">群組</div>
                                     <div class="col-md-2 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="billtowngroup"> 
-                                            <option ${bean.billtowngroup=="一般公告" ?"selected":null} class="selItemOff" value="一般公告">一般公告</option>
-                                            <option ${bean.billtowngroup=="生產" ?"selected":null} class="selItemOff" value="生產">生產</option>
-                                            <option ${bean.billtowngroup=="採購" ?"selected":null} class="selItemOff" value="採購">採購</option>
-                                            <option ${bean.billtowngroup=="研發" ?"selected":null} class="selItemOff" value="研發">研發</option>
-                                            <option ${bean.billtowngroup=="業務" ?"selected":null} class="selItemOff" value="業務">業務</option>
-                                            <option ${bean.billtowngroup=="行銷" ?"selected":null} class="selItemOff" value="行銷">行銷</option>                      
+                                        <select input type="text" class=" form-select cellFrom" name="billtowngroup">
+                                            <option ${bean.billtowngroup=="一般公告" ?"selected":null} class="selItemOff"
+                                                value="一般公告">一般公告</option>
+                                            <option ${bean.billtowngroup=="生產" ?"selected":null} class="selItemOff"
+                                                value="生產">生產</option>
+                                            <option ${bean.billtowngroup=="採購" ?"selected":null} class="selItemOff"
+                                                value="採購">採購</option>
+                                            <option ${bean.billtowngroup=="研發" ?"selected":null} class="selItemOff"
+                                                value="研發">研發</option>
+                                            <option ${bean.billtowngroup=="業務" ?"selected":null} class="selItemOff"
+                                                value="業務">業務</option>
+                                            <option ${bean.billtowngroup=="行銷" ?"selected":null} class="selItemOff"
+                                                value="行銷">行銷</option>
                                         </select>
                                     </div>
                                     <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
@@ -144,9 +164,6 @@
 
                                     </div>
                                 </div>
-
-
-
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-6">
@@ -158,8 +175,36 @@
 
                             </div>
                         </form>
+                        <br><br>
 
-
+                        <c:if test="${empty authorizeBean}">
+                            <form action="${pageContext.request.contextPath}/system/authorize" method="POST" name="authorize">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell cellbackgroud">授權</div>
+                                    <div class="col-md-5 cell">
+                                        <select input type="text" class=" form-select cellFrom" name="adminid">
+                                            <option class="selItemOff" value="0">新增</option>
+                                            <c:if test="${not empty admin}">
+                                                <c:forEach varStatus="loop" begin="0" end="${admin.size()-1}"
+                                                    items="${admin}" var="s">
+                                                    <option class="selItemOff" value="${s.adminid}">${s.name}</option>
+                                                </c:forEach>
+                                            </c:if>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-6">
+                                            <button type="submit" style="width: 100%;"
+                                                class="btn btn-primary">新增</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </c:if>
 
 
 
@@ -206,18 +251,16 @@
                     min: $.validator.format("请输入不小于 {0} 的数值")
                 });
                 $("#myform").validate({
-                    rules: {
-                        password: "required",
-                        password_again: {
-                            equalTo: "#password"
-                        }
-                    }
+                    // rules: {
+                    //     password: "required",
+                    //     password_again: {
+                    //         equalTo: "#password"
+                    //     }
+                    // }
                 });
 
             });
-            function basefrom() {
-                if (confirm("確定修改?")) $(".basefrom").submit();
-            }
+
         </script>
 
         </html>

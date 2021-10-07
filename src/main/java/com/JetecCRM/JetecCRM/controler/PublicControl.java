@@ -12,8 +12,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.controler.service.SystemService;
+import com.JetecCRM.JetecCRM.model.AdminBean;
+import com.JetecCRM.JetecCRM.model.AuthorizeBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
+import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
+import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 
 @Controller
 public class PublicControl {
@@ -24,6 +29,10 @@ public class PublicControl {
 	SystemService ss;
 	@Autowired
 	ZeroTools zTool;
+	@Autowired
+	AuthorizeRepository authorizeRepository;
+	@Autowired
+	BillboardRepository br;
 
 	@RequestMapping(path = { "/", "/index" })
 	public String index(Model model) {
@@ -85,4 +94,31 @@ public class PublicControl {
 		return "/system/billboardReply";
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//公佈欄授權
+	@RequestMapping("/authorize/{uuid}")
+	public String authorize(Model model, @PathVariable("uuid") String uuid, HttpSession session) {
+		if (authorizeRepository.existsById(uuid)) {
+			AuthorizeBean authorizeBean = authorizeRepository.getById(uuid);
+			AdminBean user = (AdminBean) session.getAttribute("user");
+			if (user.getName().equals(authorizeBean.getUsed())) {
+				model.addAttribute("authorizeBean", authorizeBean);
+				return "/system/billboard";
+			}
+		}
+		return "";
+
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 儲存授權
+	@RequestMapping("/saveAuthorize/{uuid}")
+	public String saveAuthorize(Model model, @PathVariable("uuid") String uuid, BillboardBean bean,HttpSession session) {
+		System.out.println("*****儲存授權*****");
+		if(ss.SaveBillboard(bean,session)) {
+			authorizeRepository.deleteById(uuid);
+		};
+		
+		return "redirect:/";
+	}
 }

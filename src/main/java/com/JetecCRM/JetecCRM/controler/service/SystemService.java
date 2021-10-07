@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -81,11 +81,24 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄
-	public void SaveBillboard(BillboardBean bean) {
+	public boolean SaveBillboard(BillboardBean bean,HttpSession session) {
 		
 		String content = bean.getContent();
 		bean.setContent(content.replaceAll("\\n", "<br>"));
 		br.save(bean);
+		AdminBean adminBean = (AdminBean) session.getAttribute("user");
+		String mailTo = adminBean.getEmail();
+		String Subject = bean.getTheme();
+		String text = bean.getContent();
+		StringBuilder maillist = new StringBuilder();
+		for (AdminBean a : ar.findAll()) {
+			maillist.append(a.getEmail());
+			maillist.append(",");
+		}
+		maillist.append("jeter.tony56@gmail.com");
+		zTools.mail(mailTo, text, Subject, maillist.toString());
+
+		return true;
 
 	}
 
@@ -142,9 +155,10 @@ public class SystemService {
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
-	public void SaveReply(BillboardReplyBean bean) {
+	public boolean SaveReply(BillboardReplyBean bean) {
 		bean.setReplyid(zTools.getUUID());
 		billboardReplyRepository.save(bean);
+		return true;
 	}
 
 }

@@ -3,7 +3,7 @@
         <!-- <%-- 頁首--%> -->
         <header class="container-fluid mainColor headtop">
             <div class="row">
-                <a href='${pageContext.request.contextPath}/' class='col-md-2'>CRM</a>
+                <a href='${pageContext.request.contextPath}/' class='col-md-2' style="font-size: 2.5rem;">CRM</a>
                 <div class='col-md-8'></div>
                 <span class='col-md-2' style="font-size: 2.5rem;">${user.name} <a class="Signout"
                         href="${pageContext.request.contextPath}/Signout">登出</a></span>
@@ -38,13 +38,15 @@
                 <button class="list-group-item " onclick="javascript:location.href=''">
                     數據管理
                 </button>
-                <button class="list-group-item " onclick="system()">
-                    系統管理
-                </button>
-                <button class="system"
-                    onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminList'">員工管理</button>
-                <button class="system"
-                    onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboardList'">公佈欄</button>
+                <c:if test='${user.position == "主管"}'>
+                    <button class="list-group-item " onclick="system()">
+                        系統管理
+                    </button>
+                    <button class="system"
+                        onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminList'">員工管理</button>
+                    <button class="system"
+                        onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboardList'">公佈欄</button>
+                </c:if>
 
             </ul>
         </div>
@@ -73,7 +75,7 @@
             if (Signout == '') {
                 $('.Signout').text("登入");
                 $('.Signout').attr("href", "/time.jsp");
-            }else{
-                
+            } else {
+
             }
         </script>
