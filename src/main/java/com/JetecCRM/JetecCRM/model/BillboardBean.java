@@ -6,9 +6,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -29,6 +32,7 @@ public class BillboardBean {
 	private String time;//
 	private String top;//
 	private String readcount;//保留給已讀人數用
+	private String billboardgroupid;
 	private String billtowngroup;
 	
 	@JsonIgnore
@@ -40,17 +44,42 @@ public class BillboardBean {
 	
 	
 	
+	
+	@ManyToOne(targetEntity = BillboardGroupBean.class,fetch = FetchType.EAGER)
+	@JoinColumn(name = "billboardgroupid", referencedColumnName = "billboardgroupid", insertable = false, updatable = false)
+	private BillboardGroupBean bgb;
+	
+	
+	
+	public BillboardGroupBean getBgb() {
+		return bgb;
+	}
+	public void setBgb(BillboardGroupBean bgb) {
+		this.bgb = bgb;
+	}
+	
+	
+	
+	
+	
+	public String getBilltowngroup() {
+		return billtowngroup;
+	}
+	public void setBilltowngroup(String billtowngroup) {
+		this.billtowngroup = billtowngroup;
+	}
 	public List<BillboardReplyBean> getReply() {
 		return reply;
 	}
 	public void setReply(List<BillboardReplyBean> reply) {
 		this.reply = reply;
 	}
-	public String getBilltowngroup() {
-		return billtowngroup;
+
+	public String getBillboardgroupid() {
+		return billboardgroupid;
 	}
-	public void setBilltowngroup(String billtowngroup) {
-		this.billtowngroup = billtowngroup;
+	public void setBillboardgroupid(String billboardgroupid) {
+		this.billboardgroupid = billboardgroupid;
 	}
 	public List<BillboardReadBean> getRead() {
 		return read;

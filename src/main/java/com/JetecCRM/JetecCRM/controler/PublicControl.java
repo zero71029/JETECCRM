@@ -15,7 +15,6 @@ import com.JetecCRM.JetecCRM.controler.service.SystemService;
 import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.AuthorizeBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
-import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
@@ -70,7 +69,6 @@ public class PublicControl {
 	@ResponseBody
 	public String read(@PathVariable("billboardid") Integer billboardid, @PathVariable("username") String username) {
 		System.out.println("*****點擊已讀*****");
-
 		return ss.saveRead(billboardid, username);
 	}
 
@@ -79,8 +77,8 @@ public class PublicControl {
 	@RequestMapping("/ReRead/{billboardid}/{username}")
 	public String ReRead(@PathVariable("billboardid") Integer billboardid, @PathVariable("username") String username) {
 		System.out.println("*****點擊已讀*****");
-		ss.ReRead(billboardid, username);
-		return "redirect:/";
+		ss.ReRead(billboardid, username);		
+		return "redirect:/billboardReply/"+billboardid ;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,8 +115,17 @@ public class PublicControl {
 		System.out.println("*****儲存授權*****");
 		if(ss.SaveBillboard(bean,session)) {
 			authorizeRepository.deleteById(uuid);
-		};
-		
+		};		
 		return "redirect:/";
 	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取公佈欄列表
+	@RequestMapping("/selectBillboardGroup/{billboardgroupid}")
+	public String selectBillboardGroup(Model model,@PathVariable("billboardgroupid") String billboardgroupid) {
+//		List<BillboardBean> resulet = ss.getBillboardList("發佈");
+
+		model.addAttribute("list", ss.getBillboardList("發佈",billboardgroupid));
+		return "/CRM";
+	}	
+	
 }

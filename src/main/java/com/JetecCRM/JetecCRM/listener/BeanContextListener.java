@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardGroupRepository;
 import com.JetecCRM.JetecCRM.repository.ClientRepository;
 
 @Component
@@ -16,6 +17,8 @@ public class BeanContextListener implements ServletContextListener {
 	AdminRepository ar;
 	@Autowired
 	ClientRepository cr;
+	@Autowired
+	BillboardGroupRepository bgr;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
@@ -23,6 +26,7 @@ public class BeanContextListener implements ServletContextListener {
 		ServletContext app = sce.getServletContext();
 		app.setAttribute("admin", ar.findAll());
 		app.setAttribute("client", cr.findAll());
+		app.setAttribute("billboardgroup", bgr.findAll());
 	}
 
 	@Override

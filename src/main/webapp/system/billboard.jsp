@@ -53,12 +53,12 @@
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
             <div class="container-fluid">
                 <div class="row justify-content-end">
-                    <div class="col-md-10">
+                    <div class="col-lg-10">
                         <!-- <%-- 中間主體--%> -->
                         <br>
                         <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-10">
+
+                            <div class="col-lg-10">
                                 <h3>公佈欄</h3>
                             </div>
                         </div>
@@ -66,123 +66,127 @@
 
 
                         <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-2">
+
+                            <div class="col-lg-2">
                                 <a href="javascript:history.back()"
                                     style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
                             </div>
                         </div>
                         <br>
                         <c:if test="${empty authorizeBean}">
-                            <form action="${pageContext.request.contextPath}/system/SaveBillboard" method="post" id="myform"
-                            class="g-3 needs-validation">
+                            <form action="${pageContext.request.contextPath}/system/SaveBillboard" method="post"
+                                id="myform" class="g-3 needs-validation">
                         </c:if>
                         <c:if test="${not empty authorizeBean}">
-                            <form action="${pageContext.request.contextPath}/saveAuthorize/${authorizeBean.id}" method="post" id="myform"
-                            class="g-3 needs-validation">
+                            <form action="${pageContext.request.contextPath}/saveAuthorize/${authorizeBean.id}"
+                                method="post" id="myform" class="g-3 needs-validation">
                         </c:if>
 
 
 
 
+                        <div class="row">
+                            <input type="hidden" name="billboardid" value="${bean.billboardid}">
+                            <input type="hidden" name="user" value="${user.name}">
+
                             <div class="row">
-                                <input type="hidden" name="billboardid" value="${bean.billboardid}">
-                                <input type="hidden" name="user" value="${user.name}">
 
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">主題*</div>
-                                    <div class="col-md-5 cell">
-                                        <input type="text" class=" form-control cellFrom" name="theme"
-                                            value="${bean.theme}" maxlength="90" required>
-                                    </div>
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">發佈者</div>
-                                    <div class="col-md-1 cell">${bean.user}</div>
+                                <div class="col-lg-1 cell position-relative cellbackgroud">主題*</div>
+                                <div class="col-lg-5 cell">
+                                    <input type="text" class=" form-control cellFrom" name="theme" value="${bean.theme}"
+                                        maxlength="90" required>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
-                                    <div class="col-md-5 cell ">
-                                        <textarea class="cellFrom" name="content" cols="65" rows="10" required
-                                            maxlength="450">${bean.content}</textarea>
-                                    </div>
+                                <div class="col-lg-1"></div>
+                                <div class="col-lg-1 cell position-relative cellbackgroud">發佈者</div>
+                                <div class="col-lg-1 cell">${bean.user}</div>
+                            </div>
+                            <div class="row">
 
+                                <div class="col-lg-1 cell position-relative cellbackgroud">內容*</div>
+                                <div class="col-lg-5 cell ">
+                                    <textarea class="cellFrom" name="content" cols="65" rows="10" required
+                                        maxlength="450">${bean.content}</textarea>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">狀態</div>
-                                    <div class="col-md-2 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="state">
-                                            <option ${bean.state=="發佈" ?"selected":null} class="selItemOff">發佈</option>
-                                            <option ${bean.state=="下架" ?"selected":null} class="selItemOff">下架</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">日期</div>
-                                    <div class="col-md-2 cell">${bean.createtime}
-
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">置頂</div>
-                                    <div class="col-md-2 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="top">
-                                            <option ${bean.top=="" ?"selected":null} class="selItemOff" value="">無
-                                            </option>
-                                            <option ${bean.top=="置頂" ?"selected":null} class="selItemOff" value="置頂">置頂
-                                            </option>
-
-                                        </select>
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
-                                    <div class="col-md-2 cell">${bean.read.size()}
-
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">群組</div>
-                                    <div class="col-md-2 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="billtowngroup">
-                                            <option ${bean.billtowngroup=="一般公告" ?"selected":null} class="selItemOff"
-                                                value="一般公告">一般公告</option>
-                                            <option ${bean.billtowngroup=="生產" ?"selected":null} class="selItemOff"
-                                                value="生產">生產</option>
-                                            <option ${bean.billtowngroup=="採購" ?"selected":null} class="selItemOff"
-                                                value="採購">採購</option>
-                                            <option ${bean.billtowngroup=="研發" ?"selected":null} class="selItemOff"
-                                                value="研發">研發</option>
-                                            <option ${bean.billtowngroup=="業務" ?"selected":null} class="selItemOff"
-                                                value="業務">業務</option>
-                                            <option ${bean.billtowngroup=="行銷" ?"selected":null} class="selItemOff"
-                                                value="行銷">行銷</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
-                                    <div class="col-md-2 cell">${bean.read.size()}
-
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-6">
-                                        <button type="submit" style="width: 100%;"
-                                            class="btn btn-primary">新增/修改</button>
-                                    </div>
-                                </div>
-
 
                             </div>
+                            <div class="row">
+
+                                <div class="col-lg-1 cell cellbackgroud">狀態</div>
+                                <div class="col-lg-2 cell">
+                                    <select input type="text" class=" form-select cellFrom" name="state">
+                                        <option ${bean.state=="發佈" ?"selected":null} class="selItemOff">發佈</option>
+                                        <option ${bean.state=="下架" ?"selected":null} class="selItemOff">下架</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-1 cell cellbackgroud">日期</div>
+                                <div class="col-lg-2 cell">${bean.createtime}
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-lg-1 cell cellbackgroud">置頂</div>
+                                <div class="col-lg-2 cell">
+                                    <select input type="text" class=" form-select cellFrom" name="top">
+                                        <option ${bean.top=="" ?"selected":null} class="selItemOff" value="">無
+                                        </option>
+                                        <option ${bean.top=="置頂" ?"selected":null} class="selItemOff" value="置頂">置頂
+                                        </option>
+
+                                    </select>
+                                </div>
+                                <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
+                                <div class="col-lg-2 cell">${bean.read.size()}
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-lg-1 cell cellbackgroud">群組</div>
+                                <div class="col-lg-2 cell">
+                                    <select input type="text" class=" form-select cellFrom" name="billtowngroup">
+                                        <option ${bean.billtowngroup=="一般公告" ?"selected":null} class="selItemOff"
+                                            value="一般公告">一般公告</option>
+                                        <option ${bean.billtowngroup=="生產" ?"selected":null} class="selItemOff"
+                                            value="生產">生產</option>
+                                        <option ${bean.billtowngroup=="採購" ?"selected":null} class="selItemOff"
+                                            value="採購">採購</option>
+                                        <option ${bean.billtowngroup=="研發" ?"selected":null} class="selItemOff"
+                                            value="研發">研發</option>
+                                        <option ${bean.billtowngroup=="業務" ?"selected":null} class="selItemOff"
+                                            value="業務">業務</option>
+                                        <option ${bean.billtowngroup=="行銷" ?"selected":null} class="selItemOff"
+                                            value="行銷">行銷</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-1 cell cellbackgroud">子項</div>
+                                <div class="col-lg-2 cell">
+                                    <select name="billboardgroupid" id="" class="form-select billtownoption">
+                                        <!--  -->
+
+                                        <!--  -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <button type="submit" style="width: 100%;" class="btn btn-primary">新增/修改</button>
+                                </div>
+                            </div>
+
+
+                        </div>
                         </form>
                         <br><br>
 
                         <c:if test="${empty authorizeBean}">
-                            <form action="${pageContext.request.contextPath}/system/authorize" method="POST" name="authorize">
+                            <form action="${pageContext.request.contextPath}/system/authorize" method="POST"
+                                name="authorize">
                                 <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">授權</div>
-                                    <div class="col-md-5 cell">
+
+                                    <div class="col-lg-1 cell cellbackgroud">授權</div>
+                                    <div class="col-lg-5 cell">
                                         <select input type="text" class=" form-select cellFrom" name="adminid">
                                             <option class="selItemOff" value="0">新增</option>
                                             <c:if test="${not empty admin}">
@@ -196,8 +200,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="row">
-                                        <div class="col-md-1"></div>
-                                        <div class="col-md-6">
+
+                                        <div class="col-lg-6">
                                             <button type="submit" style="width: 100%;"
                                                 class="btn btn-primary">新增</button>
                                         </div>
@@ -205,15 +209,55 @@
                                 </div>
                             </form>
                         </c:if>
-
-
-
                     </div>
+                    <!-- 回覆內容 -->
+                    <c:if test="${not empty bean.reply}">
+                        <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
+                            var="s">
+                            <div class="row" style="line-height: 2rem;">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-1 cell cellbackgroud">${s.name}</div>
+                                <div class="col-md-5 cell" style="position: relative;">${s.content} <span
+                                        style="position: absolute;right: 0%;">${s.createtime}</span></div>
+                            </div>
+                        </c:forEach>
+                    </c:if>
                 </div>
             </div>
         </body>
         <!-- 驗證UI -->
         <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
+        <!-- 分類 -->
+        <script>
+            var billboardgroup = new Array();
+        </script>
+        <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}" items="${billboardgroup}" var="s">
+            <script>
+                billboardgroup.push({ "${s.billboardgroup}": "${s.billboardoption}" });
+            </script>
+        </c:forEach>
+        <script>
+            for (var option of billboardgroup) {
+                console.log(option);
+                if (Object.keys(option)[0] == "一般公告") $(".billtownoption").append('<option  value="' + option["一般公告"] + '">' + option["一般公告"] + '</option>');
+            }
+            var aaa = '${bean.bgb.billboardoption}';
+            if (aaa == '') {
+
+            } else {
+                $(".billtownoption").val(aaa);
+            }
+            $(".billtownoption").append('<option value="new" style="background-color: #ccc;">新增</option>');
+            $(".billtownoption").change(function () {
+                console.log($(".billtownoption").val());
+                if($(".billtownoption").val() == "new"){
+                    location.href="${pageContext.request.contextPath}/system/addOption";
+                }
+            });
+
+
+        </script>
+        <!-- 分類結束 -->
         <script>
             $(".system").show();
 

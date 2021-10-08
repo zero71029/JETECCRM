@@ -11,8 +11,9 @@
             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
 
             <!-- bootstrap的CSS、JS樣式放這裡  -->
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.rtl.min.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/css/bootstrap.min.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/css/bootstrap.rtl.min.css">
+            <script src="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/js/bootstrap.bundle.js"></script>
             <!-- <%-- jQuery放這裡 --%> -->
             <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
@@ -22,19 +23,159 @@
 
 
         <body>
-
-
             <!-- <%-- 插入側邊欄--%> -->
             <jsp:include page="/Sidebar.jsp"></jsp:include>
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
             <div class="container-fluid">
                 <div class="row justify-content-end">
-                    <div class="col-md-10">
+                    <div class="col-lg-11">
+                        <!-- 導覽列 -->
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="text-align: left;">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="${pageContext.request.contextPath}">公布欄</a>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+
+                                <div class="collapse navbar-collapse " id="navbarSupportedContent" >
+                                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                                        <li class="nav-item dropdown" >
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">                                                
+                                                一般公告
+                                            </a>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown" style="text-align: left;">                                                
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "一般公告"}'>
+                                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a></li>
+                                                    </c:if>                                                    
+                                                </c:forEach>
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                生產
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">全部</a></li>
+                                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                採購
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">全部</a></li>
+                                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                研發
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">全部</a></li>
+                                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                業務
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">全部</a></li>
+                                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                行銷
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">全部</a></li>
+                                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            </ul>
+                                        </li>
+
+
+                                    </ul>
+                                    <form class="d-flex">
+                                        <input class="form-control me-2" type="search" placeholder="Search"
+                                            aria-label="Search">
+                                        <button class="btn btn-outline-success" type="submit">Search</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </nav>
+                        <!-- 導覽列 -->
+                    </div>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-lg-8">
                         <!-- <%-- 中間主體--%> -->
-                        <h1>公佈欄</h1><h1 style="color: red;">${param.mess=="1"?"權限不夠":""}</h1>
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-8 row">
+                        <h1 style="color: red;">${param.mess=="1"?"權限不夠":""}</h1>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr style="text-align:center">
+                                    <th scope="col-lg" style="width: 700px;">主題</th>
+                                    <th scope="col-lg">發布時間</th>
+                                    <th scope="col-lg">最後回覆時間</th>
+                                    <th scope="col-lg">回應</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:if test="${not empty list}">
+                                    <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}"
+                                        var="s">
+                                        <tr style="Cursor: pointer ;vertical-align: middle;"
+                                            onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'">
+                                            <td>[${s.billtowngroup}] &nbsp; ${s.theme} <span
+                                                    style="color: red;">${s.top}</span></td>
+                                            <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
+                                            <td style="text-align: center;">${s.reply[0].createtime}</td>
+                                            <td>${s.reply.size()}</td>
+                                        </tr>
+
+
+
+                                    </c:forEach>
+                                </c:if>
+
+                            </tbody>
+                        </table>
+
+
+                        <%-- <div class="row">
+                            <div class="col-lg-12 row">
                                 <c:if test="${not empty list}">
                                     <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}"
                                         var="s">
@@ -42,7 +183,8 @@
 
                                             <tr class="table-primary">
                                                 <td class="table-primary" colspan="2"
-                                                    onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'" style="Cursor: pointer">
+                                                    onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'"
+                                                    style="Cursor: pointer">
                                                     ${s.theme} <span style="color: red;">${s.top}</span></td>
                                             </tr>
                                             <tr style="position: relative;">
@@ -52,7 +194,6 @@
                                                 <td>${s.content}
                                                     <c:if test="${not empty user}">
                                                         <!-- 有登入才顯示 -->
-
                                                         <c:set var="i" value="false"></c:set>
                                                         <c:forEach varStatus="loop" begin="0" end="${s.read.size()}"
                                                             items="${s.read}" var="read">
@@ -96,10 +237,12 @@
 
 
                             </div>
-                            <div class="col-md-1"></div>
-                        </div>
+                            <div class="col-lg-1"></div>
                     </div>
+                    --%>
                 </div>
+                <div class="col-lg-3">xxxxxxxxxxx</div>
+            </div>
             </div>
             <script>
                 function read(billboardid, username) {
@@ -107,7 +250,7 @@
                     $.ajax({
                         url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + username,//接受請求的Servlet地址
                         type: 'POST',
-                        // data: formData,
+                        // data: formdata,
                         // async: false,//同步請求
                         // cache: false,//不快取頁面
                         // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
@@ -120,10 +263,6 @@
                             console.log(returndata);
                         }
                     });
-
-
-
-
                 }
             </script>
         </body>

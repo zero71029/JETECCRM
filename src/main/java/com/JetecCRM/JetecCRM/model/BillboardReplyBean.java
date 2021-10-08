@@ -1,5 +1,6 @@
 package com.JetecCRM.JetecCRM.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -40,8 +41,9 @@ public class BillboardReplyBean {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getCreatetime() {
-		return createtime;
+	public String getCreatetime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		return sdf.format(createtime);
 	}
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;

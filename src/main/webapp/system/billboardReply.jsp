@@ -55,29 +55,15 @@
                 <div class="row justify-content-end">
                     <div class="col-md-10">
                         <!-- <%-- 中間主體--%> -->
+                        
                         <br>
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-10">
-                                <h3>公佈欄</h3>
-                            </div>
-                        </div>
 
-
-
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-2">
-                                <a href="javascript:history.back()"
-                                    style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
-                            </div>
-                        </div>
 
 
 
                         <br>
                         <form action="${pageContext.request.contextPath}/system/" method="post" id="myform"
-                            class="basefrom g-3" novalidate>
+                            style="line-height: 2rem;" class=" g-3" novalidate>
                             <div class="row">
                                 <input type="hidden" name="billboardid" value="${bean.billboardid}">
                                 <input type="hidden" name="user" value="${user.name}">
@@ -95,8 +81,33 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
-                                    <div class="col-md-5 cell ">
+                                    <div class="col-md-5 cell " style="position: relative;">
                                         ${bean.content}
+
+
+                                        <c:if test="${not empty user}">
+                                            <!-- 有登入才顯示 -->
+                                            <c:set var="i" value="false"></c:set>
+                                            <c:forEach varStatus="loop" begin="0" end="${bean.read.size()}"
+                                                items="${bean.read}" var="read">
+
+                                                <!-- 已讀迴圈 -->
+                                                <!-- 登入者 已讀 i == ture -->
+                                                <c:if test="${user.name == read.name}">
+                                                    <c:set var="i" value="ture"></c:set>
+                                                    <c:set var="exitID" value="0"></c:set>
+                                                </c:if>
+                                            </c:forEach>
+                                            <!--  已讀 才顯示 -->
+                                            <c:if test='${i == "ture"}'>
+                                                <a href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.name}'
+                                                    style='position: absolute ; right: 1%; bottom: 30px;'>取消已讀</a>
+                                            </c:if>
+                                            <c:if test='${i != "ture"}'>
+                                                <a href="javascript:read(${bean.billboardid},'${user.name}')"
+                                                    style='position: absolute ; right: 1%; bottom: 30px;'>已讀點擊</a>
+                                            </c:if>
+                                        </c:if>
                                     </div>
 
                                 </div>
@@ -111,37 +122,40 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">群組</div>
                                     <div class="col-md-2 cell">${bean.billtowngroup}</div>
-                                    <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
-                                    <div class="col-md-2 cell">${bean.read.size()}</div>
+                                    <div class="col-md-1 cell cellbackgroud">子項</div>
+                                    <div class="col-md-2 cell">
+                                        
+                                    </div>
                                 </div>
                             </div>
                         </form>
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-10">
-                                <h3>回覆</h3>
-                            </div>
-                        </div>
+
+
+                        <!-- 回覆內容 -->
                         <c:if test="${not empty bean.reply}">
                             <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
                                 var="s">
-                                <div class="row">
+                                <div class="row" style="line-height: 2rem;">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">${s.name}</div>
-                                    <div class="col-md-5 cell">${s.content}</div>
+                                    <div class="col-md-5 cell" style="position: relative;">${s.content} <span
+                                            style="position: absolute;right: 0%;">${s.createtime}</span></div>
                                 </div>
                             </c:forEach>
                         </c:if>
 
 
 
-
-
-
-
+                        <!-- 回覆輸入 -->
                         <br>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                                <h3>回覆</h3>
+                            </div>
+                        </div>
                         <form action="${pageContext.request.contextPath}/system/saveReply" method="post" id="formReply"
-                            class="basefrom g-3 needs-validation">
+                            class=" g-3 needs-validation">
                             <input type="hidden" name="billboardid" value="${bean.billboardid}">
                             <input type="hidden" name="name" value="${user.name}">
                             <div class="row">
@@ -186,7 +200,7 @@
                     submitHandler: function () {
                         if ("${user}" == "") {
                             alert('須登入');
-                            location.href = "${pageContext.request.contextPath}/billboardReply/${bean.billboardid}";
+                            // location.href = "${pageContext.request.contextPath}/billboardReply/${bean.billboardid}";
                         } else if (confirm("確定題交?")) form.submit();
                     }
                 });
@@ -211,8 +225,25 @@
                 $("#formReply").validate();
 
             });
-            function basefrom() {
-                if (confirm("確定修改?")) $(".basefrom").submit();
+
+            function read(billboardid, username) {
+                console.log(username);
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + username,//接受請求的Servlet地址
+                    type: 'POST',
+                    // data: formdata,
+                    // async: false,//同步請求
+                    // cache: false,//不快取頁面
+                    // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                    // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                    success: function (json) {
+                        alert(json);
+                        location.href = "${pageContext.request.contextPath}/billboardReply/"+billboardid;
+                    },
+                    error: function (returndata) {
+                        console.log(returndata);
+                    }
+                });
             }
         </script>
 

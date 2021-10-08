@@ -13,4 +13,9 @@ public interface BillboardRepository extends JpaRepository<BillboardBean, Intege
 
 	List<BillboardBean> getByStateAndTop(String state, String string, Sort sort);
 
+	List<BillboardBean> getByStateAndBillboardgroupidAndTop(String state, String billboardgroupid, String string,
+			Sort sort);
+
+	List<BillboardBean> getByStateAndBilltowngroupAndTop(String state, String string, String string2, Sort sort);
+
 }

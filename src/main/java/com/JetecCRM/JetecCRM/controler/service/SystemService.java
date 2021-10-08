@@ -78,6 +78,29 @@ public class SystemService {
 		
 		return resulet;
 	}
+	//讀取公佈欄列表  加分類	
+	
+	public List<BillboardBean> getBillboardList(String state, String billboardgroupid) {
+		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
+		Sort sort = Sort.by(Direction.DESC, "billboardid");
+		if("1dasgregrehvbcv".equals(billboardgroupid)) {
+			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"一般公告","置頂", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state,"一般公告","", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			return resulet;
+		}else {
+			List<BillboardBean>  list = br.getByStateAndBillboardgroupidAndTop(state,billboardgroupid,"置頂", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			list = br.getByStateAndBillboardgroupidAndTop(state,billboardgroupid,"", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			return resulet;
+			
+		}
+
+//		return resulet;
+		
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄
@@ -160,5 +183,7 @@ public class SystemService {
 		billboardReplyRepository.save(bean);
 		return true;
 	}
+
+
 
 }

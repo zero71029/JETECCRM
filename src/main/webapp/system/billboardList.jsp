@@ -31,7 +31,7 @@
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
             <div class="container-fluid">
                 <div class="row justify-content-end">
-                    <div class="col-md-10">
+                    <div class="col-md-11">
                         <!-- <%-- 抬頭按鈕--%> -->
                         <div class="row">
                             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">

@@ -3,15 +3,15 @@
         <!-- <%-- 頁首--%> -->
         <header class="container-fluid mainColor headtop">
             <div class="row">
-                <a href='${pageContext.request.contextPath}/' class='col-md-2' style="font-size: 2.5rem;">CRM</a>
-                <div class='col-md-8'></div>
-                <span class='col-md-2' style="font-size: 2.5rem;">${user.name} <a class="Signout"
+                <a href='${pageContext.request.contextPath}/' class='col-lg-2' style="font-size: 2.5rem;">CRM</a>
+                <div class='col-lg-8'></div>
+                <span class='col-lg-2' style="font-size: 2.5rem;">${user.name} <a class="Signout"
                         href="${pageContext.request.contextPath}/Signout">登出</a></span>
             </div>
 
         </header>
         <!--側邊  -->
-        <div class="col-md-2 navfix mainColor">
+        <div class="col-lg-1 navfix mainColor">
             <ul class="list-group">
                 <button class="list-group-item" onclick="market()">
                     營銷模塊
