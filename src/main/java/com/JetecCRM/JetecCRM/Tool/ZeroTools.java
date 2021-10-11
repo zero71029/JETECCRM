@@ -34,23 +34,58 @@ import com.google.api.client.json.gson.GsonFactory;
 public class ZeroTools {
 
 	// 筆記
-	//Sort sort =  Sort.by(Direction.DESC,"marketid");		
-	//return mr.findAll( sort);
-
-    /*
-    *
-    *@mailTo 收件人
-    *@text 郵件內文
-    *@Subject 郵件的標題
-    *@maillist 群發郵件
-    *
-    */
-    private String STMP = "cmbatoziyuiunlot";
-    private String secret ="6LdUNRobAAAAAJR5LsTpyF-A_hIxRltekXBxWWAK";
+//////jpa排序
+	// Sort sort = Sort.by(Direction.DESC,"marketid");
+	// return mr.findAll( sort);
+///////////////////////////////
+//	HttpServletRequest sce
+//	ServletContext app = sce.getServletContext();
+//	app.setAttribute("billboardgroup", bgr.findAll());
+//////////ajax
+//	$.ajax({
+//        url: '${pageContext.request.contextPath}/CRM/selectContactByClientName/' + $("input[name='client']").val(),//接受請求的Servlet地址
+//        type: 'POST',
+//        // data: formData,
+//        // async: false,//同步請求
+//        // cache: false,//不快取頁面
+//        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+//        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+//        success: function (json) {
+//            $(".CCC").empty();
+//
+//            for (var j of json) {
+//                console.log(j);
+//
+//                $(".CCC").append('<div class="row TTT" onclick="clickContact(`' + j.name + '`,`' + j.phone + '`,`' + j.moblie + '`)">' +
+//                    '<div class="col-md-1"></div>' +
+//                    '<div class="col-md-3">' + j.name + '</div>' +
+//                    '<div class="col-md-3">' + j.phone + '</div>' +
+//                    '<div class="col-md-3">' + j.moblie + '</div>' +
+//                    '</div>');
+//            }
+//        },
+//        error: function (returndata) {
+//            console.log(returndata);
+//        }
+//    });
+//////////////////////////////////////////////////////////////////
+	/*
+	 *
+	 * @mailTo 收件人
+	 * 
+	 * @text 郵件內文
+	 * 
+	 * @Subject 郵件的標題
+	 * 
+	 * @maillist 群發郵件
+	 *
+	 */
+	private String STMP = "cmbatoziyuiunlot";
+	private String secret = "6LdUNRobAAAAAJR5LsTpyF-A_hIxRltekXBxWWAK";
 
 	// 郵件
-	public void mail(String mailTo, String text, String Subject,String maillist) {
-		
+	public void mail(String mailTo, String text, String Subject, String maillist) {
+
 //		mailTo = "wiz71028@hotmail.com";
 		new Thread() {
 			@Override
@@ -212,24 +247,24 @@ public class ZeroTools {
 		return false;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	
-    /** 
-     * 獲得一個UUID 
-     * @return String UUID 
-     */ 
-    public  String getUUID(){ 
-        String s = UUID.randomUUID().toString(); 
-        //去掉“-”符號 
-        return s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24); 
-    }
+
+	/**
+	 * 獲得一個UUID
+	 * 
+	 * @return String UUID
+	 */
+	public String getUUID() {
+		String s = UUID.randomUUID().toString();
+		// 去掉“-”符號
+		return s.substring(0, 8) + s.substring(9, 13) + s.substring(14, 18) + s.substring(19, 23) + s.substring(24);
+	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 //時間格式畫
-    public  String getTime(Date date){ 
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    	
-    	
-   
-        return sdf.format(date); 
-    }
-    
+	public String getTime(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+		return sdf.format(date);
+	}
+
 }

@@ -105,7 +105,7 @@ public class SystemControler {
 	public String SaveBillboard(BillboardBean bean, HttpSession session) {
 		System.out.println("*****儲存公佈欄*****");
 		System.out.println(bean);
-		ss.SaveBillboard(bean,session);
+		ss.SaveBillboard(bean, session);
 
 		return "redirect:/system/billboardList";
 	}
@@ -173,5 +173,18 @@ public class SystemControler {
 		return String.format("http://192.168.11.114:8081/authorize/%s", uuid);
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//新增群組分類
+	@RequestMapping("/addOption/{group}/{option}")
+	@ResponseBody
+	public String addOption(@PathVariable("group")String group,@PathVariable("option")String option,HttpServletRequest sce) {
+		System.out.println("*****新增群組分類*****");
+		
+		ss.saveOption(group,option,sce);
+		
+		
+		
+		return"save ok";
+	}
 
 }

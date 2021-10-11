@@ -55,7 +55,7 @@
                 <div class="row justify-content-end">
                     <div class="col-md-10">
                         <!-- <%-- 中間主體--%> -->
-                        
+
                         <br>
 
 
@@ -124,7 +124,7 @@
                                     <div class="col-md-2 cell">${bean.billtowngroup}</div>
                                     <div class="col-md-1 cell cellbackgroud">子項</div>
                                     <div class="col-md-2 cell">
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@
                         <c:if test="${not empty bean.reply}">
                             <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
                                 var="s">
-                                <div class="row" style="line-height: 2rem;">
+                                <div class="row" style="line-height: 2rem; height: 100px;">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">${s.name}</div>
                                     <div class="col-md-5 cell" style="position: relative;">${s.content} <span
@@ -146,34 +146,36 @@
 
 
 
-                        <!-- 回覆輸入 -->
-                        <br>
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-10">
-                                <h3>回覆</h3>
-                            </div>
-                        </div>
-                        <form action="${pageContext.request.contextPath}/system/saveReply" method="post" id="formReply"
-                            class=" g-3 needs-validation">
-                            <input type="hidden" name="billboardid" value="${bean.billboardid}">
-                            <input type="hidden" name="name" value="${user.name}">
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-1 cell cellbackgroud">留言</div>
-                                <div class="col-md-5 cell ">
-                                    <textarea class="" name="content" cols="78" rows="5" required
-                                        maxlength="450"></textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-6">
-                                    <button type="submit" style="width: 100%;" class="btn btn-primary">留言</button>
-                                </div>
-                            </div>
-                        </form>
+                        <c:if test="${not empty user}">
 
+                            <!-- 回覆輸入 -->
+                            <br>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-10">
+                                    <h3>回覆</h3>
+                                </div>
+                            </div>
+                            <form action="${pageContext.request.contextPath}/system/saveReply" method="post"
+                                id="formReply" class=" g-3 needs-validation">
+                                <input type="hidden" name="billboardid" value="${bean.billboardid}">
+                                <input type="hidden" name="name" value="${user.name}">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell cellbackgroud">留言</div>
+                                    <div class="col-md-5 cell ">
+                                        <textarea class="" name="content" cols="70" rows="5" required
+                                            maxlength="450"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-6">
+                                        <button type="submit" style="width: 100%;" class="btn btn-primary">留言</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </c:if>
 
 
 
@@ -238,7 +240,7 @@
                     // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
                     success: function (json) {
                         alert(json);
-                        location.href = "${pageContext.request.contextPath}/billboardReply/"+billboardid;
+                        location.href = "${pageContext.request.contextPath}/billboardReply/" + billboardid;
                     },
                     error: function (returndata) {
                         console.log(returndata);

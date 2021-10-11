@@ -58,10 +58,7 @@ public class BillboardBean {
 		this.bgb = bgb;
 	}
 	
-	
-	
-	
-	
+
 	public String getBilltowngroup() {
 		return billtowngroup;
 	}

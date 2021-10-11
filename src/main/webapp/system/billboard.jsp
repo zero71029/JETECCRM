@@ -48,6 +48,24 @@
         </style>
 
         <body>
+            <!-- <%-- 彈窗--%> -->
+            <div class="hazy"></div>
+            <div class="cat">
+                <button class="catReturn">X</button>
+                <br>
+                <ul class="optinUL">
+
+                </ul>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control addOption" placeholder="新增" aria-label="Recipient's username"
+                        aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2"
+                        onclick="addOption()">提交</button>
+                </div>
+
+
+            </div>
+            <!-- <%-- 彈窗/////////////////////////////////////--%> -->
             <!-- <%-- 插入側邊欄--%> -->
             <jsp:include page="/Sidebar.jsp"></jsp:include>
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
@@ -57,7 +75,6 @@
                         <!-- <%-- 中間主體--%> -->
                         <br>
                         <div class="row">
-
                             <div class="col-lg-10">
                                 <h3>公佈欄</h3>
                             </div>
@@ -144,7 +161,7 @@
 
                                 <div class="col-lg-1 cell cellbackgroud">群組</div>
                                 <div class="col-lg-2 cell">
-                                    <select input type="text" class=" form-select cellFrom" name="billtowngroup">
+                                    <select input type="text" class=" form-select cellFrom billboardGroup" name="billtowngroup">
                                         <option ${bean.billtowngroup=="一般公告" ?"selected":null} class="selItemOff"
                                             value="一般公告">一般公告</option>
                                         <option ${bean.billtowngroup=="生產" ?"selected":null} class="selItemOff"
@@ -233,12 +250,12 @@
         </script>
         <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}" items="${billboardgroup}" var="s">
             <script>
-                billboardgroup.push({ "${s.billboardgroup}": "${s.billboardoption}" });
+                billboardgroup.push({ "${s.billboardgroup}": "${s.billboardoption}" });                
             </script>
         </c:forEach>
         <script>
             for (var option of billboardgroup) {
-                console.log(option);
+
                 if (Object.keys(option)[0] == "一般公告") $(".billtownoption").append('<option  value="' + option["一般公告"] + '">' + option["一般公告"] + '</option>');
             }
             var aaa = '${bean.bgb.billboardoption}';
@@ -247,19 +264,81 @@
             } else {
                 $(".billtownoption").val(aaa);
             }
+            // 新增分類
+            var group ="";
             $(".billtownoption").append('<option value="new" style="background-color: #ccc;">新增</option>');
             $(".billtownoption").change(function () {
-                console.log($(".billtownoption").val());
-                if($(".billtownoption").val() == "new"){
-                    location.href="${pageContext.request.contextPath}/system/addOption";
+                if ($(".billtownoption").val() == "new") {
+                    $(".cat").show();
+                    $(".hazy").show();
+                    group = "一般公告";
+                    for (var option of billboardgroup) {
+                        console.log(option);
+                        if (Object.keys(option)[0] == "一般公告") $(".optinUL").append('<li>' + option["一般公告"] + ' &nbsp;&nbsp;&nbsp;&nbsp; <a href="">remove</a></li>');
+                    }
                 }
             });
+            function addOption() {
+                console.log($(".addOption").val());
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/system/addOption/'+ group+"/"+ $(".addOption").val(),//接受請求的Servlet地址
+                    type: 'POST',
+                    // data: formData,
+                    // async: false,//同步請求
+                    // cache: false,//不快取頁面
+                    // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                    // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                    success: function (json) {
+                        alert(json);
+                        location.href='http://192.168.11.114:8081/system/billboard/'${bean.billboardid};
+                    },
+                    error: function (returndata) {
+                        console.log(returndata);
+                    }
+                });
+            }
+            //切換群組
+            $(".billboardGroup").change(function(){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            })
 
 
         </script>
-        <!-- 分類結束 -->
+        <!-- 分類結束///////////// -->
         <script>
             $(".system").show();
+            $(".cat").hide();
+            $(".hazy").hide();
+            $(".catReturn").click(function () {
+                $(".cat").hide();
+                $(".hazy").hide();
+            });
 
             $(function () {
                 // 日期UI
@@ -304,7 +383,6 @@
                 });
 
             });
-
         </script>
 
         </html>

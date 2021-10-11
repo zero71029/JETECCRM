@@ -16,9 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
+import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
 import com.JetecCRM.JetecCRM.model.BillboardReadBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardGroupRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReadRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReplyRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
@@ -35,6 +37,8 @@ public class SystemService {
 	BillboardReadRepository brr;
 	@Autowired
 	BillboardReplyRepository billboardReplyRepository;
+	@Autowired
+	BillboardGroupRepository bgr; 
 	@Autowired
 	ZeroTools zTools;
 
@@ -108,6 +112,9 @@ public class SystemService {
 		
 		String content = bean.getContent();
 		bean.setContent(content.replaceAll("\\n", "<br>"));
+		
+		BillboardGroupBean bgb =bgr.findByBillboardgroupAndBillboardoption(bean.getBilltowngroup(),bean.getBillboardgroupid());
+		bean.setBillboardgroupid(bgb.getBillboardgroupid());
 		br.save(bean);
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
 		String mailTo = adminBean.getEmail();
@@ -119,7 +126,7 @@ public class SystemService {
 			maillist.append(",");
 		}
 		maillist.append("jeter.tony56@gmail.com");
-		zTools.mail(mailTo, text, Subject, maillist.toString());
+//		zTools.mail(mailTo, text, Subject, maillist.toString());
 
 		return true;
 
@@ -184,6 +191,16 @@ public class SystemService {
 		return true;
 	}
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//新增群組分類
+	public void saveOption(String group, String option, HttpServletRequest sce) {
+		BillboardGroupBean bean = new BillboardGroupBean();
+		bean.setBillboardgroup(group);
+		bean.setBillboardoption(option);
+		bean.setBillboardgroupid(zTools.getUUID());
+		bgr.save(bean);
+		ServletContext app = sce.getServletContext();
+		app.setAttribute("billboardgroup", bgr.findAll());
+	}
 
 }

@@ -6,4 +6,6 @@ import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
 
 public interface BillboardGroupRepository extends JpaRepository<BillboardGroupBean, String>{
 
+	BillboardGroupBean findByBillboardgroupAndBillboardoption(String billtowngroup, String Billboardgroupid);
+
 }
