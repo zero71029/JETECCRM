@@ -3,6 +3,7 @@ package com.JetecCRM.JetecCRM.controler.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.AEADBadTagException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,10 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.model.AdminBean;
+import com.JetecCRM.JetecCRM.model.AdminMailBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
 import com.JetecCRM.JetecCRM.model.BillboardReadBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
+import com.JetecCRM.JetecCRM.repository.AdminMailRepository;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardGroupRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReadRepository;
@@ -31,6 +34,8 @@ public class SystemService {
 
 	@Autowired
 	AdminRepository ar;
+	@Autowired
+	AdminMailRepository amr;
 	@Autowired
 	BillboardRepository br;
 	@Autowired
@@ -141,21 +146,30 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄
 	public boolean SaveBillboard(BillboardBean bean,HttpSession session) {
-		
+		AdminMailBean adminMailBean =new AdminMailBean();
+		//插入換行
 		String content = bean.getContent();
 		bean.setContent(content.replaceAll("\\n", "<br>"));
-		
+		//插入群組id
 		BillboardGroupBean bgb =bgr.findByBillboardgroupAndBillboardoption(bean.getBilltowngroup(),bean.getBillboardgroupid());
 		bean.setBillboardgroupid(bgb.getBillboardgroupid());
-		br.save(bean);
+		//
+		BillboardBean save = br.save(bean);
+		adminMailBean.setBillboardid(save.getBillboardid());
+		//郵件
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
 		String mailTo = adminBean.getEmail();
 		String Subject = bean.getTheme();
 		String text = bean.getContent();
 		StringBuilder maillist = new StringBuilder();
-		for (AdminBean a : ar.findAll()) {
+		//群發郵件
+		for (AdminBean a : ar.findAll()) {	
 			maillist.append(a.getEmail());
 			maillist.append(",");
+			//抓出所有人插入maill
+			adminMailBean.setAdminmail(zTools.getUUID());
+			adminMailBean.setAdminid(a.getAdminid());
+			amr.save(adminMailBean);
 		}
 		maillist.append("jeter.tony56@gmail.com");
 //		zTools.mail(mailTo, text, Subject, maillist.toString());

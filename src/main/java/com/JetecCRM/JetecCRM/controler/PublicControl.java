@@ -36,7 +36,6 @@ public class PublicControl {
 	@RequestMapping(path = { "/", "/index" })
 	public String index(Model model) {
 //		List<BillboardBean> resulet = ss.getBillboardList("發佈");
-
 		model.addAttribute("list", ss.getBillboardList("發佈"));
 		return "/CRM";
 	}

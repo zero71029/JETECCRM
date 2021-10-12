@@ -1,12 +1,18 @@
 package com.JetecCRM.JetecCRM.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 
 @Entity
@@ -24,8 +30,21 @@ public class AdminBean {
     private String 	position;//職位
     private  Date create_data;//
     private String department;//部門	
-    private String 	director;//主管	
+    private String 	director;//主管
     
+	@JsonIgnore
+	@OneToMany(targetEntity = AdminMailBean.class ,mappedBy = "adminid", cascade = CascadeType.ALL)
+	private List<AdminMailBean> mail;
+    
+    
+    
+    
+	public List<AdminMailBean> getMail() {
+		return mail;
+	}
+	public void setMail(List<AdminMailBean> mail) {
+		this.mail = mail;
+	}
 	public Integer getAdminid() {
 		return adminid;
 	}
