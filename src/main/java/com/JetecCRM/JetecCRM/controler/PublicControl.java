@@ -119,11 +119,11 @@ public class PublicControl {
 		return "redirect:/";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//讀取公佈欄列表
+//讀取公佈欄列表  依分類
 	@RequestMapping("/selectBillboardGroup/{billboardgroupid}")
 	public String selectBillboardGroup(Model model,@PathVariable("billboardgroupid") String billboardgroupid) {
 //		List<BillboardBean> resulet = ss.getBillboardList("發佈");
-
+		System.out.println("*****讀取公佈欄列表*****");
 		model.addAttribute("list", ss.getBillboardList("發佈",billboardgroupid));
 		return "/CRM";
 	}	

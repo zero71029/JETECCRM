@@ -8,4 +8,8 @@ public interface BillboardGroupRepository extends JpaRepository<BillboardGroupBe
 
 	BillboardGroupBean findByBillboardgroupAndBillboardoption(String billtowngroup, String Billboardgroupid);
 
+	boolean existsByBillboardgroupAndBillboardoption(String group, String option);
+
+
+
 }

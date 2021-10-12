@@ -32,7 +32,7 @@
                         <!-- 導覽列 -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="text-align: left;">
                             <div class="container-fluid">
-                                <a class="navbar-brand" href="${pageContext.request.contextPath}">公布欄</a>
+                                <a class="navbar-brand" href="${pageContext.request.contextPath}/">公布欄</a>
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                     aria-expanded="false" aria-label="Toggle navigation">
@@ -60,13 +60,13 @@
                                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 生產
                                             </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="#">全部</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown" style="text-align: left;">                                                
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "生產"}'>
+                                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a></li>
+                                                    </c:if>                                                    
+                                                </c:forEach>
                                             </ul>
                                         </li>
                                         <li class="nav-item dropdown">
@@ -74,13 +74,13 @@
                                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 採購
                                             </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="#">全部</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown" style="text-align: left;">                                                
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "採購"}'>
+                                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a></li>
+                                                    </c:if>                                                    
+                                                </c:forEach>
                                             </ul>
                                         </li>
                                         <li class="nav-item dropdown">
@@ -88,13 +88,13 @@
                                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 研發
                                             </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="#">全部</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown" style="text-align: left;">                                                
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "研發"}'>
+                                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a></li>
+                                                    </c:if>                                                    
+                                                </c:forEach>
                                             </ul>
                                         </li>
                                         <li class="nav-item dropdown">
@@ -102,13 +102,13 @@
                                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 業務
                                             </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="#">全部</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown" style="text-align: left;">                                                
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "業務"}'>
+                                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a></li>
+                                                    </c:if>                                                    
+                                                </c:forEach>
                                             </ul>
                                         </li>
                                         <li class="nav-item dropdown">
@@ -116,13 +116,13 @@
                                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 行銷
                                             </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="#">全部</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown" style="text-align: left;">                                                
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "行銷"}'>
+                                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a></li>
+                                                    </c:if>                                                    
+                                                </c:forEach>
                                             </ul>
                                         </li>
 

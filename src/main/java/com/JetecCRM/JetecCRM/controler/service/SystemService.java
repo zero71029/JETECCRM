@@ -87,13 +87,44 @@ public class SystemService {
 	public List<BillboardBean> getBillboardList(String state, String billboardgroupid) {
 		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
 		Sort sort = Sort.by(Direction.DESC, "billboardid");
-		if("1dasgregrehvbcv".equals(billboardgroupid)) {
+		//如果是 一般公告的全部
+		if("01dasgregrehvbcv一般公告".equals(billboardgroupid)) {
 			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"一般公告","置頂", sort);
 			for(BillboardBean bean : list)resulet.add(bean);
 			list = br.getByStateAndBilltowngroupAndTop(state,"一般公告","", sort);
 			for(BillboardBean bean : list)resulet.add(bean);
 			return resulet;
-		}else {
+		}else if ("01dasgregrehvbcvaaa研發".equals(billboardgroupid)) {
+			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"研發","置頂", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state,"研發","", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			return resulet;
+		}else if ("01dasgregrehvbcvbbb業務".equals(billboardgroupid)) {
+			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"業務","置頂", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state,"業務","", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			return resulet;
+		}else if ("01dasgregrehvbcvccc行銷".equals(billboardgroupid)) {
+			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"行銷","置頂", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state,"行銷","", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			return resulet;
+		}else if ("01dasgregrehvbcvddd生產".equals(billboardgroupid)) {
+			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"生產","置頂", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state,"生產","", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			return resulet;
+		}else if ("01dasgregrehvbcvfggg採購".equals(billboardgroupid)) {
+			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"採購","置頂", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state,"採購","", sort);
+			for(BillboardBean bean : list)resulet.add(bean);
+			return resulet;
+		}else {//不是的話 根據billboardgroupid尋找
 			List<BillboardBean>  list = br.getByStateAndBillboardgroupidAndTop(state,billboardgroupid,"置頂", sort);
 			for(BillboardBean bean : list)resulet.add(bean);
 			list = br.getByStateAndBillboardgroupidAndTop(state,billboardgroupid,"", sort);
@@ -105,6 +136,7 @@ public class SystemService {
 //		return resulet;
 		
 	}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄
@@ -192,15 +224,35 @@ public class SystemService {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//新增群組分類
-	public void saveOption(String group, String option, HttpServletRequest sce) {
+//新增群組子項
+	public void saveOption(String group, String option) {
 		BillboardGroupBean bean = new BillboardGroupBean();
 		bean.setBillboardgroup(group);
 		bean.setBillboardoption(option);
 		bean.setBillboardgroupid(zTools.getUUID());
 		bgr.save(bean);
+
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除群組子項
+	public String delOption(String group, String option) {
+		if(bgr.existsByBillboardgroupAndBillboardoption(group,option)) {
+			BillboardGroupBean bgBean =bgr.findByBillboardgroupAndBillboardoption(group,option);			
+			if(br.existsByBillboardgroupid(bgBean.getBillboardgroupid())) {
+				return "該項目還有留言  不能刪除";
+			}
+			bgr.delete(bgBean);
+			return "刪除成功";
+		}else {
+			return "找不到項目";
+		}
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//更新群組
+	public void updataOption(HttpServletRequest sce) {
 		ServletContext app = sce.getServletContext();
 		app.setAttribute("billboardgroup", bgr.findAll());
 	}
+	
 
 }

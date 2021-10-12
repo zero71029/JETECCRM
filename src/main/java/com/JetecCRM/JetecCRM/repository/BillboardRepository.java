@@ -18,4 +18,6 @@ public interface BillboardRepository extends JpaRepository<BillboardBean, Intege
 
 	List<BillboardBean> getByStateAndBilltowngroupAndTop(String state, String string, String string2, Sort sort);
 
+	boolean existsByBillboardgroupid(String billboardgroupid);
+
 }

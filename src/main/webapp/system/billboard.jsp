@@ -161,7 +161,8 @@
 
                                 <div class="col-lg-1 cell cellbackgroud">群組</div>
                                 <div class="col-lg-2 cell">
-                                    <select input type="text" class=" form-select cellFrom billboardGroup" name="billtowngroup">
+                                    <select input type="text" class=" form-select cellFrom billboardGroup"
+                                        name="billtowngroup">
                                         <option ${bean.billtowngroup=="一般公告" ?"selected":null} class="selItemOff"
                                             value="一般公告">一般公告</option>
                                         <option ${bean.billtowngroup=="生產" ?"selected":null} class="selItemOff"
@@ -250,7 +251,7 @@
         </script>
         <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}" items="${billboardgroup}" var="s">
             <script>
-                billboardgroup.push({ "${s.billboardgroup}": "${s.billboardoption}" });                
+                billboardgroup.push({ "${s.billboardgroup}": "${s.billboardoption}" });
             </script>
         </c:forEach>
         <script>
@@ -265,23 +266,40 @@
                 $(".billtownoption").val(aaa);
             }
             // 新增分類
-            var group ="";
+            var $group = $(".billboardGroup");
+            var $option = $(".billtownoption");
+            var group = "一般公告";
             $(".billtownoption").append('<option value="new" style="background-color: #ccc;">新增</option>');
+
+            //切換子項
             $(".billtownoption").change(function () {
+                //切換子項 選到新稱
                 if ($(".billtownoption").val() == "new") {
                     $(".cat").show();
                     $(".hazy").show();
-                    group = "一般公告";
                     for (var option of billboardgroup) {
-                        console.log(option);
-                        if (Object.keys(option)[0] == "一般公告") $(".optinUL").append('<li>' + option["一般公告"] + ' &nbsp;&nbsp;&nbsp;&nbsp; <a href="">remove</a></li>');
+                        if (Object.keys(option)[0] == $group.val()) $(".optinUL").append('<li>' + option[$group.val()] + ' &nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:delOption(`' + option[$group.val()] + '`)">remove</a></li>');
                     }
                 }
             });
+            //切換群組
+            $group.change(function () {
+                $group = $(".billboardGroup");
+                group = $group.val();
+                $option.empty();
+                for (var b of billboardgroup) {
+                    if (Object.keys(b)[0] == $group.val()) {
+                        $option.append('<option  value="' + b[$group.val()] + '">' + b[$group.val()] + '</option>');
+                    }
+                }
+                $(".billtownoption").append('<option value="new" style="background-color: #ccc;">新增</option>');
+            })
+            //新增子項
             function addOption() {
                 console.log($(".addOption").val());
+                console.log(group);
                 $.ajax({
-                    url: '${pageContext.request.contextPath}/system/addOption/'+ group+"/"+ $(".addOption").val(),//接受請求的Servlet地址
+                    url: '${pageContext.request.contextPath}/system/addOption/' + group + "/" + $(".addOption").val(),//接受請求的Servlet地址
                     type: 'POST',
                     // data: formData,
                     // async: false,//同步請求
@@ -290,43 +308,38 @@
                     // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
                     success: function (json) {
                         alert(json);
-                        location.href='http://192.168.11.114:8081/system/billboard/'${bean.billboardid};
+                        location.href = 'http://192.168.11.114:8081/system/billboard/${bean.billboardid}';
                     },
                     error: function (returndata) {
                         console.log(returndata);
                     }
                 });
             }
-            //切換群組
-            $(".billboardGroup").change(function(){
+            //刪除子項
+            function delOption(a) {
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/system/delOption/' + group + "/" + a,//接受請求的Servlet地址
+                    type: 'POST',
+                    // data: formData,
+                    // async: false,//同步請求
+                    // cache: false,//不快取頁面
+                    // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                    // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                    success: function (json) {
+                        alert(json);
+                        $(".optinUL").empty(); 
+                        for (var option of billboardgroup) {
+                            console.log(option);
+                            if (Object.keys(option)[0] == $group.val()) $(".optinUL").append('<li>' + option[$group.val()] + 
+                                ' &nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:delOption(`' + option[$group.val()] + '`)">remove</a></li>');
+                        }
+                    },
+                    error: function (returndata) {
+                        console.log(returndata);
+                    }
+                });
+            }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-            })
 
 
         </script>
@@ -335,9 +348,9 @@
             $(".system").show();
             $(".cat").hide();
             $(".hazy").hide();
+            // 返回按鈕
             $(".catReturn").click(function () {
-                $(".cat").hide();
-                $(".hazy").hide();
+                location.href = 'http://192.168.11.114:8081/system/billboard/${bean.billboardid}';
             });
 
             $(function () {

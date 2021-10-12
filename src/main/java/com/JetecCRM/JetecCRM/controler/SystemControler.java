@@ -104,9 +104,7 @@ public class SystemControler {
 	@RequestMapping("/SaveBillboard")
 	public String SaveBillboard(BillboardBean bean, HttpSession session) {
 		System.out.println("*****儲存公佈欄*****");
-		System.out.println(bean);
 		ss.SaveBillboard(bean, session);
-
 		return "redirect:/system/billboardList";
 	}
 
@@ -174,17 +172,30 @@ public class SystemControler {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//新增群組分類
+//新增群組子項
 	@RequestMapping("/addOption/{group}/{option}")
 	@ResponseBody
-	public String addOption(@PathVariable("group")String group,@PathVariable("option")String option,HttpServletRequest sce) {
-		System.out.println("*****新增群組分類*****");
-		
-		ss.saveOption(group,option,sce);
-		
-		
-		
-		return"save ok";
+	public String addOption(@PathVariable("group") String group, @PathVariable("option") String option,
+			HttpServletRequest sce) {
+		System.out.println("*****新增群組子項*****");
+		ss.saveOption(group, option);
+		ss.updataOption(sce);
+		return String.format("%s  %s 新增成功", group,option);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除群組子項
+	@RequestMapping("/delOption/{group}/{option}")
+	@ResponseBody
+	public String delOption(@PathVariable("group") String group, @PathVariable("option") String option,
+			HttpServletRequest sce) {
+		System.out.println("*****刪除群組子項*****");
+		System.out.println(group);
+		System.out.println(option);
+		if(option.equals("全部"))return "全部 不能刪除";		
+		String result = ss.delOption(group, option);
+		ss.updataOption(sce);
+		return result;
 	}
 
 }
