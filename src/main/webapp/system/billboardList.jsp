@@ -44,7 +44,7 @@
 
                                 <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
                                 <label class="btn btn-outline-primary" for="btncheck3"
-                                    onclick="javascript:location.href='${pageContext.request.contextPath}/system/OffShelf'">下架商品</label>
+                                    onclick="javascript:location.href='${pageContext.request.contextPath}/system/OffShelf'">封存訊息</label>
                             </div>
                         </div> <!-- <%-- 抬頭搜索--%> -->
                         <div class="col-lg-5">

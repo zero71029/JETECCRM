@@ -183,10 +183,9 @@
                                         var="s">
                                         <tr style="Cursor: pointer ;vertical-align: middle;"
                                             onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'">
-                                            <td>[${s.billtowngroup}] &nbsp; ${s.theme} <span
-                                                    style="color: red;">${s.top}
-
-
+                                            <td>
+                                                <span   style="color: red;">${s.top}</span>    [${s.billtowngroup}] &nbsp; ${s.theme} <span
+                                                    style="color: red;">
                                                     <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
                                                     <c:if test="${not empty user.mail}">
                                                         <c:forEach varStatus="loop" begin="0"
@@ -195,11 +194,9 @@
                                                         </c:forEach>
                                                     </c:if>
 
-
-
                                                 </span></td>
                                             <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
-                                            <td style="text-align: center;">${s.reply[0].createtime}</td>
+                                            <td style="text-align: center;">${s.reply[0].name} <br>${s.reply[0].createtime}</td>
                                             <td>${s.reply.size()}</td>
                                         </tr>
 

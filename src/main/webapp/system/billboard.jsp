@@ -96,6 +96,10 @@
                         <div class="row">
                             <input type="hidden" name="billboardid" value="${bean.billboardid}">
                             <input type="hidden" name="user" value="${user.name}">
+                            <div class="row">
+                                <div class="col-lg-1 cell position-relative cellbackgroud">發佈者</div>
+                                <div class="col-lg-9 cell">${bean.user}</div>
+                            </div>
 
                             <div class="row">
 
@@ -121,7 +125,7 @@
                                 <div class="col-lg-4 cell">
                                     <select input type="text" class=" form-select cellFrom" name="state">
                                         <option ${bean.state=="發佈" ?"selected":null} class="selItemOff">發佈</option>
-                                        <option ${bean.state=="下架" ?"selected":null} class="selItemOff">下架</option>
+                                        <option ${bean.state=="下架" ?"selected":null} class="selItemOff">封存</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-1 cell cellbackgroud">日期</div>
@@ -177,7 +181,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <button type="submit" style="width: 100%;" class="btn btn-primary">新增/修改</button>
+                                    <button type="submit" style="width: 100%;" class="btn btn-primary">儲存</button>
                                 </div>
                             </div>
 
@@ -209,7 +213,7 @@
 
                                         <div class="col-lg-10">
                                             <button type="submit" style="width: 100%;"
-                                                class="btn btn-primary">新增</button>
+                                                class="btn btn-primary">發送</button>
                                         </div>
                                     </div>
                                 </div>
@@ -232,10 +236,7 @@
                     <div class="col-lg-3">
                         <c:if test="${not empty bean}">
                             <br><br><br><br><br>
-                            <div class="row">
-                                <div class="col-lg-4 cell position-relative cellbackgroud">發佈者</div>
-                                <div class="col-lg-5 cell">${bean.user}</div>
-                            </div>
+
                             <br>
                             <!-- 附件 -->
                             <c:if test="${not empty bean.file}">

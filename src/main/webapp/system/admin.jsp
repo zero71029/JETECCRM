@@ -97,7 +97,7 @@
                                             value="${bean.phone}" maxlength="20" required>
                                         <div class="invalid-tooltip">須輸入</div>
                                     </div>
-                                    <div class="col-md-1 cell cellbackgroud">Email</div>
+                                    <div class="col-md-1 cell cellbackgroud">Email*</div>
                                     <div class="col-md-2 cell">
                                         <input type="email" class=" form-control cellFrom" name="email"
                                             value="${bean.email}" maxlength="90" required>

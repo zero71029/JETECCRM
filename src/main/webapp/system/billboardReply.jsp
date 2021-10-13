@@ -52,17 +52,43 @@
                         <!-- <%-- 中間主體--%> -->
                         <br>
                         <br>
+
                         <form action="${pageContext.request.contextPath}/system/" method="post" id="myform"
                             style="line-height: 2rem;" class=" g-3" novalidate>
+
                             <div class="row">
                                 <input type="hidden" name="billboardid" value="${bean.billboardid}">
                                 <input type="hidden" name="user" value="${user.name}">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">發佈者</div>
+                                    <div class="col-md-7 cell">${bean.user}</div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">主題*</div>
                                     <div class="col-md-7 cell" style="position: relative;">
                                         ${bean.theme}
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
+                                    <div class="col-md-7 cell content">
+                                        ${bean.content}
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell cellbackgroud">日期</div>
+                                    <div class="col-md-3 cell">${bean.createtime}</div>
+                                    <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
+                                    <div class="col-md-3 cell" style="position: relative;">${bean.read.size()}
                                         <c:if test="${not empty user}">
                                             <!-- 有登入才顯示 -->
                                             <c:if test="${not empty user.mail}">
@@ -87,24 +113,9 @@
                                                 </c:if>
                                             </c:if>
                                         </c:if>
-                                    </div>
 
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
-                                    <div class="col-md-7 cell content" >
-                                        ${bean.content}
 
                                     </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">日期</div>
-                                    <div class="col-md-3 cell">${bean.createtime}</div>
-                                    <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
-                                    <div class="col-md-3 cell">${bean.read.size()}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
@@ -171,10 +182,7 @@
                     </div>
                     <div class="col-md-4">
                         <br><br><br>
-                        <div class="row">
-                            <div class="col-md-2 cell position-relative cellbackgroud">發佈者</div>
-                            <div class="col-md-5 cell">${bean.user}</div>
-                        </div>
+
                         <br>
                         <!-- 附件 -->
                         <c:if test="${not empty bean.file}">
