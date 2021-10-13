@@ -1,9 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <!-- <%-- jQuery放這裡 --%> -->
-        <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
-        <script src="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.js"></script>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}jquery-ui-1.13.0.custom/jquery-ui.min.css">
+            <!-- <%-- jQuery放這裡 --%> -->
+            <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
+            <script src="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.js"></script>
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.css">。
+            <!-- <%-- VUE放這裡 --%> -->
+            <script src="${pageContext.request.contextPath}/js/vue.js"></script>
         <!-- <%-- 頁首--%> -->
         <header class="container-fluid mainColor headtop">
             <div class="row">

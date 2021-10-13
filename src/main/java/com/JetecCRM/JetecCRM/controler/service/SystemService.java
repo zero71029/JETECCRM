@@ -203,29 +203,26 @@ public class SystemService {
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //點擊已讀
-	public String saveRead(Integer billboardid, String username) {
-		if(brr.existsByBillboardidAndName(billboardid,username)) {
-			return "找不到資料";
-		}else {
-			System.out.println(billboardid);
-			System.out.println(username);
-			BillboardReadBean bean =new BillboardReadBean();
-			bean.setBillboardid(billboardid);
-			bean.setName(username);
-			bean.setReadid(zTools.getUUID());
-			System.out.println(bean);
-			brr.save(bean);
+	public String saveRead(Integer billboardid,Integer adminid) {
+		if(amr.existsByBillboardidAndAdminid(billboardid,adminid)) {
+			amr.deleteByBillboardidAndAdminid(billboardid,adminid);
 			return "成功已讀";
+		}else {
+			return "找不到資料";
+			
 		}
 		
 		
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //取消已讀
-	public void ReRead(Integer billboardid, String username) {
-		if(brr.existsByBillboardidAndName(billboardid,username)) {
-			
-			brr.deleteByBillboardidAndName(billboardid,username);
+	public void ReRead(Integer billboardid, Integer adminid) {
+		if(!amr.existsByBillboardidAndAdminid(billboardid,adminid)) {
+			AdminMailBean aBean = new AdminMailBean();
+			aBean.setAdminid(adminid);
+			aBean.setBillboardid(billboardid);
+			aBean.setAdminmail(zTools.getUUID());
+			amr.save(aBean);
 		}
 		
 	}

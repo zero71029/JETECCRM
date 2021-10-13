@@ -190,8 +190,6 @@ public class SystemControler {
 	public String delOption(@PathVariable("group") String group, @PathVariable("option") String option,
 			HttpServletRequest sce) {
 		System.out.println("*****刪除群組子項*****");
-		System.out.println(group);
-		System.out.println(option);
 		if(option.equals("全部"))return "全部 不能刪除";		
 		String result = ss.delOption(group, option);
 		ss.updataOption(sce);

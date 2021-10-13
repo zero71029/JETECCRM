@@ -15,10 +15,13 @@
             <link rel="stylesheet"
                 href="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/css/bootstrap.rtl.min.css">
             <script src="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
+            <!-- <%-- jQuery放這裡 --%> -->
+            <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
+            <script src="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.js"></script>
+            <link rel="stylesheet" href="${pageContext.request.contextPath}jquery-ui-1.13.0.custom/jquery-ui.min.css">
 
 
 
-            
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
             <title>CRM客戶管理系統</title>
@@ -181,13 +184,24 @@
                                         <tr style="Cursor: pointer ;vertical-align: middle;"
                                             onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'">
                                             <td>[${s.billtowngroup}] &nbsp; ${s.theme} <span
-                                                    style="color: red;">${s.top}</span></td>
+                                                    style="color: red;">${s.top}
+
+
+                                                    <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
+                                                    <c:if test="${not empty user.mail}">
+                                                        <c:forEach varStatus="loop" begin="0"
+                                                            end="${user.mail.size()-1}" items="${user.mail}" var="mail">
+                                                            ${mail.billboardid == s.billboardid? "未讀":""}
+                                                        </c:forEach>
+                                                    </c:if>
+
+
+
+                                                </span></td>
                                             <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
                                             <td style="text-align: center;">${s.reply[0].createtime}</td>
                                             <td>${s.reply.size()}</td>
                                         </tr>
-
-
 
                                     </c:forEach>
                                 </c:if>
@@ -265,26 +279,26 @@
                 </div>
                 <div class="col-lg-3">
 
+                    <!-- 基本的对话框 -->
+                    <c:if test="${not empty unread}">
+                        <c:forEach varStatus="loop" begin="0" end="${unread.size()}" items="${unread}" var="unread">
 
 
-                    xxxxxxxxxxxxx
-
-                    <div id="dialog" title="基本的对话框">
-                        <p>这是一个默认的对话框，用于显示信息。对话框窗口可以移动，调整尺寸，默认可通过 'x' 图标关闭。</p>
-                    </div>
+                            <div class="dialog" title="新訊息">
+                                <p>${unread}</p>
+                            </div>
 
 
-                    yyyyyyyyyyyyyyyyy
+                        </c:forEach>
 
-
-
+                    </c:if>
                 </div>
             </div>
             </div>
             <script>
-               
-                    $("#dialog").dialog({ autoOpen: true });
-              
+
+                $(".dialog").dialog({ autoOpen: true });
+
                 function read(billboardid, username) {
                     console.log(username);
                     $.ajax({

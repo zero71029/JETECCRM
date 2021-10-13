@@ -13,12 +13,7 @@
             <!-- bootstrap的CSS、JS樣式放這裡  -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.rtl.min.css">
-            <!-- <%-- jQuery放這裡 --%> -->
-            <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
-            <!-- <%-- jQueryUI放這裡 --%> -->
-            <link rel="stylesheet"
-                href="${pageContext.request.contextPath}/jquery-ui-192/css/base/jquery-ui-1.9.2.custom.css">
-            <script src="${pageContext.request.contextPath}/jquery-ui-192/js/jquery-ui-1.9.2.custom.js"></script>
+
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
 
@@ -81,31 +76,35 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
-                                    <div class="col-md-5 cell " style="position: relative;">
+                                    <div class="col-md-5 cell content" style="position: relative;">
                                         ${bean.content}
 
 
                                         <c:if test="${not empty user}">
                                             <!-- 有登入才顯示 -->
-                                            <c:set var="i" value="false"></c:set>
-                                            <c:forEach varStatus="loop" begin="0" end="${bean.read.size()}"
-                                                items="${bean.read}" var="read">
+                                            <c:if test="${not empty user.mail}">
 
-                                                <!-- 已讀迴圈 -->
-                                                <!-- 登入者 已讀 i == ture -->
-                                                <c:if test="${user.name == read.name}">
-                                                    <c:set var="i" value="ture"></c:set>
-                                                    <c:set var="exitID" value="0"></c:set>
+
+                                                <c:set var="i" value="false"></c:set>
+                                                <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}"
+                                                    items="${user.mail}" var="mail">
+
+                                                    <!-- 已讀迴圈 -->
+                                                    <!-- 登入者 已讀 i == ture -->
+                                                    <c:if test="${bean.billboardid == mail.billboardid}">
+                                                        <c:set var="i" value="ture"></c:set>
+                                                        <c:set var="exitID" value="0"></c:set>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <!--  已讀 才顯示 -->
+                                                <c:if test='${i != "ture"}'>
+                                                    <a href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'
+                                                        style='position: absolute ; right: 1%; bottom: 5px;'>取消已讀</a>
                                                 </c:if>
-                                            </c:forEach>
-                                            <!--  已讀 才顯示 -->
-                                            <c:if test='${i == "ture"}'>
-                                                <a href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.name}'
-                                                    style='position: absolute ; right: 1%; bottom: 30px;'>取消已讀</a>
-                                            </c:if>
-                                            <c:if test='${i != "ture"}'>
-                                                <a href="javascript:read(${bean.billboardid},'${user.name}')"
-                                                    style='position: absolute ; right: 1%; bottom: 30px;'>已讀點擊</a>
+                                                <c:if test='${i == "ture"}'>
+                                                    <a href="javascript:read(${bean.billboardid},${user.adminid})"
+                                                        style='position: absolute ; right: 1%; bottom: 5px;'>已讀點擊</a>
+                                                </c:if>
                                             </c:if>
                                         </c:if>
                                     </div>
@@ -185,9 +184,28 @@
         </body>
         <!-- 驗證UI -->
         <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
+  
         <script>
             $(".system").show();
 
+            var con = $(".content").text();
+            console.log($(".content").text());
+            var vm = new Vue({
+                el: ".content",
+                data: {
+                    sss: con
+                }
+            });
+            
+
+
+
+
+
+
+
+
+            
             $(function () {
                 // 日期UI
                 $(".contacttime").datepicker({
@@ -228,10 +246,10 @@
 
             });
 
-            function read(billboardid, username) {
-                console.log(username);
+            function read(billboardid, adminid) {
+
                 $.ajax({
-                    url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + username,//接受請求的Servlet地址
+                    url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + adminid,//接受請求的Servlet地址
                     type: 'POST',
                     // data: formdata,
                     // async: false,//同步請求

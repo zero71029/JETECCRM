@@ -1,5 +1,10 @@
 package com.JetecCRM.JetecCRM.controler;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.controler.service.SystemService;
 import com.JetecCRM.JetecCRM.model.AdminBean;
+import com.JetecCRM.JetecCRM.model.AdminMailBean;
 import com.JetecCRM.JetecCRM.model.AuthorizeBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
@@ -34,9 +40,20 @@ public class PublicControl {
 	BillboardRepository br;
 
 	@RequestMapping(path = { "/", "/index" })
-	public String index(Model model) {
-//		List<BillboardBean> resulet = ss.getBillboardList("發佈");
+	public String index(Model model,HttpSession session) {
+		System.out.println( "*****主頁面*****");
+		List<String> unread = new ArrayList<String>();
 		model.addAttribute("list", ss.getBillboardList("發佈"));
+		AdminBean adminBean =(AdminBean) session.getAttribute("user");
+		if(adminBean != null) {
+			System.out.println(adminBean.getMail());
+			List<AdminMailBean> a = adminBean.getMail();
+			for(AdminMailBean bean :a) {
+				unread.add(br.getById(bean.getBillboardid()).getContent()) ;
+			}
+			model.addAttribute("unread", unread);
+		}
+		
 		return "/CRM";
 	}
 
@@ -64,19 +81,21 @@ public class PublicControl {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //點擊已讀
-	@RequestMapping("/read/{billboardid}/{username}")
+	@RequestMapping("/read/{billboardid}/{adminid}")
 	@ResponseBody
-	public String read(@PathVariable("billboardid") Integer billboardid, @PathVariable("username") String username) {
+	public String read(@PathVariable("billboardid") Integer billboardid, @PathVariable("adminid") Integer adminid,HttpSession session) {
 		System.out.println("*****點擊已讀*****");
-		return ss.saveRead(billboardid, username);
+		session.setAttribute("user", ar.getById(adminid));
+		return ss.saveRead(billboardid, adminid); 
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //取消已讀
-	@RequestMapping("/ReRead/{billboardid}/{username}")
-	public String ReRead(@PathVariable("billboardid") Integer billboardid, @PathVariable("username") String username) {
-		System.out.println("*****點擊已讀*****");
-		ss.ReRead(billboardid, username);		
+	@RequestMapping("/ReRead/{billboardid}/{adminid}")
+	public String ReRead(@PathVariable("billboardid") Integer billboardid, @PathVariable("adminid") Integer adminid,HttpSession session) {
+		System.out.println("*****取消已讀*****");
+		ss.ReRead(billboardid, adminid);
+		session.setAttribute("user", ar.getById(adminid));
 		return "redirect:/billboardReply/"+billboardid ;
 	}
 
