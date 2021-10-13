@@ -35,22 +35,30 @@ public class BillboardBean {
 	private String billboardgroupid;
 	private String billtowngroup;
 	
+	//殺掉了
 	@JsonIgnore
 	@OneToMany(targetEntity = BillboardReadBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
 	private List<BillboardReadBean> read;
+	//回覆
 	@JsonIgnore
 	@OneToMany(targetEntity = BillboardReplyBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
 	private List<BillboardReplyBean> reply;
-	
-	
-	
-	
+	//分類群組
 	@ManyToOne(targetEntity = BillboardGroupBean.class,fetch = FetchType.EAGER)
 	@JoinColumn(name = "billboardgroupid", referencedColumnName = "billboardgroupid", insertable = false, updatable = false)
 	private BillboardGroupBean bgb;
+	@JsonIgnore
+	@OneToMany(targetEntity = BillboardFileBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
+	private List<BillboardFileBean> file;
 	
 	
 	
+	public List<BillboardFileBean> getFile() {
+		return file;
+	}
+	public void setFile(List<BillboardFileBean> file) {
+		this.file = file;
+	}
 	public BillboardGroupBean getBgb() {
 		return bgb;
 	}

@@ -13,12 +13,7 @@
             <!-- bootstrap的CSS、JS樣式放這裡  -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.rtl.min.css">
-            <!-- <%-- jQuery放這裡 --%> -->
-            <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
-            <!-- <%-- jQueryUI放這裡 --%> -->
-            <link rel="stylesheet"
-                href="${pageContext.request.contextPath}/jquery-ui-192/css/base/jquery-ui-1.9.2.custom.css">
-            <script src="${pageContext.request.contextPath}/jquery-ui-192/js/jquery-ui-1.9.2.custom.js"></script>
+
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
 
@@ -71,7 +66,7 @@
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
             <div class="container-fluid">
                 <div class="row justify-content-end">
-                    <div class="col-lg-10">
+                    <div class="col-lg-7">
                         <!-- <%-- 中間主體--%> -->
                         <br>
                         <div class="row">
@@ -79,11 +74,7 @@
                                 <h3>公佈欄</h3>
                             </div>
                         </div>
-
-
-
                         <div class="row">
-
                             <div class="col-lg-2">
                                 <a href="javascript:history.back()"
                                     style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
@@ -109,18 +100,16 @@
                             <div class="row">
 
                                 <div class="col-lg-1 cell position-relative cellbackgroud">主題*</div>
-                                <div class="col-lg-5 cell">
+                                <div class="col-lg-9 cell">
                                     <input type="text" class=" form-control cellFrom" name="theme" value="${bean.theme}"
                                         maxlength="90" required>
                                 </div>
-                                <div class="col-lg-1"></div>
-                                <div class="col-lg-1 cell position-relative cellbackgroud">發佈者</div>
-                                <div class="col-lg-1 cell">${bean.user}</div>
+
                             </div>
                             <div class="row">
 
                                 <div class="col-lg-1 cell position-relative cellbackgroud">內容*</div>
-                                <div class="col-lg-5 cell ">
+                                <div class="col-lg-9 cell ">
                                     <textarea class="cellFrom" name="content" cols="65" rows="10" required
                                         maxlength="450">${bean.content}</textarea>
                                 </div>
@@ -129,21 +118,21 @@
                             <div class="row">
 
                                 <div class="col-lg-1 cell cellbackgroud">狀態</div>
-                                <div class="col-lg-2 cell">
+                                <div class="col-lg-4 cell">
                                     <select input type="text" class=" form-select cellFrom" name="state">
                                         <option ${bean.state=="發佈" ?"selected":null} class="selItemOff">發佈</option>
                                         <option ${bean.state=="下架" ?"selected":null} class="selItemOff">下架</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-1 cell cellbackgroud">日期</div>
-                                <div class="col-lg-2 cell">${bean.createtime}
+                                <div class="col-lg-4 cell">${bean.createtime}
 
                                 </div>
                             </div>
                             <div class="row">
 
                                 <div class="col-lg-1 cell cellbackgroud">置頂</div>
-                                <div class="col-lg-2 cell">
+                                <div class="col-lg-4 cell">
                                     <select input type="text" class=" form-select cellFrom" name="top">
                                         <option ${bean.top=="" ?"selected":null} class="selItemOff" value="">無
                                         </option>
@@ -153,14 +142,14 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
-                                <div class="col-lg-2 cell">${bean.read.size()}
+                                <div class="col-lg-4 cell">${bean.read.size()}
 
                                 </div>
                             </div>
                             <div class="row">
 
                                 <div class="col-lg-1 cell cellbackgroud">群組</div>
-                                <div class="col-lg-2 cell">
+                                <div class="col-lg-4 cell">
                                     <select input type="text" class=" form-select cellFrom billboardGroup"
                                         name="billtowngroup">
                                         <option ${bean.billtowngroup=="一般公告" ?"selected":null} class="selItemOff"
@@ -178,7 +167,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-1 cell cellbackgroud">子項</div>
-                                <div class="col-lg-2 cell">
+                                <div class="col-lg-4 cell">
                                     <select name="billboardgroupid" id="" class="form-select billtownoption">
                                         <!--  -->
 
@@ -187,8 +176,7 @@
                                 </div>
                             </div>
                             <div class="row">
-
-                                <div class="col-lg-6">
+                                <div class="col-lg-10">
                                     <button type="submit" style="width: 100%;" class="btn btn-primary">新增/修改</button>
                                 </div>
                             </div>
@@ -204,7 +192,7 @@
                                 <div class="row">
 
                                     <div class="col-lg-1 cell cellbackgroud">授權</div>
-                                    <div class="col-lg-5 cell">
+                                    <div class="col-lg-9 cell">
                                         <select input type="text" class=" form-select cellFrom" name="adminid">
                                             <option class="selItemOff" value="0">新增</option>
                                             <c:if test="${not empty admin}">
@@ -219,7 +207,7 @@
                                 <div class="row">
                                     <div class="row">
 
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-10">
                                             <button type="submit" style="width: 100%;"
                                                 class="btn btn-primary">新增</button>
                                         </div>
@@ -227,19 +215,53 @@
                                 </div>
                             </form>
                         </c:if>
+                        <!-- 回覆內容 -->
+                        <c:if test="${not empty bean.reply}">
+                            <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
+                                var="s">
+                                <div class="row" style="line-height: 2rem;">
+                                    <div class="col-md-1 cell cellbackgroud">${s.name}</div>
+                                    <div class="col-md-9 cell" style="position: relative;">${s.content} <span
+                                            style="position: absolute;right: 0%;">${s.createtime}</span></div>
+                                </div>
+                            </c:forEach>
+                        </c:if>
                     </div>
-                    <!-- 回覆內容 -->
-                    <c:if test="${not empty bean.reply}">
-                        <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
-                            var="s">
-                            <div class="row" style="line-height: 2rem;">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-1 cell cellbackgroud">${s.name}</div>
-                                <div class="col-md-5 cell" style="position: relative;">${s.content} <span
-                                        style="position: absolute;right: 0%;">${s.createtime}</span></div>
+
+
+                    <div class="col-lg-3">
+                        <c:if test="${not empty bean}">
+                            <br><br><br><br><br>
+                            <div class="row">
+                                <div class="col-lg-4 cell position-relative cellbackgroud">發佈者</div>
+                                <div class="col-lg-5 cell">${bean.user}</div>
                             </div>
-                        </c:forEach>
-                    </c:if>
+                            <br>
+                            <!-- 附件 -->
+                            <c:if test="${not empty bean.file}">
+                                <c:forEach varStatus="loop" begin="0" end="${bean.file.size()-1}" items="${bean.file}"
+                                    var="s">
+                                    <div class="row">
+                                        <div class="col-lg-6 ">
+                                            <a href="${pageContext.request.contextPath}/file/${s.url}">${s.url}</a>
+                                        </div>
+                                        <div class="col-lg-6 ">
+                                            <a href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a>
+                                        </div>
+
+                                    </div>    
+                                    <br>
+                                </c:forEach>
+                            </c:if>
+                            <!-- 上傳 -->
+                            <div class="row">
+                                <form class="row uppdf" action="" method="post" enctype='multipart/form-data'>
+                                    <input type="file" name="file1" onchange="upfile(0);" class="fileInput" value="" />
+                                </form>
+                            </div>
+                        </c:if>
+                    </div>
+
                 </div>
             </div>
         </body>
@@ -308,7 +330,7 @@
                     // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
                     success: function (json) {
                         alert(json);
-                        location.href = 'http://192.168.11.114:8081/system/billboard/${bean.billboardid}';
+                        location.href = '${pageContext.request.contextPath}/system/billboard/${bean.billboardid}';
                     },
                     error: function (returndata) {
                         console.log(returndata);
@@ -327,10 +349,10 @@
                     // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
                     success: function (json) {
                         alert(json);
-                        $(".optinUL").empty(); 
+                        $(".optinUL").empty();
                         for (var option of billboardgroup) {
                             console.log(option);
-                            if (Object.keys(option)[0] == $group.val()) $(".optinUL").append('<li>' + option[$group.val()] + 
+                            if (Object.keys(option)[0] == $group.val()) $(".optinUL").append('<li>' + option[$group.val()] +
                                 ' &nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:delOption(`' + option[$group.val()] + '`)">remove</a></li>');
                         }
                     },
@@ -396,6 +418,29 @@
                 });
 
             });
+            //上傳型錄
+            upfile = function (i) {
+                var formData = new FormData($(".uppdf")[0]);
+                console.log(formData);
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/system/upFile/${bean.billboardid}',//接受請求的Servlet地址
+                    type: 'POST',
+                    data: formData,
+                    async: false,//同步請求
+                    cache: false,//不快取頁面
+                    contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                    processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                    success: function (url) {
+                        alert(url);
+                        window.location.href = "${pageContext.request.contextPath}/system/billboard/${bean.billboardid}";
+                    },
+                    error: function (returndata) {
+                        console.log(returndata);
+
+                    }
+
+                });
+            }
         </script>
 
         </html>

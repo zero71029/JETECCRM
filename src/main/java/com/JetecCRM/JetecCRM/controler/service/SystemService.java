@@ -1,9 +1,9 @@
 package com.JetecCRM.JetecCRM.controler.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.AEADBadTagException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,11 +18,12 @@ import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.AdminMailBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
+import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
-import com.JetecCRM.JetecCRM.model.BillboardReadBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminMailRepository;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardGroupRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReadRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReplyRepository;
@@ -43,7 +44,9 @@ public class SystemService {
 	@Autowired
 	BillboardReplyRepository billboardReplyRepository;
 	@Autowired
-	BillboardGroupRepository bgr; 
+	BillboardGroupRepository bgr;
+	@Autowired
+	BillboardFileRepository bfr;
 	@Autowired
 	ZeroTools zTools;
 
@@ -80,93 +83,109 @@ public class SystemService {
 	public List<BillboardBean> getBillboardList(String state) {
 		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
 		Sort sort = Sort.by(Direction.DESC, "billboardid");
-		List<BillboardBean>  list = br.getByStateAndTop(state,"置頂", sort);
-		for(BillboardBean bean : list)resulet.add(bean);
-		list = br.getByStateAndTop(state,"", sort);
-		for(BillboardBean bean : list)resulet.add(bean);
-		
+		List<BillboardBean> list = br.getByStateAndTop(state, "置頂", sort);
+		for (BillboardBean bean : list)
+			resulet.add(bean);
+		list = br.getByStateAndTop(state, "", sort);
+		for (BillboardBean bean : list)
+			resulet.add(bean);
+
 		return resulet;
 	}
-	//讀取公佈欄列表  加分類	
-	
+	// 讀取公佈欄列表 加分類
+
 	public List<BillboardBean> getBillboardList(String state, String billboardgroupid) {
 		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
 		Sort sort = Sort.by(Direction.DESC, "billboardid");
-		//如果是 一般公告的全部
-		if("01dasgregrehvbcv一般公告".equals(billboardgroupid)) {
-			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"一般公告","置頂", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
-			list = br.getByStateAndBilltowngroupAndTop(state,"一般公告","", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
+		// 如果是 一般公告的全部
+		if ("01dasgregrehvbcv一般公告".equals(billboardgroupid)) {
+			List<BillboardBean> list = br.getByStateAndBilltowngroupAndTop(state, "一般公告", "置頂", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state, "一般公告", "", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
 			return resulet;
-		}else if ("01dasgregrehvbcvaaa研發".equals(billboardgroupid)) {
-			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"研發","置頂", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
-			list = br.getByStateAndBilltowngroupAndTop(state,"研發","", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
+		} else if ("01dasgregrehvbcvaaa研發".equals(billboardgroupid)) {
+			List<BillboardBean> list = br.getByStateAndBilltowngroupAndTop(state, "研發", "置頂", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state, "研發", "", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
 			return resulet;
-		}else if ("01dasgregrehvbcvbbb業務".equals(billboardgroupid)) {
-			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"業務","置頂", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
-			list = br.getByStateAndBilltowngroupAndTop(state,"業務","", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
+		} else if ("01dasgregrehvbcvbbb業務".equals(billboardgroupid)) {
+			List<BillboardBean> list = br.getByStateAndBilltowngroupAndTop(state, "業務", "置頂", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state, "業務", "", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
 			return resulet;
-		}else if ("01dasgregrehvbcvccc行銷".equals(billboardgroupid)) {
-			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"行銷","置頂", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
-			list = br.getByStateAndBilltowngroupAndTop(state,"行銷","", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
+		} else if ("01dasgregrehvbcvccc行銷".equals(billboardgroupid)) {
+			List<BillboardBean> list = br.getByStateAndBilltowngroupAndTop(state, "行銷", "置頂", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state, "行銷", "", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
 			return resulet;
-		}else if ("01dasgregrehvbcvddd生產".equals(billboardgroupid)) {
-			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"生產","置頂", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
-			list = br.getByStateAndBilltowngroupAndTop(state,"生產","", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
+		} else if ("01dasgregrehvbcvddd生產".equals(billboardgroupid)) {
+			List<BillboardBean> list = br.getByStateAndBilltowngroupAndTop(state, "生產", "置頂", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state, "生產", "", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
 			return resulet;
-		}else if ("01dasgregrehvbcvfggg採購".equals(billboardgroupid)) {
-			List<BillboardBean>  list = br.getByStateAndBilltowngroupAndTop(state,"採購","置頂", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
-			list = br.getByStateAndBilltowngroupAndTop(state,"採購","", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
+		} else if ("01dasgregrehvbcvfggg採購".equals(billboardgroupid)) {
+			List<BillboardBean> list = br.getByStateAndBilltowngroupAndTop(state, "採購", "置頂", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state, "採購", "", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
 			return resulet;
-		}else {//不是的話 根據billboardgroupid尋找
-			List<BillboardBean>  list = br.getByStateAndBillboardgroupidAndTop(state,billboardgroupid,"置頂", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
-			list = br.getByStateAndBillboardgroupidAndTop(state,billboardgroupid,"", sort);
-			for(BillboardBean bean : list)resulet.add(bean);
+		} else {// 不是的話 根據billboardgroupid尋找
+			List<BillboardBean> list = br.getByStateAndBillboardgroupidAndTop(state, billboardgroupid, "置頂", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			list = br.getByStateAndBillboardgroupidAndTop(state, billboardgroupid, "", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
 			return resulet;
-			
+
 		}
 
 //		return resulet;
-		
-	}
 
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄
-	public boolean SaveBillboard(BillboardBean bean,HttpSession session) {
-		AdminMailBean adminMailBean =new AdminMailBean();
-		//插入換行
+	public boolean SaveBillboard(BillboardBean bean, HttpSession session) {
+		AdminMailBean adminMailBean = new AdminMailBean();
+		// 插入換行
 		String content = bean.getContent();
 		bean.setContent(content.replaceAll("\\n", "<br>"));
-		//插入群組id
-		BillboardGroupBean bgb =bgr.findByBillboardgroupAndBillboardoption(bean.getBilltowngroup(),bean.getBillboardgroupid());
+		// 插入群組id
+		BillboardGroupBean bgb = bgr.findByBillboardgroupAndBillboardoption(bean.getBilltowngroup(),
+				bean.getBillboardgroupid());
 		bean.setBillboardgroupid(bgb.getBillboardgroupid());
 		//
 		BillboardBean save = br.save(bean);
 		adminMailBean.setBillboardid(save.getBillboardid());
-		//郵件
+		// 郵件
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
 		String mailTo = adminBean.getEmail();
 		String Subject = bean.getTheme();
 		String text = bean.getContent();
 		StringBuilder maillist = new StringBuilder();
-		//群發郵件
-		for (AdminBean a : ar.findAll()) {	
+		// 群發郵件
+		for (AdminBean a : ar.findAll()) {
 			maillist.append(a.getEmail());
 			maillist.append(",");
-			//抓出所有人插入maill
+			// 抓出所有人插入maill
 			adminMailBean.setAdminmail(zTools.getUUID());
 			adminMailBean.setAdminid(a.getAdminid());
 			amr.save(adminMailBean);
@@ -201,31 +220,33 @@ public class SystemService {
 		}
 
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //點擊已讀
-	public String saveRead(Integer billboardid,Integer adminid) {
-		if(amr.existsByBillboardidAndAdminid(billboardid,adminid)) {
-			amr.deleteByBillboardidAndAdminid(billboardid,adminid);
+	public String saveRead(Integer billboardid, Integer adminid) {
+		if (amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
+			amr.deleteByBillboardidAndAdminid(billboardid, adminid);
 			return "成功已讀";
-		}else {
+		} else {
 			return "找不到資料";
-			
+
 		}
-		
-		
+
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //取消已讀
 	public void ReRead(Integer billboardid, Integer adminid) {
-		if(!amr.existsByBillboardidAndAdminid(billboardid,adminid)) {
+		if (!amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
 			AdminMailBean aBean = new AdminMailBean();
 			aBean.setAdminid(adminid);
 			aBean.setBillboardid(billboardid);
 			aBean.setAdminmail(zTools.getUUID());
 			amr.save(aBean);
 		}
-		
+
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
 	public boolean SaveReply(BillboardReplyBean bean) {
@@ -244,26 +265,42 @@ public class SystemService {
 		bgr.save(bean);
 
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //刪除群組子項
 	public String delOption(String group, String option) {
-		if(bgr.existsByBillboardgroupAndBillboardoption(group,option)) {
-			BillboardGroupBean bgBean =bgr.findByBillboardgroupAndBillboardoption(group,option);			
-			if(br.existsByBillboardgroupid(bgBean.getBillboardgroupid())) {
+		if (bgr.existsByBillboardgroupAndBillboardoption(group, option)) {
+			BillboardGroupBean bgBean = bgr.findByBillboardgroupAndBillboardoption(group, option);
+			if (br.existsByBillboardgroupid(bgBean.getBillboardgroupid())) {
 				return "該項目還有留言  不能刪除";
 			}
 			bgr.delete(bgBean);
 			return "刪除成功";
-		}else {
+		} else {
 			return "找不到項目";
 		}
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //更新群組
 	public void updataOption(HttpServletRequest sce) {
 		ServletContext app = sce.getServletContext();
 		app.setAttribute("billboardgroup", bgr.findAll());
 	}
-	
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 3. 儲存檔案名稱到資料庫
+	public void saveUrl(BillboardFileBean billBoardFileBean) {
+		bfr.save(billBoardFileBean);
+
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除型錄
+	public void removefile(String fileid) {
+		BillboardFileBean billBoardFileBean =bfr.getById(fileid);
+		File file = new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"+billBoardFileBean.getUrl());
+		System.out.println(file.delete());
+		bfr.delete(billBoardFileBean);
+	}
 }

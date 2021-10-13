@@ -48,14 +48,9 @@
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
             <div class="container-fluid">
                 <div class="row justify-content-end">
-                    <div class="col-md-10">
+                    <div class="col-md-7">
                         <!-- <%-- 中間主體--%> -->
-
                         <br>
-
-
-
-
                         <br>
                         <form action="${pageContext.request.contextPath}/system/" method="post" id="myform"
                             style="line-height: 2rem;" class=" g-3" novalidate>
@@ -66,29 +61,14 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">主題*</div>
-                                    <div class="col-md-5 cell">
+                                    <div class="col-md-7 cell" style="position: relative;">
                                         ${bean.theme}
-                                    </div>
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">發佈者</div>
-                                    <div class="col-md-1 cell">${bean.user}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
-                                    <div class="col-md-5 cell content" style="position: relative;">
-                                        ${bean.content}
-
-
                                         <c:if test="${not empty user}">
                                             <!-- 有登入才顯示 -->
                                             <c:if test="${not empty user.mail}">
-
-
                                                 <c:set var="i" value="false"></c:set>
                                                 <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}"
                                                     items="${user.mail}" var="mail">
-
                                                     <!-- 已讀迴圈 -->
                                                     <!-- 登入者 已讀 i == ture -->
                                                     <c:if test="${bean.billboardid == mail.billboardid}">
@@ -112,17 +92,26 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
+                                    <div class="col-md-7 cell content" >
+                                        ${bean.content}
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">日期</div>
-                                    <div class="col-md-2 cell">${bean.createtime}</div>
+                                    <div class="col-md-3 cell">${bean.createtime}</div>
                                     <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
-                                    <div class="col-md-2 cell">${bean.read.size()}</div>
+                                    <div class="col-md-3 cell">${bean.read.size()}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">群組</div>
-                                    <div class="col-md-2 cell">${bean.billtowngroup}</div>
+                                    <div class="col-md-3 cell">${bean.bgb.billboardgroup}</div>
                                     <div class="col-md-1 cell cellbackgroud">子項</div>
-                                    <div class="col-md-2 cell">
+                                    <div class="col-md-3 cell">${bean.bgb.billboardoption}
 
                                     </div>
                                 </div>
@@ -137,7 +126,7 @@
                                 <div class="row" style="line-height: 2rem; height: 100px;">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">${s.name}</div>
-                                    <div class="col-md-5 cell" style="position: relative;">${s.content} <span
+                                    <div class="col-md-7 cell" style="position: relative;">${s.content} <span
                                             style="position: absolute;right: 0%;">${s.createtime}</span></div>
                                 </div>
                             </c:forEach>
@@ -162,7 +151,7 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">留言</div>
-                                    <div class="col-md-5 cell ">
+                                    <div class="col-md-7 cell ">
                                         <textarea class="" name="content" cols="70" rows="5" required
                                             maxlength="450"></textarea>
                                     </div>
@@ -178,34 +167,37 @@
 
 
 
+
+                    </div>
+                    <div class="col-md-4">
+                        <br><br><br>
+                        <div class="row">
+                            <div class="col-md-2 cell position-relative cellbackgroud">發佈者</div>
+                            <div class="col-md-5 cell">${bean.user}</div>
+                        </div>
+                        <br>
+                        <!-- 附件 -->
+                        <c:if test="${not empty bean.file}">
+                            <c:forEach varStatus="loop" begin="0" end="${bean.file.size()-1}" items="${bean.file}"
+                                var="s">
+                                <div class="row">
+                                    <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
+                                    <div class="col-lg-5 cell"><a
+                                            href="${pageContext.request.contextPath}/file/${s.url}">${s.url}</a></div>
+
+                                </div>
+                            </c:forEach>
+                        </c:if>
                     </div>
                 </div>
             </div>
         </body>
         <!-- 驗證UI -->
         <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
-  
+
         <script>
             $(".system").show();
 
-            var con = $(".content").text();
-            console.log($(".content").text());
-            var vm = new Vue({
-                el: ".content",
-                data: {
-                    sss: con
-                }
-            });
-            
-
-
-
-
-
-
-
-
-            
             $(function () {
                 // 日期UI
                 $(".contacttime").datepicker({

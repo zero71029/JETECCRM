@@ -1,6 +1,10 @@
 package com.JetecCRM.JetecCRM.controler;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.controler.service.SystemService;
 import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.AuthorizeBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
+import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
@@ -145,7 +152,6 @@ public class SystemControler {
 			StringBuilder maillist = new StringBuilder();
 			zTools.mail(mailTo, text, Subject, maillist.toString());
 		}
-
 		return "redirect:/billboardReply/" + bean.getBillboardid();
 	}
 
@@ -180,7 +186,7 @@ public class SystemControler {
 		System.out.println("*****新增群組子項*****");
 		ss.saveOption(group, option);
 		ss.updataOption(sce);
-		return String.format("%s  %s 新增成功", group,option);
+		return String.format("%s  %s 新增成功", group, option);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,10 +196,64 @@ public class SystemControler {
 	public String delOption(@PathVariable("group") String group, @PathVariable("option") String option,
 			HttpServletRequest sce) {
 		System.out.println("*****刪除群組子項*****");
-		if(option.equals("全部"))return "全部 不能刪除";		
+		if (option.equals("全部"))
+			return "全部 不能刪除";
 		String result = ss.delOption(group, option);
 		ss.updataOption(sce);
 		return result;
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//上傳型錄
+	@RequestMapping("/upFile/{billboardid}")
+	@ResponseBody
+	public String upFile(MultipartHttpServletRequest multipartRequest, @PathVariable("billboardid") Integer billboardid,
+			Model model) {
+		System.out.println("*****上傳型錄*****");
+		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+		System.out.println("fileMap " + fileMap);
+//圖片儲存
+		try {
+			for (int i = 0; i <= fileMap.size(); i++) {
+//2. 儲存圖片到資料夾
+				if (fileMap.get("file" + i) != null) {
+					System.out.println(fileMap.get("file" + i).getOriginalFilename());
+//改名+存檔
+					String lastname = fileMap.get("file" + i).getOriginalFilename()
+							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
+					System.out.println(lastname);
+					fileMap.get("file" + i).transferTo(new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"
+							+ fileMap.get("file" + i).getOriginalFilename()));
+//fileMap.get("file" + i).transferTo(new File("classpath:/resources/static\\images\\product\\" + Productmodel + ".jpg"));
+//3. 儲存檔案名稱到資料庫
+					BillboardFileBean billBoardFileBean = new BillboardFileBean();
+					billBoardFileBean.setBillboardid(billboardid);
+					billBoardFileBean.setFileid(zTools.getUUID());
+					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
+					ss.saveUrl(billBoardFileBean);
+
+//ProductPictureBean pBean = productPictureJpaReposit.findProducturl(Productmodel + "-" + i);
+//if (pBean == null) {
+//pBean = new ProductPictureBean();
+//}
+//pBean.setProducturl(Productmodel + "-" + i);
+//pBean.setProductid(Productid);
+//productPictureJpaReposit.save(pBean);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "儲存失敗";
+		}
+		return "上傳成功";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除型錄
+	@RequestMapping("/remove/{fileid}/{billboardid}")
+	public String remove(@PathVariable("fileid") String fileid,@PathVariable("billboardid") String billboardid) {
+		System.out.println("*****刪除型錄*****");
+		ss.removefile(fileid);
+		return "redirect:/system/billboard/"+billboardid;
+	}
 }
