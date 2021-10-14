@@ -83,8 +83,8 @@ public class ZeroTools {
 	 * @maillist 群發郵件
 	 *
 	 */
-	private String STMP = "cmbatoziyuiunlot";
-	private String secret = "6LdUNRobAAAAAJR5LsTpyF-A_hIxRltekXBxWWAK";
+	private String STMP = "";
+	private String secret = "";
 
 	// 郵件
 	public void mail(String mailTo, String text, String Subject, String maillist) {
