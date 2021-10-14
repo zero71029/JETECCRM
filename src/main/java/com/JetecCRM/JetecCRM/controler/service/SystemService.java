@@ -20,7 +20,9 @@ import com.JetecCRM.JetecCRM.model.AdminMailBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
+import com.JetecCRM.JetecCRM.model.BillboardReadBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
+import com.JetecCRM.JetecCRM.model.MarketBean;
 import com.JetecCRM.JetecCRM.repository.AdminMailRepository;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
@@ -224,12 +226,18 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //點擊已讀
 	public String saveRead(Integer billboardid, Integer adminid) {
+		//刪除mail  插入read
 		if (amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
 			amr.deleteByBillboardidAndAdminid(billboardid, adminid);
+			AdminBean adminBean = ar.getById(adminid);
+			BillboardReadBean brb = new BillboardReadBean();
+			brb.setBillboardid(billboardid);
+			brb.setReadid(zTools.getUUID());
+			brb.setName(adminBean.getName());
+			brr.save(brb);			
 			return "成功已讀";
 		} else {
 			return "找不到資料";
-
 		}
 
 	}
@@ -237,12 +245,17 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //取消已讀
 	public void ReRead(Integer billboardid, Integer adminid) {
+		//刪除read  插入mail
 		if (!amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
 			AdminMailBean aBean = new AdminMailBean();
 			aBean.setAdminid(adminid);
 			aBean.setBillboardid(billboardid);
 			aBean.setAdminmail(zTools.getUUID());
 			amr.save(aBean);
+			AdminBean adminBean = ar.getById(adminid);
+			if(brr.existsByBillboardidAndName(billboardid,adminBean.getName())) {
+				brr.deleteByBillboardidAndName(billboardid, adminBean.getName());
+			}
 		}
 
 	}
@@ -277,7 +290,7 @@ public class SystemService {
 			bgr.delete(bgBean);
 			return "刪除成功";
 		} else {
-			return "找不到項目";
+			return "找不到項目,請聯絡資訊人員";
 		}
 	}
 
@@ -302,5 +315,27 @@ public class SystemService {
 		File file = new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"+billBoardFileBean.getUrl());
 		System.out.println(file.delete());
 		bfr.delete(billBoardFileBean);
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//搜索公布欄
+	public List<BillboardBean> selectBillboardt(String search) {
+		List<BillboardBean> result= new ArrayList<BillboardBean>();
+		boolean boo = true;
+		// 搜索主題
+		Sort sort = Sort.by(Direction.DESC,"createtime"); 
+		for (BillboardBean p : br.findByThemeLikeIgnoreCaseAndState("%" + search + "%","發佈",sort)) {
+			result.add(p);
+		}
+
+		// 用發表人搜索
+		for (BillboardBean p : br.findByUserLikeIgnoreCaseAndState("%" + search + "%","發佈",sort)) {
+			for (BillboardBean bean : result) {
+				if (bean.getBillboardgroupid() == p.getBillboardgroupid()) {
+					boo = false;
+				}
+			}
+			if (boo)result.add(p);
+		}
+		return result;
 	}
 }

@@ -20,4 +20,10 @@ public interface BillboardRepository extends JpaRepository<BillboardBean, Intege
 
 	boolean existsByBillboardgroupid(String billboardgroupid);
 
+	List<BillboardBean> findByThemeLikeIgnoreCaseAndState(String Theme, String state, Sort sort);
+
+	List<BillboardBean> findByUserLikeIgnoreCaseAndState(String User, String State, Sort sort);
+
+	
+
 }

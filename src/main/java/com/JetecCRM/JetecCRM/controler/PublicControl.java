@@ -40,20 +40,20 @@ public class PublicControl {
 	BillboardRepository br;
 
 	@RequestMapping(path = { "/", "/index" })
-	public String index(Model model,HttpSession session) {
-		System.out.println( "*****主頁面*****");
+	public String index(Model model, HttpSession session) {
+		System.out.println("*****主頁面*****");
 		List<String> unread = new ArrayList<String>();
 		model.addAttribute("list", ss.getBillboardList("發佈"));
-		AdminBean adminBean =(AdminBean) session.getAttribute("user");
-		if(adminBean != null) {
+		AdminBean adminBean = (AdminBean) session.getAttribute("user");
+		if (adminBean != null) {
 			System.out.println(adminBean.getMail());
 			List<AdminMailBean> a = adminBean.getMail();
-			for(AdminMailBean bean :a) {
-				unread.add(br.getById(bean.getBillboardid()).getContent()) ;
+			for (AdminMailBean bean : a) {
+				unread.add(br.getById(bean.getBillboardid()).getContent());
 			}
 			model.addAttribute("unread", unread);
 		}
-		
+
 		return "/CRM";
 	}
 
@@ -83,20 +83,22 @@ public class PublicControl {
 //點擊已讀
 	@RequestMapping("/read/{billboardid}/{adminid}")
 	@ResponseBody
-	public String read(@PathVariable("billboardid") Integer billboardid, @PathVariable("adminid") Integer adminid,HttpSession session) {
+	public String read(@PathVariable("billboardid") Integer billboardid, @PathVariable("adminid") Integer adminid,
+			HttpSession session) {
 		System.out.println("*****點擊已讀*****");
 		session.setAttribute("user", ar.getById(adminid));
-		return ss.saveRead(billboardid, adminid); 
+		return ss.saveRead(billboardid, adminid);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //取消已讀
 	@RequestMapping("/ReRead/{billboardid}/{adminid}")
-	public String ReRead(@PathVariable("billboardid") Integer billboardid, @PathVariable("adminid") Integer adminid,HttpSession session) {
+	public String ReRead(@PathVariable("billboardid") Integer billboardid, @PathVariable("adminid") Integer adminid,
+			HttpSession session) {
 		System.out.println("*****取消已讀*****");
 		ss.ReRead(billboardid, adminid);
 		session.setAttribute("user", ar.getById(adminid));
-		return "redirect:/billboardReply/"+billboardid ;
+		return "redirect:/billboardReply/" + billboardid;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,21 +131,33 @@ public class PublicControl {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 儲存授權
 	@RequestMapping("/saveAuthorize/{uuid}")
-	public String saveAuthorize(Model model, @PathVariable("uuid") String uuid, BillboardBean bean,HttpSession session) {
+	public String saveAuthorize(Model model, @PathVariable("uuid") String uuid, BillboardBean bean,
+			HttpSession session) {
 		System.out.println("*****儲存授權*****");
-		if(ss.SaveBillboard(bean,session)) {
+		if (ss.SaveBillboard(bean, session)) {
 			authorizeRepository.deleteById(uuid);
-		};		
+		}
+		;
 		return "redirect:/";
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表  依分類
 	@RequestMapping("/selectBillboardGroup/{billboardgroupid}")
-	public String selectBillboardGroup(Model model,@PathVariable("billboardgroupid") String billboardgroupid) {
+	public String selectBillboardGroup(Model model, @PathVariable("billboardgroupid") String billboardgroupid) {
 //		List<BillboardBean> resulet = ss.getBillboardList("發佈");
 		System.out.println("*****讀取公佈欄列表*****");
-		model.addAttribute("list", ss.getBillboardList("發佈",billboardgroupid));
+		model.addAttribute("list", ss.getBillboardList("發佈", billboardgroupid));
 		return "/CRM";
-	}	
-	
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//搜索公布欄
+	@RequestMapping("/selectBillboard")
+	public String selectMarket(Model model, @RequestParam("search") String search) {
+		System.out.println("搜索公布欄");
+		model.addAttribute("list", ss.selectBillboardt(search));
+		return "/CRM";
+	}
+
 }

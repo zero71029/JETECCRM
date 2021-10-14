@@ -153,9 +153,10 @@
 
 
                                     未讀${user.mail.size()}
-                                    <form class="d-flex">
-                                        <input class="form-control me-2" type="search" placeholder="Search"
-                                            aria-label="Search">
+                                    
+                                    <form class="d-flex" method="post" action="${pageContext.request.contextPath}/selectBillboard">
+                                        <input class="form-control me-2" type="search" placeholder="主題 or 發佈者"
+                                            aria-label="Search" name="search">
                                         <button class="btn btn-outline-success" type="submit">Search</button>
                                     </form>
                                 </div>
@@ -197,7 +198,7 @@
                                                 </span></td>
                                             <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
                                             <td style="text-align: center;">${s.reply[0].name} <br>${s.reply[0].createtime}</td>
-                                            <td>${s.reply.size()}</td>
+                                            <td style="text-align: center;">${s.reply.size()}</td>
                                         </tr>
 
                                     </c:forEach>

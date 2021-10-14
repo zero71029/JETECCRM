@@ -110,8 +110,8 @@ public class MarketControler {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 搜索銷售機會
 	@RequestMapping("/selectMarket")
-	// 搜索銷售機會
 	public String selectMarket(Model model, @RequestParam("name") String name) {
 		System.out.println("搜索銷售機會");
 		model.addAttribute("list", ms.selectMarket(name));

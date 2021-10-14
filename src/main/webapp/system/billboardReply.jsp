@@ -43,6 +43,7 @@
         </style>
 
         <body>
+
             <!-- <%-- 插入側邊欄--%> -->
             <jsp:include page="/Sidebar.jsp"></jsp:include>
             <!-- <%-- 中間主體////////////////////////////////////////////////////////////////////////////////////////--%> -->
@@ -67,7 +68,7 @@
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">主題*</div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">主題</div>
                                     <div class="col-md-7 cell" style="position: relative;">
                                         ${bean.theme}
 
@@ -76,7 +77,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">內容*</div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">內容</div>
                                     <div class="col-md-7 cell content">
                                         ${bean.content}
 
@@ -88,30 +89,31 @@
                                     <div class="col-md-1 cell cellbackgroud">日期</div>
                                     <div class="col-md-3 cell">${bean.createtime}</div>
                                     <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
-                                    <div class="col-md-3 cell" style="position: relative;">${bean.read.size()}
+                                    <div class="col-md-3 cell" style="position: relative;">
+                                        ${bean.read.size()}
                                         <c:if test="${not empty user}">
                                             <!-- 有登入才顯示 -->
-                                            <c:if test="${not empty user.mail}">
-                                                <c:set var="i" value="false"></c:set>
-                                                <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}"
-                                                    items="${user.mail}" var="mail">
-                                                    <!-- 已讀迴圈 -->
-                                                    <!-- 登入者 已讀 i == ture -->
-                                                    <c:if test="${bean.billboardid == mail.billboardid}">
-                                                        <c:set var="i" value="ture"></c:set>
-                                                        <c:set var="exitID" value="0"></c:set>
-                                                    </c:if>
-                                                </c:forEach>
-                                                <!--  已讀 才顯示 -->
-                                                <c:if test='${i != "ture"}'>
-                                                    <a href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'
-                                                        style='position: absolute ; right: 1%; bottom: 5px;'>取消已讀</a>
+                                            <!-- 有資料才顯示 -->
+                                            <c:set var="i" value="false"></c:set>
+                                            <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}"
+                                                items="${user.mail}" var="mail">
+                                                <!-- 已讀迴圈 -->
+                                                <!-- 登入者 已讀 i == ture -->
+                                                <c:if test="${bean.billboardid == mail.billboardid}">
+                                                    <c:set var="i" value="ture"></c:set>
+                                                    <c:set var="exitID" value="0"></c:set>
                                                 </c:if>
-                                                <c:if test='${i == "ture"}'>
-                                                    <a href="javascript:read(${bean.billboardid},${user.adminid})"
-                                                        style='position: absolute ; right: 1%; bottom: 5px;'>已讀點擊</a>
-                                                </c:if>
+                                            </c:forEach>
+                                            <!--  已讀 才顯示 -->
+                                            <c:if test='${i != "ture"}'>
+                                                <a href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'
+                                                    style='position: absolute ; right: 1%; bottom: 5px;'>取消已讀</a>
                                             </c:if>
+                                            <c:if test='${i == "ture"}'>
+                                                <a href="javascript:read(${bean.billboardid},${user.adminid})"
+                                                    style='position: absolute ; right: 1%; bottom: 5px;'>已讀點擊</a>
+                                            </c:if>
+
                                         </c:if>
 
 
@@ -169,7 +171,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <button type="submit" style="width: 100%;" class="btn btn-primary">留言</button>
                                     </div>
                                 </div>
@@ -205,6 +207,7 @@
 
         <script>
             $(".system").show();
+
 
             $(function () {
                 // 日期UI
@@ -265,6 +268,14 @@
                     }
                 });
             }
+            var reg="((http|ftp|https)://)(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\\&%_\\./-~-]*)?";
+            var aaa = $(".content").text();
+            console.log(aaa);
+            var ccc =  aaa.match(reg);
+            console.log(ccc);
+            for(let a of ccc)console.log(a);
+
+
         </script>
 
         </html>

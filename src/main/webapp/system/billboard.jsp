@@ -146,7 +146,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
-                                <div class="col-lg-4 cell">${bean.read.size()}
+                                <div class="col-lg-4 cell"> <a href="javascript:ReadNum()">${bean.read.size()}</a>
 
                                 </div>
                             </div>
@@ -247,10 +247,11 @@
                                             <a href="${pageContext.request.contextPath}/file/${s.url}">${s.url}</a>
                                         </div>
                                         <div class="col-lg-6 ">
-                                            <a href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a>
+                                            <a
+                                                href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a>
                                         </div>
 
-                                    </div>    
+                                    </div>
                                     <br>
                                 </c:forEach>
                             </c:if>
@@ -442,6 +443,27 @@
 
                 });
             }
+            $(function () {
+                $("#dialog").dialog({ autoOpen: false });
+            });
+            function ReadNum() {
+                $("#dialog").dialog("open");
+            }
+
+        
+        
+        
+        
         </script>
+        <div id="dialog" title="已讀人員">
+            <p>
+                <c:forEach varStatus="loop" begin="0" end="${bean.read.size()-1}"
+                items="${bean.read}" var="s">
+                ${s.name} <br>
+            </c:forEach>
+
+
+            </p>
+        </div>
 
         </html>

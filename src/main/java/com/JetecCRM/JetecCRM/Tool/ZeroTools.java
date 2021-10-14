@@ -34,6 +34,9 @@ import com.google.api.client.json.gson.GsonFactory;
 public class ZeroTools {
 
 	// 筆記
+//	一键复制至剪切板
+//	url.select();
+//    document.execCommand("Copy");
 //////jpa排序
 	// Sort sort = Sort.by(Direction.DESC,"marketid");
 	// return mr.findAll( sort);
@@ -80,8 +83,8 @@ public class ZeroTools {
 	 * @maillist 群發郵件
 	 *
 	 */
-	private String STMP = "";
-	private String secret = "";
+	private String STMP = "cmbatoziyuiunlot";
+	private String secret = "6LdUNRobAAAAAJR5LsTpyF-A_hIxRltekXBxWWAK";
 
 	// 郵件
 	public void mail(String mailTo, String text, String Subject, String maillist) {
