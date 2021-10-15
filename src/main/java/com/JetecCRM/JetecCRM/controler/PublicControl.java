@@ -116,9 +116,8 @@ public class PublicControl {
 	@RequestMapping("/billboardReply/{id}")
 	public String billboardReply(Model model, @PathVariable("id") Integer id) {
 		System.out.println("*****讀取公佈欄細節****");
-		BillboardBean bean = ss.getBillboardById(id);
-//		bean.setContent(bean.getContent().replaceAll("<br>", "\n"));
-		model.addAttribute("bean", bean);
+		model.addAttribute("bean", ss.getBillboardById(id));
+		model.addAttribute("news", ss.getBillboardByTime());
 		return "/system/billboardReply";
 	}
 
@@ -149,7 +148,7 @@ public class PublicControl {
 
 		BillboardBean save = ss.SaveBillboard(bean, session);
 		List<BillboardFileBean> list = bfr.findByAuthorize(uuid);
-		for(BillboardFileBean b : list) {
+		for (BillboardFileBean b : list) {
 			b.setBillboardid(save.getBillboardid());
 			bfr.save(b);
 		}
@@ -196,6 +195,7 @@ public class PublicControl {
 	public String upFile(MultipartHttpServletRequest multipartRequest,
 			@PathVariable("authorizeId") String authorizeId) {
 		System.out.println("*****上傳型錄*****");
+		String uuid = zTools.getUUID();
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		System.out.println("fileMap " + fileMap);
 //圖片儲存
@@ -209,13 +209,13 @@ public class PublicControl {
 							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
 					System.out.println(lastname);
 					fileMap.get("file" + i).transferTo(new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"
-							+ fileMap.get("file" + i).getOriginalFilename()));
+							+ uuid+lastname));
 //fileMap.get("file" + i).transferTo(new File("classpath:/resources/static\\images\\product\\" + Productmodel + ".jpg"));
 //3. 儲存檔案名稱到資料庫
 					BillboardFileBean billBoardFileBean = new BillboardFileBean();
 					billBoardFileBean.setBillboardid(0);
 					billBoardFileBean.setAuthorize(authorizeId);
-					billBoardFileBean.setFileid(zTools.getUUID());
+					billBoardFileBean.setFileid(uuid);
 					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
@@ -253,6 +253,23 @@ public class PublicControl {
 		System.out.println(file.delete());
 		bfr.delete(billBoardFileBean);
 		return "redirect:/authorize/" + billBoardFileBean.getAuthorize();
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//置頂設定
+	@RequestMapping("/top/{billboardid}")
+	@ResponseBody
+	public String billboardid(@PathVariable("billboardid") Integer billboardid) {
+		System.out.println("*****置頂設定*****");
+		BillboardBean bean = br.getById(billboardid);
+		if(bean.getTop().equals("置頂")) {
+			bean.setTop("");
+			br.save(bean);
+			return "取消成功";	
+		}
+		bean.setTop("置頂");
+		br.save(bean);
+		return "置頂成功";
 	}
 
 }

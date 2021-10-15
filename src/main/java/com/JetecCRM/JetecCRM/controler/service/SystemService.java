@@ -22,7 +22,7 @@ import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
 import com.JetecCRM.JetecCRM.model.BillboardReadBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
-import com.JetecCRM.JetecCRM.model.MarketBean;
+import com.JetecCRM.JetecCRM.model.NewsBean;
 import com.JetecCRM.JetecCRM.repository.AdminMailRepository;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
@@ -352,6 +352,11 @@ public class SystemService {
 			if (boo)result.add(p);
 		}
 		return result;
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取留言by時間
+	public List<BillboardBean> getBillboardByTime() {
+		return br.getBillboardByTime();
 	}
 
 }

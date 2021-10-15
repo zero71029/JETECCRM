@@ -78,11 +78,6 @@
                                 <input type="hidden" name="billboardid" value="${bean.billboardid}">
                                 <input type="hidden" name="user" value="${user.name}">
                                 <div class="row">
-                                    <div class="col-lg-1 cell position-relative cellbackgroud">發佈者</div>
-                                    <div class="col-lg-9 cell">${bean.user}${param.authorize}</div>
-                                </div>
-
-                                <div class="row">
 
                                     <div class="col-lg-1 cell position-relative cellbackgroud">主題*</div>
                                     <div class="col-lg-9 cell">
@@ -203,15 +198,21 @@
 
                     <div class="col-lg-3">
                         <!-- 附件 -->
+                        <br><br><br><br><br>
+                        <div class="row">
+                            <div class="col-lg-8 cell" style="background-color : #569b92 ;text-align: center;">
+                                附件</div>
+                        </div>
                         <div class="row fileDiv">
-                            <div class="col-lg-6 ">
-                                <a href="${pageContext.request.contextPath}/file/${s.url}">${s.url}</a>
+                            <div class="col-lg-6 " >
+                                <a href="${pageContext.request.contextPath}/file/${s.url}" style="word-wrap: break-word;">${s.url}</a>
                             </div>
                             <div class="col-lg-6 ">
                                 <a
                                     href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a>
                             </div>
                         </div>
+
                         <br>
                         <!-- 上傳 -->
                         <div class="row upDiv">
@@ -237,7 +238,7 @@
         </c:forEach>
         <script>
             var group = "${bean.billtowngroup}";
- 
+
             if (group == "") group = "一般公告";
 
             // 插入子項
@@ -364,16 +365,15 @@
                     success: function (json) {
                         console.log(json);
                         $(".fileDiv").empty();
-                        for(var f of json){
-                            $(".fileDiv").append('<div class="col-lg-6 "><a href="${pageContext.request.contextPath}/file/'+f.url+'">'+f.url+'</a></div>'+
-                            '<div class="col-lg-6 "><a href="${pageContext.request.contextPath}/remove/'+f.fileid+'">remove</a></div>');
+                        for (var f of json) {
+                            var url = "${pageContext.request.contextPath}/file/"+ f.fileid;
+                            $(".fileDiv").append('<div class="col-lg-6" style="word-wrap: break-word;" ><a draggable="true"'+
+                                       ' ondragstart="event.dataTransfer.setData(`text/plain`, `<img style=width:100% src=' + url + ' >`)" href="${pageContext.request.contextPath}/file/' + f.url + '">' + f.url + '</a></div>' +
+                                '<div class="col-lg-6 "><a href="${pageContext.request.contextPath}/remove/' + f.fileid + '">remove</a></div>');
                         }
-                        
                         $(".upDiv").empty();
-                        $(".upDiv").append('<form class="row uppdf" action="" method="post" enctype="multipart/form-data">'+
-                                '<input type="file" name="file1" onchange="upfile(0);" class="fileInput" value="" /></form>');
-
-
+                        $(".upDiv").append('<form class="row uppdf" action="" method="post" enctype="multipart/form-data">' +
+                            '<input type="file" name="file1" onchange="upfile(0);" class="fileInput" value="" /></form>');
                     },
                     error: function (returndata) {
                         console.log(returndata);

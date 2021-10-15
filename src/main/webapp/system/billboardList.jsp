@@ -76,7 +76,8 @@
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
                                             ${s.billboardid}</td>
-                                            <td style="color: red;" onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">${s.top}</td>
+                                            <c:set var="img" value="<img src='${pageContext.request.contextPath}/img/TOP.png' alt='置頂'>" ></c:set>
+                                            <td style="color: red;" onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">${s.top == "置頂"?img:""}</td>
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
                                             ${s.theme}</td>

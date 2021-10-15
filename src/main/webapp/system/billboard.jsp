@@ -72,8 +72,8 @@
 
                         <div class="row">
                             <div class="col-lg-2">
-                                <a href="javascript:history.back()"
-                                    style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
+                                <a href="javascript:history.back()" style="text-decoration: none;"><img
+                                        src="${pageContext.request.contextPath}/img/Pre.png" alt="上一頁"></a>
                             </div>
                         </div>
                         <br>
@@ -94,6 +94,11 @@
                             <input type="hidden" name="billboardid" value="${bean.billboardid}">
                             <input type="hidden" name="user" value="${user.name}">
                             <div class="row">
+                                <div class="col-lg-10 cell position-relative cellbackgroud"
+                                    style="text-align: center;color:white;background-color: #569b92; font-size: 20px;">
+                                    發布公告</div>
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-1 cell position-relative cellbackgroud">發佈者</div>
                                 <div class="col-lg-9 cell">${bean.user}${param.authorize}</div>
                             </div>
@@ -111,7 +116,7 @@
 
                                 <div class="col-lg-1 cell position-relative cellbackgroud">內容*</div>
                                 <div class="col-lg-9 cell ">
-                                    <textarea class="cellFrom" name="content" cols="100" rows="10" required
+                                    <textarea class="cellFrom" name="content" cols="98" rows="10" required
                                         maxlength="450">${bean.content}</textarea>
                                 </div>
 
@@ -126,12 +131,9 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-1 cell cellbackgroud">日期</div>
-                                <div class="col-lg-4 cell">${bean.createtime}
-
-                                </div>
+                                <div class="col-lg-4 cell">${bean.createtime}</div>
                             </div>
                             <div class="row">
-
                                 <div class="col-lg-1 cell cellbackgroud">置頂</div>
                                 <div class="col-lg-4 cell">
                                     <select input type="text" class=" form-select cellFrom" name="top">
@@ -139,7 +141,6 @@
                                         </option>
                                         <option ${bean.top=="置頂" ?"selected":null} class="selItemOff" value="置頂">置頂
                                         </option>
-
                                     </select>
                                 </div>
                                 <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
@@ -178,7 +179,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <button type="submit" style="width: 100%;" class="btn btn-primary">儲存</button>
+                                    <button type="submit" style="width: 100%;background-color: #08604f;color: white;"
+                                        class="btn ">儲存</button>
                                 </div>
                             </div>
 
@@ -209,11 +211,12 @@
                                     <div class="row">
 
                                         <div class="col-lg-10">
-                                            <button type="submit" style="width: 100%;"
-                                                class="btn btn-primary">發送</button>
+                                            <button type="submit" style="width: 100%;background-color: #08604f;color: white;"
+                                                class="btn ">發送</button>
                                         </div>
                                     </div>
                                 </div>
+                                <br><br>
                             </form>
                         </c:if>
                         <!-- 回覆內容 -->
@@ -222,11 +225,13 @@
                                 var="s">
                                 <div class="row" style="line-height: 2rem;">
                                     <div class="col-md-1 cell cellbackgroud">${s.name}</div>
-                                    <div class="col-md-9 cell" style="position: relative;">${s.content} <span
-                                            style="position: absolute;right: 0%;">${s.createtime}</span></div>
+                                    <div class="col-md-9 cell" style="position: relative;word-wrap:break-word;">
+                                        ${s.content} <span style="position: absolute;right: 0%;">${s.createtime}</span>
+                                    </div>
                                 </div>
                             </c:forEach>
                         </c:if>
+                        <br><br><br><br><br>
                     </div>
 
 
@@ -237,21 +242,25 @@
                             <br>
                             <!-- 附件 -->
                             <c:if test="${not empty bean.file}">
+                                <div class="row">
+                                    <div class="col-lg-9 cell" style="background-color : #569b92 ;text-align: center;">
+                                        附件</div>
+                                </div>
                                 <c:forEach varStatus="loop" begin="0" end="${bean.file.size()-1}" items="${bean.file}"
                                     var="s">
-                                    <div class="row">
-                                        <div class="col-lg-6 ">
-                                            <a href="${pageContext.request.contextPath}/file/${s.url}">${s.url}</a>
+                                    <c:set var="url" value="${pageContext.request.contextPath}/file/${s.url}"></c:set>
+                                    <div class="row" draggable="true"
+                                        ondragstart="event.dataTransfer.setData('text/plain', '<img style=width:100% src=${url} alt=xxx>')">
+                                        <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
+                                        <div class="col-lg-5 cell" style="word-wrap: break-word;"><a
+                                                href="${pageContext.request.contextPath}/file/${s.url}">${s.url} </a>
                                         </div>
-                                        <div class="col-lg-6 ">
-                                            <a
-                                                href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a>
-                                        </div>
-
+                                        <div class="col-md-2 cell position-relative ">
+                                            <a href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a></div>
                                     </div>
-                                    <br>
                                 </c:forEach>
                             </c:if>
+                            <img src="" alt="">
                             <!-- 上傳 -->
                             <div class="row">
                                 <form class="row uppdf" action="" method="post" enctype='multipart/form-data'>

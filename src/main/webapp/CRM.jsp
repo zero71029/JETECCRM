@@ -188,7 +188,8 @@
                                         <tr style="Cursor: pointer ;vertical-align: middle;"
                                             onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'">
                                             <td>
-                                                <span style="color: red;">${s.top}</span> [${s.billtowngroup}] &nbsp;
+                                                <c:set var="img" value="<img src='${pageContext.request.contextPath}/img/TOP.png' alt='置頂'>" ></c:set>
+                                                <span style="color: red;">${s.top == "置頂"?img:""}</span> [${s.billtowngroup}] &nbsp;
                                                 ${s.theme} <span style="color: red;">
                                                     <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
                                                     <c:if test="${not empty user.mail}">

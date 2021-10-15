@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 
@@ -23,6 +24,10 @@ public interface BillboardRepository extends JpaRepository<BillboardBean, Intege
 	List<BillboardBean> findByThemeLikeIgnoreCaseAndState(String Theme, String state, Sort sort);
 
 	List<BillboardBean> findByUserLikeIgnoreCaseAndState(String User, String State, Sort sort);
+
+	
+	@Query(value ="SELECT * FROM `billboard` WHERE  date_sub(curdate(), interval 7 day) <= createtime  ORDER BY createtime DESC", nativeQuery=true)
+	List<BillboardBean> getBillboardByTime();
 
 	
 
