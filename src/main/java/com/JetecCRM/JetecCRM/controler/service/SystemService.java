@@ -66,8 +66,10 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存員工
-	public void SaveAdmin(AdminBean abean) {
+	public String SaveAdmin(AdminBean abean) {
+		if(ar.existsByEmail(abean.getEmail()))return "失敗,Email 已被使用";
 		ar.save(abean);
+		return "儲存成功,<a href=\"/time.jsp\">請重新登入</a>";
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +167,7 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄
-	public boolean SaveBillboard(BillboardBean bean, HttpSession session) {
+	public BillboardBean SaveBillboard(BillboardBean bean, HttpSession session) {
 		AdminMailBean adminMailBean = new AdminMailBean();
 		// 插入換行
 		String content = bean.getContent();
@@ -176,6 +178,10 @@ public class SystemService {
 		bean.setBillboardgroupid(bgb.getBillboardgroupid());
 		//
 		BillboardBean save = br.save(bean);
+		if(save.getState().equals("封存")) {
+			amr.deleteAllByBillboardid(save.getBillboardid());			
+			return save;
+		}
 		adminMailBean.setBillboardid(save.getBillboardid());
 		// 郵件
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
@@ -188,14 +194,17 @@ public class SystemService {
 			maillist.append(a.getEmail());
 			maillist.append(",");
 			// 抓出所有人插入maill
-			adminMailBean.setAdminmail(zTools.getUUID());
-			adminMailBean.setAdminid(a.getAdminid());
-			amr.save(adminMailBean);
+			
+			if(!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid())) {
+				adminMailBean.setAdminmail(zTools.getUUID());
+				adminMailBean.setAdminid(a.getAdminid());
+				amr.save(adminMailBean);
+				}
 		}
 		maillist.append("jeter.tony56@gmail.com");
 //		zTools.mail(mailTo, text, Subject, maillist.toString());
 
-		return true;
+		return save;
 
 	}
 
@@ -218,6 +227,8 @@ public class SystemService {
 //刪除公佈欄
 	public void delBillboard(List<Integer> id) {
 		for (Integer i : id) {
+			
+			if(amr.existsByBillboardid(i))amr.deleteAllByBillboardid(i);
 			br.deleteById(i);
 		}
 
@@ -270,13 +281,17 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //新增群組子項
-	public void saveOption(String group, String option) {
+	public String saveOption(String group, String option) {
+		if (bgr.existsByBillboardgroupAndBillboardoption(group, option)) {
+			return "改項目存在";
+		}else {	
 		BillboardGroupBean bean = new BillboardGroupBean();
 		bean.setBillboardgroup(group);
 		bean.setBillboardoption(option);
 		bean.setBillboardgroupid(zTools.getUUID());
 		bgr.save(bean);
-
+		return group+" "+option+""+"新增成功";
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,4 +353,5 @@ public class SystemService {
 		}
 		return result;
 	}
+
 }

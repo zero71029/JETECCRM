@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -65,17 +63,6 @@ public class SystemControler {
 		return "/system/admin";
 	}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//儲存員工
-	@RequestMapping("/SaveAdmin")
-	public String SaveAdmin(AdminBean abean, HttpServletRequest req) {
-		System.out.println("*****儲存員工*****");
-		ss.SaveAdmin(abean);
-		ServletContext sce = req.getServletContext();
-		sce.setAttribute("admin", ar.findAll());
-
-		return "redirect:/system/adminList";
-	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //刪除員工
@@ -102,7 +89,7 @@ public class SystemControler {
 	@RequestMapping("/OffShelf")
 	public String OffShelf(Model model) {
 		System.out.println("*****讀取公佈欄列表*****");
-		model.addAttribute("list", ss.getBillboardList("下架"));
+		model.addAttribute("list", ss.getBillboardList("封存"));
 		return "/system/billboardList";
 	}
 
@@ -145,7 +132,6 @@ public class SystemControler {
 		if (ss.SaveReply(bean)) {
 			BillboardBean bb = br.getById(bean.getBillboardid());
 			AdminBean abean = ar.findByName(bb.getUser());
-
 			String mailTo = abean.getEmail();
 			String Subject = bean.getName() + "回覆留言";
 			String text = "主題 :" + bb.getTheme() + "<br>回覆 :" + bean.getContent();
@@ -173,6 +159,11 @@ public class SystemControler {
 			String text = String.format("<a href='http://192.168.11.114:8081/authorize/%s'>點擊鍊接留言</a>", uuid);
 			String maillist = "";
 			zTools.mail(mailTo, text, Subject, maillist);
+		}else {
+			AuthorizeBean authorizeBean = new AuthorizeBean();
+			authorizeBean.setId(uuid);
+			authorizeBean.setUsed("所有人");
+			authorizeRepository.save(authorizeBean);
 		}
 		return String.format("http://192.168.11.114:8081/authorize/%s", uuid);
 	}
@@ -184,9 +175,9 @@ public class SystemControler {
 	public String addOption(@PathVariable("group") String group, @PathVariable("option") String option,
 			HttpServletRequest sce) {
 		System.out.println("*****新增群組子項*****");
-		ss.saveOption(group, option);
+		String resuly = ss.saveOption(group, option);
 		ss.updataOption(sce);
-		return String.format("%s  %s 新增成功", group, option);
+		return resuly;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

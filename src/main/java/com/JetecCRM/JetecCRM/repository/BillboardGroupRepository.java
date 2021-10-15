@@ -11,5 +11,4 @@ public interface BillboardGroupRepository extends JpaRepository<BillboardGroupBe
 	boolean existsByBillboardgroupAndBillboardoption(String group, String option);
 
 
-
 }

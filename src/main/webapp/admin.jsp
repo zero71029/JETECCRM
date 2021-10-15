@@ -26,13 +26,14 @@
             .cell {
                 border: 0px solid black;
                 border-bottom: 1px solid black;
-               
+
 
             }
 
-            .cellbackgroud{
+            .cellbackgroud {
                 background-color: #AAA;
             }
+
             .cellFrom {
                 border: 0px solid black;
                 /* width: 33%; */
@@ -69,8 +70,7 @@
                             </div>
                         </div>
                         <br>
-                        <form action="${pageContext.request.contextPath}/system/SaveAdmin" method="post" id="myform"
-                            class="basefrom g-3 needs-validation">
+                        <form action="${pageContext.request.contextPath}/SaveAdmin" method="post" id="myform" class="basefrom g-3 needs-validation">
                             <div class="row">
                                 <input type="hidden" name="adminid" value="${bean.adminid}">
 
@@ -114,19 +114,22 @@
                                     <div class="col-md-2 cell">
                                         <select input type="text" class=" form-select cellFrom" name="state">
                                             <option ${bean.state=="在職" ?"selected":null} class="selItemOff">在職</option>
-                                            <option ${bean.state=="留職停薪" ?"selected":null} class="selItemOff">留職停薪</option>
+                                            <option ${bean.state=="留職停薪" ?"selected":null} class="selItemOff">留職停薪
+                                            </option>
                                             <option ${bean.state=="離職" ?"selected":null} class="selItemOff">離職</option>
                                             <option ${bean.state=="試用" ?"selected":null} class="selItemOff">試用</option>
-                                            <option ${bean.state=="合約到期" ?"selected":null} class="selItemOff">合約到期</option>
-                                            <option ${bean.state=="退休" ?"selected":null} class="selItemOff">退休</option>                                           
+                                            <option ${bean.state=="合約到期" ?"selected":null} class="selItemOff">合約到期
+                                            </option>
+                                            <option ${bean.state=="退休" ?"selected":null} class="selItemOff">退休</option>
                                         </select>
                                     </div>
                                     <div class="col-md-1 cell cellbackgroud">職位</div>
                                     <div class="col-md-2 cell">
-                                            <select input type="text" class=" form-select cellFrom" name="position">
-                                                <option ${bean.position=="職員" ?"selected":null} class="selItemOff">職員</option>
-                                                <option ${bean.position=="主管" ?"selected":null} class="selItemOff">主管</option> 
-                                            </select>
+                                        <select input type="text" class=" form-select cellFrom" name="position">
+                                            <option ${bean.position=="職員" ?"selected":null} class="selItemOff">職員
+                                            </option>
+
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -144,7 +147,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">密碼</div>
+                                    <div class="col-md-1 cell cellbackgroud">密碼*</div>
                                     <div class="col-md-2 cell position-relative">
                                         <input type="password" class=" form-control cellFrom" name="password"
                                             id="password" value="${bean.password}" maxlength="20">
@@ -152,7 +155,7 @@
                                             須輸入密碼
                                         </div>
                                     </div>
-                                    <div class="col-md-1 cell cellbackgroud">密碼確認</div>
+                                    <div class="col-md-1 cell cellbackgroud">密碼確認*</div>
                                     <div class="col-md-2 cell position-relative">
                                         <input type="password" class=" form-control cellFrom" name="password_again"
                                             id="password_again" value="${bean.password}" maxlength="20">
@@ -172,7 +175,7 @@
                                     </div>
                                 </div>
 
-
+                                
                             </div>
                         </form>
 
@@ -202,8 +205,10 @@
                 jQuery.validator.setDefaults({
                     submitHandler: function () {
                         if (confirm("題交確認")) form.submit();
+                        
                     }
                 });
+
                 $.extend($.validator.messages, {
                     required: "這是必填字段",
                     email: "請输入有效的電子郵件地址",

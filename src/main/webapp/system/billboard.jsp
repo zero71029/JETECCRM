@@ -69,11 +69,7 @@
                     <div class="col-lg-7">
                         <!-- <%-- 中間主體--%> -->
                         <br>
-                        <div class="row">
-                            <div class="col-lg-10">
-                                <h3>公佈欄</h3>
-                            </div>
-                        </div>
+
                         <div class="row">
                             <div class="col-lg-2">
                                 <a href="javascript:history.back()"
@@ -94,11 +90,12 @@
 
 
                         <div class="row">
+                            <input type="hidden" name="authorize" value="${param.authorize}">
                             <input type="hidden" name="billboardid" value="${bean.billboardid}">
                             <input type="hidden" name="user" value="${user.name}">
                             <div class="row">
                                 <div class="col-lg-1 cell position-relative cellbackgroud">發佈者</div>
-                                <div class="col-lg-9 cell">${bean.user}</div>
+                                <div class="col-lg-9 cell">${bean.user}${param.authorize}</div>
                             </div>
 
                             <div class="row">
@@ -114,7 +111,7 @@
 
                                 <div class="col-lg-1 cell position-relative cellbackgroud">內容*</div>
                                 <div class="col-lg-9 cell ">
-                                    <textarea class="cellFrom" name="content" cols="65" rows="10" required
+                                    <textarea class="cellFrom" name="content" cols="100" rows="10" required
                                         maxlength="450">${bean.content}</textarea>
                                 </div>
 
@@ -125,7 +122,7 @@
                                 <div class="col-lg-4 cell">
                                     <select input type="text" class=" form-select cellFrom" name="state">
                                         <option ${bean.state=="發佈" ?"selected":null} class="selItemOff">發佈</option>
-                                        <option ${bean.state=="下架" ?"selected":null} class="selItemOff">封存</option>
+                                        <option ${bean.state=="封存" ?"selected":null} class="selItemOff">封存</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-1 cell cellbackgroud">日期</div>
@@ -279,9 +276,13 @@
             </script>
         </c:forEach>
         <script>
+            var group = "${bean.billtowngroup}";
+            console.log(group);
+            if (group == "") group = "一般公告";
+            console.log(group);
+            // 插入子項
             for (var option of billboardgroup) {
-
-                if (Object.keys(option)[0] == "一般公告") $(".billtownoption").append('<option  value="' + option["一般公告"] + '">' + option["一般公告"] + '</option>');
+                if (Object.keys(option)[0] == group) $(".billtownoption").append('<option  value="' + option[group] + '">' + option[group] + '</option>');
             }
             var aaa = '${bean.bgb.billboardoption}';
             if (aaa == '') {
@@ -292,7 +293,7 @@
             // 新增分類
             var $group = $(".billboardGroup");
             var $option = $(".billtownoption");
-            var group = "一般公告";
+
             $(".billtownoption").append('<option value="new" style="background-color: #ccc;">新增</option>');
 
             //切換子項
@@ -310,6 +311,11 @@
             $group.change(function () {
                 $group = $(".billboardGroup");
                 group = $group.val();
+                console.log(group);
+
+
+
+
                 $option.empty();
                 for (var b of billboardgroup) {
                     if (Object.keys(b)[0] == $group.val()) {
@@ -351,12 +357,7 @@
                     // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
                     success: function (json) {
                         alert(json);
-                        $(".optinUL").empty();
-                        for (var option of billboardgroup) {
-                            console.log(option);
-                            if (Object.keys(option)[0] == $group.val()) $(".optinUL").append('<li>' + option[$group.val()] +
-                                ' &nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:delOption(`' + option[$group.val()] + '`)">remove</a></li>');
-                        }
+                        location.href = '${pageContext.request.contextPath}/system/billboard/${bean.billboardid}';
                     },
                     error: function (returndata) {
                         console.log(returndata);
@@ -450,17 +451,16 @@
                 $("#dialog").dialog("open");
             }
 
-        
-        
-        
-        
+
+
+
+
         </script>
         <div id="dialog" title="已讀人員">
             <p>
-                <c:forEach varStatus="loop" begin="0" end="${bean.read.size()-1}"
-                items="${bean.read}" var="s">
-                ${s.name} <br>
-            </c:forEach>
+                <c:forEach varStatus="loop" begin="0" end="${bean.read.size()}" items="${bean.read}" var="s">
+                    ${s.name} <br>
+                </c:forEach>
 
 
             </p>

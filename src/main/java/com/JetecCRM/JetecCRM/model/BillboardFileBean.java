@@ -10,13 +10,19 @@ public class BillboardFileBean {
 	
     @Id   
     private String fileid;;
-    private Integer billboardid	;
+    private Integer billboardid;
     private String url;
+    private String authorize;
     
     
     
     
-    
+	public String getAuthorize() {
+		return authorize;
+	}
+	public void setAuthorize(String authorize) {
+		this.authorize = authorize;
+	}
 	public String getFileid() {
 		return fileid;
 	}

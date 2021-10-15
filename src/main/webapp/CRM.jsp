@@ -38,7 +38,7 @@
                         <!-- 導覽列 -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="text-align: left;">
                             <div class="container-fluid">
-                                <a class="navbar-brand" href="${pageContext.request.contextPath}/">公布欄</a>
+                                <a class="navbar-brand" href="${pageContext.request.contextPath}/">首頁</a>
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                     aria-expanded="false" aria-label="Toggle navigation">
@@ -153,8 +153,9 @@
 
 
                                     未讀${user.mail.size()}
-                                    
-                                    <form class="d-flex" method="post" action="${pageContext.request.contextPath}/selectBillboard">
+
+                                    <form class="d-flex" method="post"
+                                        action="${pageContext.request.contextPath}/selectBillboard">
                                         <input class="form-control me-2" type="search" placeholder="主題 or 發佈者"
                                             aria-label="Search" name="search">
                                         <button class="btn btn-outline-success" type="submit">Search</button>
@@ -169,6 +170,8 @@
                     <div class="col-lg-8">
                         <!-- <%-- 中間主體--%> -->
                         <h1 style="color: red;">${param.mess=="1"?"權限不夠":""}</h1>
+                        <h1 style="color: red;">${param.mess=="2"?"須先登入":""}</h1>
+                        <h1 style="color: red;">${param.mess=="3"?"授權碼過期":""}</h1>
                         <table class="table table-hover">
                             <thead>
                                 <tr style="text-align:center">
@@ -185,8 +188,8 @@
                                         <tr style="Cursor: pointer ;vertical-align: middle;"
                                             onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'">
                                             <td>
-                                                <span   style="color: red;">${s.top}</span>    [${s.billtowngroup}] &nbsp; ${s.theme} <span
-                                                    style="color: red;">
+                                                <span style="color: red;">${s.top}</span> [${s.billtowngroup}] &nbsp;
+                                                ${s.theme} <span style="color: red;">
                                                     <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
                                                     <c:if test="${not empty user.mail}">
                                                         <c:forEach varStatus="loop" begin="0"
@@ -195,9 +198,11 @@
                                                         </c:forEach>
                                                     </c:if>
 
-                                                </span></td>
+                                                </span>
+                                            </td>
                                             <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
-                                            <td style="text-align: center;">${s.reply[0].name} <br>${s.reply[0].createtime}</td>
+                                            <td style="text-align: center;">${s.reply[0].name}
+                                                <br>${s.reply[0].createtime}</td>
                                             <td style="text-align: center;">${s.reply.size()}</td>
                                         </tr>
 
@@ -280,13 +285,9 @@
                     <!-- 基本的对话框 -->
                     <c:if test="${not empty unread}">
                         <c:forEach varStatus="loop" begin="0" end="${unread.size()}" items="${unread}" var="unread">
-
-
                             <div class="dialog" title="新訊息">
                                 <p>${unread}</p>
                             </div>
-
-
                         </c:forEach>
 
                     </c:if>
@@ -295,8 +296,13 @@
             </div>
             <script>
 
-                $(".dialog").dialog({ autoOpen: true });
-
+                $(".dialog").dialog({
+                    autoOpen: true,
+                    position:{
+                        at:"right bottom"
+                }
+                    
+                });
                 function read(billboardid, username) {
                     console.log(username);
                     $.ajax({

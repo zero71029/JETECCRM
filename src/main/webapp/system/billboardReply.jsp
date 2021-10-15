@@ -88,9 +88,8 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">日期</div>
                                     <div class="col-md-3 cell">${bean.createtime}</div>
-                                    <div class="col-md-1 cell cellbackgroud">閱讀人數</div>
-                                    <div class="col-md-3 cell" style="position: relative;">
-                                        ${bean.read.size()}
+                                    <div class="col-md-1 cell cellbackgroud">閱讀</div>
+                                    <div class="col-md-3 cell" style="position: relative;">                                       
                                         <c:if test="${not empty user}">
                                             <!-- 有登入才顯示 -->
                                             <!-- 有資料才顯示 -->

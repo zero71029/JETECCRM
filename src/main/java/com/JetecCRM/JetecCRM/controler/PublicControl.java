@@ -1,7 +1,10 @@
 package com.JetecCRM.JetecCRM.controler;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.controler.service.SystemService;
@@ -21,8 +26,10 @@ import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.AdminMailBean;
 import com.JetecCRM.JetecCRM.model.AuthorizeBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
+import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 
 @Controller
@@ -33,12 +40,16 @@ public class PublicControl {
 	@Autowired
 	SystemService ss;
 	@Autowired
-	ZeroTools zTool;
+	ZeroTools zTools;
 	@Autowired
 	AuthorizeRepository authorizeRepository;
 	@Autowired
 	BillboardRepository br;
+	@Autowired
+	BillboardFileRepository bfr;
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//主頁面
 	@RequestMapping(path = { "/", "/index" })
 	public String index(Model model, HttpSession session) {
 		System.out.println("*****主頁面*****");
@@ -53,7 +64,6 @@ public class PublicControl {
 			}
 			model.addAttribute("unread", unread);
 		}
-
 		return "/CRM";
 	}
 
@@ -113,31 +123,38 @@ public class PublicControl {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//公佈欄授權
+//授權的公佈欄
 	@RequestMapping("/authorize/{uuid}")
 	public String authorize(Model model, @PathVariable("uuid") String uuid, HttpSession session) {
+		System.out.println("*****授權的公佈欄****");
 		if (authorizeRepository.existsById(uuid)) {
 			AuthorizeBean authorizeBean = authorizeRepository.getById(uuid);
 			AdminBean user = (AdminBean) session.getAttribute("user");
-			if (user.getName().equals(authorizeBean.getUsed())) {
+			if (user == null)
+				return "redirect:/CRM.jsp?mess=2";
+			if (user.getName().equals(authorizeBean.getUsed()) || "所有人".equals(authorizeBean.getUsed())) {
 				model.addAttribute("authorizeBean", authorizeBean);
-				return "/system/billboard";
+				return "/authorize";
 			}
 		}
-		return "";
+		return "redirect:/CRM.jsp?mess=3";
 
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 儲存授權
 	@RequestMapping("/saveAuthorize/{uuid}")
-	public String saveAuthorize(Model model, @PathVariable("uuid") String uuid, BillboardBean bean,
-			HttpSession session) {
+	public String saveAuthorize(@PathVariable("uuid") String uuid, BillboardBean bean, HttpSession session) {
 		System.out.println("*****儲存授權*****");
-		if (ss.SaveBillboard(bean, session)) {
-			authorizeRepository.deleteById(uuid);
+
+		BillboardBean save = ss.SaveBillboard(bean, session);
+		List<BillboardFileBean> list = bfr.findByAuthorize(uuid);
+		for(BillboardFileBean b : list) {
+			b.setBillboardid(save.getBillboardid());
+			bfr.save(b);
 		}
-		;
+//			authorizeRepository.deleteById(uuid);
+
 		return "redirect:/";
 	}
 
@@ -158,6 +175,84 @@ public class PublicControl {
 		System.out.println("搜索公布欄");
 		model.addAttribute("list", ss.selectBillboardt(search));
 		return "/CRM";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//儲存員工
+	@RequestMapping("/SaveAdmin")
+	@ResponseBody
+	public String SaveAdmin(AdminBean abean, HttpServletRequest req) {
+		System.out.println("*****儲存員工*****");
+		String save = ss.SaveAdmin(abean);
+		ServletContext sce = req.getServletContext();
+		sce.setAttribute("admin", ar.findAll());
+		return save;
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//上傳型錄
+	@RequestMapping("/upFile/{authorizeId}")
+	@ResponseBody
+	public String upFile(MultipartHttpServletRequest multipartRequest,
+			@PathVariable("authorizeId") String authorizeId) {
+		System.out.println("*****上傳型錄*****");
+		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+		System.out.println("fileMap " + fileMap);
+//圖片儲存
+		try {
+			for (int i = 0; i <= fileMap.size(); i++) {
+//2. 儲存圖片到資料夾
+				if (fileMap.get("file" + i) != null) {
+					System.out.println(fileMap.get("file" + i).getOriginalFilename());
+//改名+存檔
+					String lastname = fileMap.get("file" + i).getOriginalFilename()
+							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
+					System.out.println(lastname);
+					fileMap.get("file" + i).transferTo(new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"
+							+ fileMap.get("file" + i).getOriginalFilename()));
+//fileMap.get("file" + i).transferTo(new File("classpath:/resources/static\\images\\product\\" + Productmodel + ".jpg"));
+//3. 儲存檔案名稱到資料庫
+					BillboardFileBean billBoardFileBean = new BillboardFileBean();
+					billBoardFileBean.setBillboardid(0);
+					billBoardFileBean.setAuthorize(authorizeId);
+					billBoardFileBean.setFileid(zTools.getUUID());
+					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
+					ss.saveUrl(billBoardFileBean);
+
+//ProductPictureBean pBean = productPictureJpaReposit.findProducturl(Productmodel + "-" + i);
+//if (pBean == null) {
+//pBean = new ProductPictureBean();
+//}
+//pBean.setProducturl(Productmodel + "-" + i);
+//pBean.setProductid(Productid);
+//productPictureJpaReposit.save(pBean);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "儲存失敗";
+		}
+		return "上傳成功";
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//要求附件
+	@RequestMapping("/selectFile/{authorizeId}")
+	@ResponseBody
+	public List<BillboardFileBean> selectFile(@PathVariable("authorizeId") String authorizeId) {
+		System.out.println("*****要求附件*****");
+		return bfr.findByAuthorize(authorizeId);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除型錄
+	@RequestMapping("/remove/{fileId}")
+	public String removefile(@PathVariable("fileId") String fileId) {
+		BillboardFileBean billBoardFileBean = bfr.getById(fileId);
+		File file = new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\" + billBoardFileBean.getUrl());
+		System.out.println(file.delete());
+		bfr.delete(billBoardFileBean);
+		return "redirect:/authorize/" + billBoardFileBean.getAuthorize();
 	}
 
 }
