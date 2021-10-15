@@ -366,9 +366,9 @@
                         console.log(json);
                         $(".fileDiv").empty();
                         for (var f of json) {
-                            var url = "${pageContext.request.contextPath}/file/"+ f.fileid;
+                            var url = "${pageContext.request.contextPath}/file/"+ f.url;
                             $(".fileDiv").append('<div class="col-lg-6" style="word-wrap: break-word;" ><a draggable="true"'+
-                                       ' ondragstart="event.dataTransfer.setData(`text/plain`, `<img style=width:100% src=' + url + ' >`)" href="${pageContext.request.contextPath}/file/' + f.url + '">' + f.url + '</a></div>' +
+                                       ' ondragstart="event.dataTransfer.setData(`text/plain`, `<img width=100% src=' + url + ' onerror=errorOne()>`)" href="${pageContext.request.contextPath}/file/' + f.url + '">' + f.name + '</a></div>' +
                                 '<div class="col-lg-6 "><a href="${pageContext.request.contextPath}/remove/' + f.fileid + '">remove</a></div>');
                         }
                         $(".upDiv").empty();

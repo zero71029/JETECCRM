@@ -250,10 +250,10 @@
                                     var="s">
                                     <c:set var="url" value="${pageContext.request.contextPath}/file/${s.url}"></c:set>
                                     <div class="row" draggable="true"
-                                        ondragstart="event.dataTransfer.setData('text/plain', '<img style=width:100% src=${url} alt=xxx>')">
+                                        ondragstart="event.dataTransfer.setData('text/plain', '<img width=100% src=${url} onerror=errorOne()>')">
                                         <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
                                         <div class="col-lg-5 cell" style="word-wrap: break-word;"><a
-                                                href="${pageContext.request.contextPath}/file/${s.url}">${s.url} </a>
+                                                href="${pageContext.request.contextPath}/file/${s.url}">${s.name} </a>
                                         </div>
                                         <div class="col-md-2 cell position-relative ">
                                             <a href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a></div>

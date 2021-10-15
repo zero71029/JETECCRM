@@ -201,6 +201,7 @@ public class SystemControler {
 	public String upFile(MultipartHttpServletRequest multipartRequest, @PathVariable("billboardid") Integer billboardid,
 			Model model) {
 		System.out.println("*****上傳型錄*****");
+		String uuid = zTools.getUUID();
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		System.out.println("fileMap " + fileMap);
 //圖片儲存
@@ -214,13 +215,14 @@ public class SystemControler {
 							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
 					System.out.println(lastname);
 					fileMap.get("file" + i).transferTo(new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"
-							+ fileMap.get("file" + i).getOriginalFilename()));
+							+ uuid+lastname));
 //fileMap.get("file" + i).transferTo(new File("classpath:/resources/static\\images\\product\\" + Productmodel + ".jpg"));
 //3. 儲存檔案名稱到資料庫
 					BillboardFileBean billBoardFileBean = new BillboardFileBean();
 					billBoardFileBean.setBillboardid(billboardid);
-					billBoardFileBean.setFileid(zTools.getUUID());
-					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
+					billBoardFileBean.setFileid(uuid);
+					billBoardFileBean.setUrl(uuid+lastname);
+					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
 //ProductPictureBean pBean = productPictureJpaReposit.findProducturl(Productmodel + "-" + i);

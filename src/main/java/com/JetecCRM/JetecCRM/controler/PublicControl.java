@@ -55,9 +55,11 @@ public class PublicControl {
 		System.out.println("*****主頁面*****");
 		List<String> unread = new ArrayList<String>();
 		model.addAttribute("list", ss.getBillboardList("發佈"));
-		AdminBean adminBean = (AdminBean) session.getAttribute("user");
-		if (adminBean != null) {
-			System.out.println(adminBean.getMail());
+		AdminBean user = (AdminBean) session.getAttribute("user");
+		
+		if (user != null) {
+			AdminBean adminBean =ar.getById(user.getAdminid());
+			
 			List<AdminMailBean> a = adminBean.getMail();
 			for (AdminMailBean bean : a) {
 				unread.add(br.getById(bean.getBillboardid()).getContent());
@@ -216,7 +218,8 @@ public class PublicControl {
 					billBoardFileBean.setBillboardid(0);
 					billBoardFileBean.setAuthorize(authorizeId);
 					billBoardFileBean.setFileid(uuid);
-					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
+					billBoardFileBean.setUrl(uuid+lastname);
+					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
 //ProductPictureBean pBean = productPictureJpaReposit.findProducturl(Productmodel + "-" + i);

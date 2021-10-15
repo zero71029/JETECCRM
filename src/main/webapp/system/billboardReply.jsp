@@ -69,40 +69,48 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-9"
                                         style="background-color: #569b92; border: solid 1px #569b92; position: relative; color: white;">
-                                        討論區<!-- 有登入才顯示 -->
+                                        討論區
+                                        <!-- 有登入才顯示 -->
                                         <c:if test='${not empty user}'>
                                             <span style="position: absolute; right: 0%; top: 0%;">
-                                                 <!-- 有資料才顯示 -->
-                                            <c:set var="i" value="false"></c:set>
-                                            <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}"
-                                                items="${user.mail}" var="mail">
-                                                <!-- 已讀迴圈 -->
-                                                <!-- 登入者 已讀 i == ture -->
-                                                <c:if test="${bean.billboardid == mail.billboardid}">
-                                                    <c:set var="i" value="ture"></c:set>
-                                                    <c:set var="exitID" value="0"></c:set>
+                                                <!-- 有資料才顯示 -->
+                                                <c:set var="i" value="false"></c:set>
+                                                <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}"
+                                                    items="${user.mail}" var="mail">
+                                                    <!-- 已讀迴圈 -->
+                                                    <!-- 登入者 已讀 i == ture -->
+                                                    <c:if test="${bean.billboardid == mail.billboardid}">
+                                                        <c:set var="i" value="ture"></c:set>
+                                                        <c:set var="exitID" value="0"></c:set>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <!--  已讀 才顯示 -->
+                                                <c:if test='${i != "ture"}'>
+                                                    <a
+                                                        href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'><img
+                                                            src="${pageContext.request.contextPath}/img/unread.png"
+                                                            alt="取消已讀"></a>
                                                 </c:if>
-                                            </c:forEach>
-                                            <!--  已讀 才顯示 -->
-                                            <c:if test='${i != "ture"}'>
-                                                <a href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'
-                                                    ><img
-                                                        src="${pageContext.request.contextPath}/img/unread.png"
-                                                        alt="取消已讀"></a>
-                                            </c:if>
-                                            <c:if test='${i == "ture"}'>
-                                                <a href="javascript:read(${bean.billboardid},${user.adminid})"
-                                                    ><img
-                                                        src="${pageContext.request.contextPath}/img/read.png"
-                                                        alt="已讀點擊"></a>
-                                            </c:if>
+                                                <c:if test='${i == "ture"}'>
+                                                    <a href="javascript:read(${bean.billboardid},${user.adminid})"><img
+                                                            src="${pageContext.request.contextPath}/img/read.png"
+                                                            alt="已讀點擊"></a>
+                                                </c:if>
 
+                                                <img src="${pageContext.request.contextPath}/img/copy.png" alt="複製" onclick="cop()" style="cursor: pointer;">
+                                                
+                                                <c:if test='${bean.top == ""}'>
+                                                    <img src="${pageContext.request.contextPath}/img/未釘選-01.png" alt="未釘選" onclick="tops()" style="cursor: pointer;">
 
-                                                <button type="button" onclick="cop()">複製</button>
-                                                <button type="button" onclick="tops()">置頂</button>
+                                                </c:if>
+
+                                                <c:if test='${bean.top == "置頂"}'>
+                                                    <img src="${pageContext.request.contextPath}/img/釘選-01.png" alt="釘選" onclick="tops()" style="cursor: pointer;">
+
+                                                </c:if>
                                             </span>
                                         </c:if>
-                                        
+
                                     </div>
 
                                 </div>
@@ -118,8 +126,9 @@
                                     <div class="col-md-1 cell position-relative cellbackgroud">主題</div>
                                     <div class="col-md-8 cell" style="position: relative;">
                                         ${bean.theme}
-                                        <span style="color: #8e8e8e; position: absolute ;right: 0%;">${bean.createtime}</span>
-                                       
+                                        <span
+                                            style="color: #8e8e8e; position: absolute ;right: 0%;">${bean.createtime}</span>
+
                                     </div>
                                 </div>
 
@@ -213,7 +222,8 @@
                     <br>
                     <div class="row">
                         <div class="col-md-1"></div>
-                        <div class="col-md-9" style="background-color: #569b92; border: solid 1px #569b92;color: white;">
+                        <div class="col-md-9"
+                            style="background-color: #569b92; border: solid 1px #569b92;color: white;">
                             回覆</div>
                     </div>
                     <form action="${pageContext.request.contextPath}/system/saveReply" method="post" id="formReply"
@@ -255,10 +265,10 @@
                     <c:forEach varStatus="loop" begin="0" end="${bean.file.size()-1}" items="${bean.file}" var="s">
                         <c:set var="url" value="${pageContext.request.contextPath}/file/${s.url}"></c:set>
                         <div class="row" draggable="true"
-                        ondragstart="event.dataTransfer.setData('text/plain', '<img style=width:100% src=${url} alt=xxx>')">
+                            ondragstart="event.dataTransfer.setData('text/plain', '<img width=100% src=${url} onerror=errorOne()>')">
                             <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
-                            <div class="col-lg-5 cell" style="word-wrap: break-word;"><a 
-                                    href="${pageContext.request.contextPath}/file/${s.url}">${s.url}</a></div>
+                            <div class="col-lg-5 cell" style="word-wrap: break-word;"><a
+                                    href="${pageContext.request.contextPath}/file/${s.url}">${s.name}</a></div>
 
                         </div>
                     </c:forEach>
@@ -368,6 +378,7 @@
                 document.body.removeChild(el);
             }
             function tops() {
+                
                 $.ajax({
                     url: '${pageContext.request.contextPath}/top/${bean.billboardid}',//接受請求的Servlet地址
                     type: 'POST',
@@ -378,13 +389,17 @@
                     // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
                     success: function (json) {
                         alert(json);
-                        // location.href = "${pageContext.request.contextPath}/billboardReply/${bean.billboardid}";
+                        location.href = "${pageContext.request.contextPath}/billboardReply/${bean.billboardid}";
                     },
                     error: function (returndata) {
                         console.log(returndata);
                     }
                 });
 
+            }
+            function errorOne(id) {
+                console.log('first image load error!');
+                $(".content img").attr("width", "50px");
             }
         </script>
         <input type="hidden" name="myInput" class="myInput">

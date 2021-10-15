@@ -13,10 +13,16 @@ public class BillboardFileBean {
     private Integer billboardid;
     private String url;
     private String authorize;
+    private String name;
     
     
     
-    
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getAuthorize() {
 		return authorize;
 	}
