@@ -70,7 +70,8 @@
                             </div>
                         </div>
                         <br>
-                        <form action="${pageContext.request.contextPath}/SaveAdmin" method="post" id="myform" class="basefrom g-3 needs-validation">
+                        <form action="${pageContext.request.contextPath}/SaveAdmin" method="post" id="myform"
+                            class="basefrom g-3 needs-validation">
                             <div class="row">
                                 <input type="hidden" name="adminid" value="${bean.adminid}">
 
@@ -78,19 +79,11 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">名稱*</div>
-                                    <div class="col-md-2 cell">
+                                    <div class="col-md-5 cell">
                                         <input type="text" class=" form-control cellFrom" name="name"
                                             value="${bean.name}" maxlength="20" required>
                                         <div class="invalid-tooltip">須輸入</div>
                                     </div>
-
-                                    <div class="col-md-1 cell cellbackgroud">到值日</div>
-                                    <div class="col-md-2 cell position-relative">
-                                        <input type="text" class="form-control cellFrom contacttime" name="dutyDay"
-                                            maxlength="20" readonly required>    
-                                    </div>
-
-
 
 
                                 </div>
@@ -116,12 +109,30 @@
                                             value="${bean.address}" maxlength="100">
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell cellbackgroud">部門</div>
+                                    <div class="col-md-2 cell">
+                                        <select input type="text" class=" form-select cellFrom billboardGroup"
+                                            name="department">
+                                            <option class="selItemOff" value="生產">生產</option>
+                                            <option class="selItemOff" value="採購">採購</option>
+                                            <option class="selItemOff" value="研發">研發</option>
+                                            <option class="selItemOff" value="業務">業務</option>
+                                            <option class="selItemOff" value="行銷">行銷</option>
+                                            <option class="selItemOff" value="財務">財務</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1 cell cellbackgroud">到值日</div>
+                                    <div class="col-md-2 cell position-relative">
+                                        <input type="text" class="form-control cellFrom contacttime" name="dutyDay"
+                                            maxlength="20" readonly required>
+                                    </div>
+                                </div>
 
                                 <input type="hidden" name="state" value="新">
                                 <input type="hidden" name="position" value="職員">
-                                <input type="hidden" name="" value="">
-                                <input type="hidden" name="" value="">
-                                <input type="hidden" name="" value="">
+
 
 
                                 <div class="row">
@@ -151,7 +162,7 @@
                                         <button type="submit" style="width: 100%;"
                                             class="btn btn-primary">新增/修改</button>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </form>
 
@@ -181,7 +192,7 @@
                 jQuery.validator.setDefaults({
                     submitHandler: function () {
                         if (confirm("題交確認")) form.submit();
-                        
+
                     }
                 });
 

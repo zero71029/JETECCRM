@@ -34,6 +34,10 @@ import com.google.api.client.json.gson.GsonFactory;
 public class ZeroTools {
 
 // 筆記
+////////////////////
+// 修改为不自动更新（只是插入是自动生成当前时间）
+//alter table hello change uptime uptime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP	
+//////////////////////////////////
 //	一键复制至剪切板
 //	url.select();
 //    document.execCommand("Copy");

@@ -114,6 +114,7 @@
                                     <div class="col-md-2 cell">
                                         <select input type="text" class=" form-select cellFrom" name="state">
                                             <option ${bean.state=="在職" ?"selected":null} class="selItemOff">在職</option>
+                                            <option ${bean.state=="新" ?"selected":null} class="selItemOff">新</option>
                                             <option ${bean.state=="留職停薪" ?"selected":null} class="selItemOff">留職停薪</option>
                                             <option ${bean.state=="離職" ?"selected":null} class="selItemOff">離職</option>
                                             <option ${bean.state=="試用" ?"selected":null} class="selItemOff">試用</option>
@@ -133,8 +134,15 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud"> 部門</div>
                                     <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="department"
-                                            value="${bean.department}" maxlength="20">
+                                        <select input type="text" class=" form-select cellFrom billboardGroup"
+                                            name="department">
+                                            <option  ${bean.department=="生產" ?"selected":null} class="selItemOff" value="生產">生產</option>
+                                            <option  ${bean.department=="採購" ?"selected":null} class="selItemOff" value="採購">採購</option>
+                                            <option  ${bean.department=="研發" ?"selected":null} class="selItemOff" value="研發">研發</option>
+                                            <option  ${bean.department=="業務" ?"selected":null} class="selItemOff" value="業務">業務</option>
+                                            <option  ${bean.department=="行銷" ?"selected":null} class="selItemOff" value="行銷">行銷</option>
+                                            <option  ${bean.department=="財務" ?"selected":null} class="selItemOff" value="財務">財務</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-1 cell cellbackgroud">直屬主管</div>
                                     <div class="col-md-2 cell">
@@ -161,7 +169,15 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1 cell cellbackgroud">到職日</div>
+                                    <div class="col-md-2 cell position-relative">
+                                        <input type="text" class=" form-control cellFrom" name="dutyDay"
+                                          value="${bean.dutyDay}" maxlength="20" readonly> 
+                                    </div>
+   
+                                </div>
 
 
                                 <div class="row">

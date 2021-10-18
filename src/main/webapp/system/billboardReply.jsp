@@ -112,7 +112,7 @@
                                                 </c:if>
 
                                                 <c:if test='${bean.top == "置頂"}'>
-                                                    <img src="${pageContext.request.contextPath}/img/釘選-01.png" alt="釘選"
+                                                    <img src="${pageContext.request.contextPath}/img/CCC.png" alt="釘選"
                                                         onclick="tops()" style="cursor: pointer;"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="取消置頂">
@@ -148,7 +148,11 @@
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">
                                         ${bean.content}
                                     </div>
-
+                                </div>
+                                <div class="row" onclick="advice()" hidden>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-9 cell content" style="word-wrap:break-word;">&nbsp;
+                                    </div>
                                 </div>
 
                             </div>
@@ -163,7 +167,6 @@
                         </style>
                         <div class="row">
                             <c:if test="${not empty bean.reply}">
-
                                 <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
                                     var="s">
                                     <div class="row" style="line-height: 2rem; min-height: 100px; ">
@@ -200,7 +203,8 @@
                                         <div class="col-md-2 ccc" style="background-color: #d9e2e0;">
                                             <c:if test="${s.name == user.name}">
                                                 <button onclick="replyChange();">修改</button>
-                                                <button onclick="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</button>
+                                                <button
+                                                    onclick="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</button>
                                             </c:if>
                                         </div>
                                     </div>
@@ -294,125 +298,151 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 驗證UI -->
+            <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
+
+            <script>
+                $('.replyText').hide();
+
+
+                $(function () {
+                    // 日期UI
+                    $(".contacttime").datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        dateFormat: "yy-mm-dd"
+                    });
+
+
+                    // 密碼驗證
+                    jQuery.validator.setDefaults({
+                        submitHandler: function () {
+                            if ("${user}" == "") {
+                                alert('須登入');
+                                // location.href = "${pageContext.request.contextPath}/billboardReply/${bean.billboardid}";
+                            } else if (confirm("確定題交?")) form.submit();
+                        }
+                    });
+                    $.extend($.validator.messages, {
+                        required: "這是必填字段",
+                        email: "請输入有效的電子郵件地址",
+                        url: "请输入有效的网址",
+                        date: "请输入有效的日期",
+                        dateISO: "请输入有效的日期 (YYYY-MM-DD)",
+                        number: "请输入有效的数字",
+                        digits: "只能输入数字",
+                        creditcard: "请输入有效的信用卡号码",
+                        equalTo: "你的输入不相同",
+                        extension: "请输入有效的后缀",
+                        maxlength: $.validator.format("最多可以输入 {0} 个字符"),
+                        minlength: $.validator.format("最少要输入 {0} 个字符"),
+                        rangelength: $.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
+                        range: $.validator.format("请输入范围在 {0} 到 {1} 之间的数值"),
+                        max: $.validator.format("请输入不大于 {0} 的数值"),
+                        min: $.validator.format("请输入不小于 {0} 的数值")
+                    });
+                    $("#formReply").validate();
+
+                });
+
+                function read(billboardid, adminid) {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + adminid,//接受請求的Servlet地址
+                        type: 'POST',
+                        // data: formdata,
+                        // async: false,//同步請求
+                        // cache: false,//不快取頁面
+                        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                        success: function (json) {
+                            alert(json);
+                            location.href = "${pageContext.request.contextPath}/billboardReply/" + billboardid;
+                        },
+                        error: function (returndata) {
+                            console.log(returndata);
+                        }
+                    });
+                }
+                // var reg = "((http|ftp|https)://)(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\\&%_\\./-~-]*)?";
+                // var aaa = $(".content").text();
+                // console.log(aaa);
+                // var ccc = aaa.match(reg);
+                // console.log(ccc);
+                // for (let a of ccc) console.log(a);
+
+                //複製網址
+                function cop() {
+                    const value = location.href;
+                    const el = document.createElement('textarea');
+                    el.value = value;
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                }
+                //點擊置頂
+                function tops() {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/top/${bean.billboardid}',//接受請求的Servlet地址
+                        type: 'POST',
+                        // data: formdata,
+                        // async: false,//同步請求
+                        // cache: false,//不快取頁面
+                        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                        success: function (json) {
+                            alert(json);
+                            location.href = "${pageContext.request.contextPath}/billboardReply/${bean.billboardid}";
+                        },
+                        error: function (returndata) {
+                            console.log(returndata);
+                        }
+                    });
+
+                }
+                //讀取錯誤 縮小img
+                function errorOne(id) {
+                    console.log('first image load error!');
+                    $(".content img").attr("width", "50px");
+                }
+                //修改留言
+                function replyChange() {
+                    $('.replyText').toggle();
+                }
+                //刪除留言
+                function replyRemove() {
+                    $('.replyText').toggle();
+                }
+                //標註
+                function advice() {
+                    $(".dialog").dialog(open);
+                }
+                $(".dialog").dialog({
+                    autoOpen: false,
+                    position: {
+                        at: "right bottom"
+                    }
+
+                });
+
+            </script>
+            <input type="hidden" name="myInput" class="myInput">
+            <!-- 基本的对话框 -->
+            <!-- <c:if test="${not empty admin}">
+
+                <div class="dialog row" title="標註人員">
+                    <form action="">
+                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}" var="admin">
+                            <div class="col-md-3">
+                                <input type="checkbox" name="" id="name${loop.index}" value="${admin.name}"><label
+                                    for="name${loop.index}">${admin.name} </label>&nbsp;&nbsp;&nbsp;
+                            </div>
+
+                        </c:forEach>
+                    </form>
+                </div>
+            </c:if> -->
         </body>
-        <!-- 驗證UI -->
-        <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
-
-        <script>
-            $('.replyText').hide();
-
-
-
-            $(function () {
-                // 日期UI
-                $(".contacttime").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    dateFormat: "yy-mm-dd"
-                });
-
-
-                // 密碼驗證
-                jQuery.validator.setDefaults({
-                    submitHandler: function () {
-                        if ("${user}" == "") {
-                            alert('須登入');
-                            // location.href = "${pageContext.request.contextPath}/billboardReply/${bean.billboardid}";
-                        } else if (confirm("確定題交?")) form.submit();
-                    }
-                });
-                $.extend($.validator.messages, {
-                    required: "這是必填字段",
-                    email: "請输入有效的電子郵件地址",
-                    url: "请输入有效的网址",
-                    date: "请输入有效的日期",
-                    dateISO: "请输入有效的日期 (YYYY-MM-DD)",
-                    number: "请输入有效的数字",
-                    digits: "只能输入数字",
-                    creditcard: "请输入有效的信用卡号码",
-                    equalTo: "你的输入不相同",
-                    extension: "请输入有效的后缀",
-                    maxlength: $.validator.format("最多可以输入 {0} 个字符"),
-                    minlength: $.validator.format("最少要输入 {0} 个字符"),
-                    rangelength: $.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
-                    range: $.validator.format("请输入范围在 {0} 到 {1} 之间的数值"),
-                    max: $.validator.format("请输入不大于 {0} 的数值"),
-                    min: $.validator.format("请输入不小于 {0} 的数值")
-                });
-                $("#formReply").validate();
-
-            });
-
-            function read(billboardid, adminid) {
-                $.ajax({
-                    url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + adminid,//接受請求的Servlet地址
-                    type: 'POST',
-                    // data: formdata,
-                    // async: false,//同步請求
-                    // cache: false,//不快取頁面
-                    // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
-                    // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
-                    success: function (json) {
-                        alert(json);
-                        location.href = "${pageContext.request.contextPath}/billboardReply/" + billboardid;
-                    },
-                    error: function (returndata) {
-                        console.log(returndata);
-                    }
-                });
-            }
-            // var reg = "((http|ftp|https)://)(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\\&%_\\./-~-]*)?";
-            // var aaa = $(".content").text();
-            // console.log(aaa);
-            // var ccc = aaa.match(reg);
-            // console.log(ccc);
-            // for (let a of ccc) console.log(a);
-
-            //複製網址
-            function cop() {
-                const value = location.href;
-                const el = document.createElement('textarea');
-                el.value = value;
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
-            }
-            //點擊置頂
-            function tops() {
-                $.ajax({
-                    url: '${pageContext.request.contextPath}/top/${bean.billboardid}',//接受請求的Servlet地址
-                    type: 'POST',
-                    // data: formdata,
-                    // async: false,//同步請求
-                    // cache: false,//不快取頁面
-                    // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
-                    // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
-                    success: function (json) {
-                        alert(json);
-                        location.href = "${pageContext.request.contextPath}/billboardReply/${bean.billboardid}";
-                    },
-                    error: function (returndata) {
-                        console.log(returndata);
-                    }
-                });
-
-            }
-            //讀取錯誤 縮小img
-            function errorOne(id) {
-                console.log('first image load error!');
-                $(".content img").attr("width", "50px");
-            }
-            //修改留言
-            function replyChange() {
-                $('.replyText').toggle();
-            }
-            //刪除留言
-            function replyRemove() {
-                $('.replyText').toggle();
-            }
-
-        </script>
-        <input type="hidden" name="myInput" class="myInput">
 
         </html>
