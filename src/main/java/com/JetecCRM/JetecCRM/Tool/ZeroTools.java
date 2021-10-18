@@ -84,7 +84,7 @@ public class ZeroTools {
 	 * @maillist 群發郵件
 	 *
 	 */
-	private String STMP = "";
+	private String STMP = "ssss";
 	private String secret = "";
 
 	// 郵件
