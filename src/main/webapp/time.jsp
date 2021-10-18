@@ -33,11 +33,12 @@
       <div id="timeCenter">Error</div>
       <script src="${pageContext.request.contextPath}/js/time.js"></script>
       <form action="${pageContext.request.contextPath}/home" method="post">
-        <input type="text" placeholder="帳號" name="userName" value="jeter.tony56@gmail.com"><br>
-        <input type="password" placeholder="密碼" name="userPassword" value="AAA"><br>
+        <input type="text" placeholder="帳號" name="userName" ><br>
+        <input type="password" placeholder="密碼" name="userPassword" ><br>
         <span style="color: red;">${param.mess=="1"?"帳號密碼錯誤 或 權限不夠":""}</span>
         <input type="submit" value="登入">
-
+        <button type="button" style="background-color: #0d1326;border: 0px solid #0d1326; color: #0d1326;" 
+        onclick="javascript:$('input[name=userName]').val('AAA@AAA.com');$('input[name=userPassword]').val('AAA');">xxx</button>
       </form>
 
       <br />

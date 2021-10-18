@@ -13,7 +13,7 @@
             <!-- bootstrap的CSS、JS樣式放這裡  -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.rtl.min.css">
-
+            <script src="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
 
@@ -70,6 +70,7 @@
                                     <div class="col-md-9"
                                         style="background-color: #569b92; border: solid 1px #569b92; position: relative; color: white;">
                                         討論區
+
                                         <!-- 有登入才顯示 -->
                                         <c:if test='${not empty user}'>
                                             <span style="position: absolute; right: 0%; top: 0%;">
@@ -89,23 +90,32 @@
                                                     <a
                                                         href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'><img
                                                             src="${pageContext.request.contextPath}/img/unread.png"
-                                                            alt="取消已讀"></a>
+                                                            alt="取消已讀" data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom" title="取消已讀"></a>
                                                 </c:if>
                                                 <c:if test='${i == "ture"}'>
                                                     <a href="javascript:read(${bean.billboardid},${user.adminid})"><img
                                                             src="${pageContext.request.contextPath}/img/read.png"
-                                                            alt="已讀點擊"></a>
+                                                            alt="已讀點擊" data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom" title="已讀點擊"></a>
                                                 </c:if>
 
-                                                <img src="${pageContext.request.contextPath}/img/copy.png" alt="複製" onclick="cop()" style="cursor: pointer;">
-                                                
+                                                <img src="${pageContext.request.contextPath}/img/copy.png" alt="複製"
+                                                    onclick="cop()" style="cursor: pointer;" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title="複製">
+
                                                 <c:if test='${bean.top == ""}'>
-                                                    <img src="${pageContext.request.contextPath}/img/未釘選-01.png" alt="未釘選" onclick="tops()" style="cursor: pointer;">
+                                                    <img src="${pageContext.request.contextPath}/img/未釘選-01.png"
+                                                        alt="未釘選" onclick="tops()" style="cursor: pointer;"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="置頂">
 
                                                 </c:if>
 
                                                 <c:if test='${bean.top == "置頂"}'>
-                                                    <img src="${pageContext.request.contextPath}/img/釘選-01.png" alt="釘選" onclick="tops()" style="cursor: pointer;">
+                                                    <img src="${pageContext.request.contextPath}/img/釘選-01.png" alt="釘選"
+                                                        onclick="tops()" style="cursor: pointer;"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="取消置頂">
 
                                                 </c:if>
                                             </span>
@@ -140,167 +150,157 @@
                                     </div>
 
                                 </div>
-                                <!-- <%-- 
+
+                            </div>
+                        </form>
+
+
+                        <!-- 回覆內容 -->
+                        <style>
+                            .ccc {
+                                border-bottom: 2px solid #FFF;
+                            }
+                        </style>
+                        <div class="row">
+                            <c:if test="${not empty bean.reply}">
+
+                                <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
+                                    var="s">
+                                    <div class="row" style="line-height: 2rem; min-height: 100px; ">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-1  " style="background-color: #a5b5b1;">${s.name}</div>
+                                        <div class="col-md-8 "
+                                            style="position: relative; word-wrap:break-word;background-color: #d9e2e0;">
+                                            ${s.content}
+
+                                            <c:if test="${s.name == user.name}">
+                                                <form action="${pageContext.request.contextPath}/replyChange"
+                                                    class="replyText" method="post">
+                                                    <textarea name="content" id="" cols="70" rows="3"
+                                                        maxlength="450">${s.content}</textarea>
+                                                    <input type="hidden" name="replyid" value="${s.replyid}">
+                                                    <input type="hidden" name="billboardid" value="${s.billboardid}">
+                                                    <input type="hidden" name="name" value="${s.name}">
+
+                                                    <button type="submit"
+                                                        style="width: 95%;background-color: #08604f; color: white;"
+                                                        class="btn ">修改</button>
+                                                </form>
+                                            </c:if>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1 "></div>
+                                        <div class="col-md-1  ccc" style="background-color: #a5b5b1;"></div>
+                                        <div class="col-md-6 ccc"
+                                            style="position: relative; word-wrap:break-word;background-color: #d9e2e0;color: #8e8e8e;">
+                                            ${s.createtime}
+
+                                        </div>
+                                        <div class="col-md-2 ccc" style="background-color: #d9e2e0;">
+                                            <c:if test="${s.name == user.name}">
+                                                <button onclick="replyChange();">修改</button>
+                                                <button onclick="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</button>
+                                            </c:if>
+                                        </div>
+                                    </div>
+
+
+
+                                </c:forEach>
+                            </c:if>
+
+                        </div>
+
+                        <c:if test="${not empty user}">
+
+                            <!-- 回覆輸入 -->
+                            <br>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-9"
+                                    style="background-color: #569b92; border: solid 1px #569b92;color: white;">
+                                    回覆</div>
+                            </div>
+                            <form action="${pageContext.request.contextPath}/saveReply" method="post" id="formReply"
+                                class=" g-3 needs-validation">
+                                <input type="hidden" name="billboardid" value="${bean.billboardid}">
+                                <input type="hidden" name="name" value="${user.name}">
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">日期</div>
-                                    <div class="col-md-3 cell">${bean.createtime}</div>
-                                    <div class="col-md-1 cell cellbackgroud">閱讀</div>
-                                    <div class="col-md-3 cell" style="position: relative;">                                       
-                                        <c:if test="${not empty user}">
-                                            <!-- 有登入才顯示 -->
-                                <!-- 有資料才顯示 -->
-                                <c:set var="i" value="false"></c:set>
-                                <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}" items="${user.mail}"
-                                    var="mail">
-                                    <!-- 已讀迴圈 -->
-                                    <!-- 登入者 已讀 i == ture -->
-                                    <c:if test="${bean.billboardid == mail.billboardid}">
-                                        <c:set var="i" value="ture"></c:set>
-                                        <c:set var="exitID" value="0"></c:set>
-                                    </c:if>
-                                </c:forEach>
-                                <!--  已讀 才顯示 -->
-                                <c:if test='${i != "ture"}'>
-
-                                    <a
-                                        href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'><img
-                                            src="${pageContext.request.contextPath}/img/unread.png" alt="取消已讀">取消已讀</a>
-                                </c:if>
-                                <c:if test='${i == "ture"}'>
-                                    <a href="javascript:read(${bean.billboardid},${user.adminid})"><img
-                                            src="${pageContext.request.contextPath}/img/read.png" alt="已讀點擊"></a>
-                                </c:if>
-
-                                </c:if>
-
-
-                            </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-1 cell cellbackgroud">群組</div>
-                        <div class="col-md-4 cell">${bean.bgb.billboardgroup}</div>
-                        <div class="col-md-1 cell cellbackgroud">子項</div>
-                        <div class="col-md-3 cell">${bean.bgb.billboardoption}
-
-                        </div>
-                    </div>--%> -->
-                </div>
-                </form>
-
-
-                <!-- 回覆內容 -->
-                <style>
-                    .cccc {
-                        border-bottom: 1px solid #FFF;
-                    }
-                </style>
-                <div class="row">
-                    <c:if test="${not empty bean.reply}">
-
-                        <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
-                            var="s">
-                            <div class="row" style="line-height: 2rem; min-height: 100px; ">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-1 cccc " style="background-color: #a5b5b1;">${s.name}</div>
-                                <div class="col-md-8 cccc"
-                                    style="position: relative; word-wrap:break-word;background-color: #d9e2e0;">
-                                    ${s.content} <span
-                                        style="position: absolute;right: 0%;color: #8e8e8e;">${s.createtime}</span>
+                                    <div class="col-md-1 cell cellbackgroud">留言</div>
+                                    <div class="col-md-8 cell ">
+                                        <textarea class="" name="content" cols="70" rows="5" required
+                                            placeholder="限定450字" maxlength="450"></textarea>
+                                    </div>
                                 </div>
-                            </div>
-                        </c:forEach>
-                    </c:if>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-9">
+                                        <button type="submit"
+                                            style="width: 100%;background-color: #08604f; color: white;"
+                                            class="btn ">留言</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </c:if>
+                        <br><br><br><br>
+                        <div class="row"></div>
 
-                </div>
 
-                <c:if test="${not empty user}">
 
-                    <!-- 回覆輸入 -->
-                    <br>
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-9"
-                            style="background-color: #569b92; border: solid 1px #569b92;color: white;">
-                            回覆</div>
                     </div>
-                    <form action="${pageContext.request.contextPath}/system/saveReply" method="post" id="formReply"
-                        class=" g-3 needs-validation">
-                        <input type="hidden" name="billboardid" value="${bean.billboardid}">
-                        <input type="hidden" name="name" value="${user.name}">
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-1 cell cellbackgroud">留言</div>
-                            <div class="col-md-8 cell ">
-                                <textarea class="" name="content" cols="70" rows="5" required placeholder="限定450字"
-                                    maxlength="450"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-9">
-                                <button type="submit" style="width: 100%;background-color: #08604f; color: white;"
-                                    class="btn ">留言</button>
-                            </div>
-                        </div>
-                    </form>
-                </c:if>
-                <br><br><br><br>
-                <div class="row"></div>
+                    <div class="col-md-4">
+                        <br><br><br>
 
-
-
-            </div>
-            <div class="col-md-4">
-                <br><br><br>
-
-                <br>
-                <!-- 附件 -->
-                <c:if test="${not empty bean.file}">
-                    <div class="row">
-                        <div class="col-lg-7 cell" style="background-color : #569b92 ;text-align: center;">附件</div>
-                    </div>
-                    <c:forEach varStatus="loop" begin="0" end="${bean.file.size()-1}" items="${bean.file}" var="s">
-                        <c:set var="url" value="${pageContext.request.contextPath}/file/${s.url}"></c:set>
-                        <div class="row" draggable="true"
-                            ondragstart="event.dataTransfer.setData('text/plain', '<img width=100% src=${url} onerror=errorOne()>')">
-                            <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
-                            <div class="col-lg-5 cell" style="word-wrap: break-word;"><a
-                                    href="${pageContext.request.contextPath}/file/${s.url}">${s.name}</a></div>
-
-                        </div>
-                    </c:forEach>
-                </c:if>
-                <!-- 新訊息 -->
-                <br><br>
-                <c:if test="${not empty news}">
-                    <c:forEach varStatus="loop" begin="0" end="${news.size()-1}" items="${news}" var="s">
-                        <a style="color: #08604f; opacity: 100%; text-decoration: none;"
-                            href="${pageContext.request.contextPath}/billboardReply/${s.billboardid}">
+                        <br>
+                        <!-- 附件 -->
+                        <c:if test="${not empty bean.file}">
                             <div class="row">
-
-                                <div class="col-lg-5 "
-                                    style="border-bottom: 1px solid black; position: relative; word-wrap:break-word;">
-                                    ${s.theme}
+                                <div class="col-lg-7 cell" style="background-color : #569b92 ;text-align: center;">附件
                                 </div>
-                                <div class="col-lg-2 " style="border-bottom: 1px solid black;"><img
-                                        src="${pageContext.request.contextPath}/img/news.png" alt="取消已讀"></div>
                             </div>
-                        </a>
-                    </c:forEach>
-                </c:if>
+                            <c:forEach varStatus="loop" begin="0" end="${bean.file.size()-1}" items="${bean.file}"
+                                var="s">
+                                <c:set var="url" value="${pageContext.request.contextPath}/file/${s.url}"></c:set>
+                                <div class="row" draggable="true"
+                                    ondragstart="event.dataTransfer.setData('text/plain', '<img width=100% src=${url} onerror=errorOne()>')">
+                                    <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
+                                    <div class="col-lg-5 cell" style="word-wrap: break-word;"><a
+                                            href="${pageContext.request.contextPath}/file/${s.url}">${s.name}</a></div>
 
-            </div>
-            </div>
+                                </div>
+                            </c:forEach>
+                        </c:if>
+                        <!-- 新訊息 -->
+                        <br><br>
+                        <c:if test="${not empty news}">
+                            <c:forEach varStatus="loop" begin="0" end="${news.size()-1}" items="${news}" var="s">
+                                <a style="color: #08604f; opacity: 100%; text-decoration: none;"
+                                    href="${pageContext.request.contextPath}/billboardReply/${s.billboardid}">
+                                    <div class="row">
+
+                                        <div class="col-lg-5 "
+                                            style="border-bottom: 1px solid black; position: relative; word-wrap:break-word;">
+                                            ${s.theme}
+                                        </div>
+                                        <div class="col-lg-2 " style="border-bottom: 1px solid black;"><img
+                                                src="${pageContext.request.contextPath}/img/news.png" alt="取消已讀"></div>
+                                    </div>
+                                </a>
+                            </c:forEach>
+                        </c:if>
+
+                    </div>
+                </div>
             </div>
         </body>
         <!-- 驗證UI -->
         <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
 
         <script>
-            $(".system").show();
+            $('.replyText').hide();
+
 
 
             $(function () {
@@ -368,6 +368,7 @@
             // console.log(ccc);
             // for (let a of ccc) console.log(a);
 
+            //複製網址
             function cop() {
                 const value = location.href;
                 const el = document.createElement('textarea');
@@ -377,8 +378,8 @@
                 document.execCommand('copy');
                 document.body.removeChild(el);
             }
+            //點擊置頂
             function tops() {
-                
                 $.ajax({
                     url: '${pageContext.request.contextPath}/top/${bean.billboardid}',//接受請求的Servlet地址
                     type: 'POST',
@@ -397,10 +398,20 @@
                 });
 
             }
+            //讀取錯誤 縮小img
             function errorOne(id) {
                 console.log('first image load error!');
                 $(".content img").attr("width", "50px");
             }
+            //修改留言
+            function replyChange() {
+                $('.replyText').toggle();
+            }
+            //刪除留言
+            function replyRemove() {
+                $('.replyText').toggle();
+            }
+
         </script>
         <input type="hidden" name="myInput" class="myInput">
 

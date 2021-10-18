@@ -274,7 +274,7 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
 	public boolean SaveReply(BillboardReplyBean bean) {
-		bean.setReplyid(zTools.getUUID());
+		if(bean.getReplyid() == null || bean.getReplyid().length() == 0)bean.setReplyid(zTools.getUUID());
 		billboardReplyRepository.save(bean);
 		return true;
 	}
@@ -357,6 +357,13 @@ public class SystemService {
 //讀取留言by時間
 	public List<BillboardBean> getBillboardByTime() {
 		return br.getBillboardByTime();
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除留言
+	public Integer delReply(String replyId) {
+		BillboardReplyBean bean = billboardReplyRepository.getById(replyId);
+		if(bean != null)billboardReplyRepository.delete(bean);
+		return bean.getBillboardid();
 	}
 
 }

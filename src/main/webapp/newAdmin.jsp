@@ -83,8 +83,16 @@
                                             value="${bean.name}" maxlength="20" required>
                                         <div class="invalid-tooltip">須輸入</div>
                                     </div>
-                                    <div class="col-md-1 cell cellbackgroud">編號</div>
-                                    <div class="col-md-2 cell">${bean.adminid}</div>
+
+                                    <div class="col-md-1 cell cellbackgroud">到值日</div>
+                                    <div class="col-md-2 cell position-relative">
+                                        <input type="text" class="form-control cellFrom contacttime" name="dutyDay"
+                                            maxlength="20" readonly required>    
+                                    </div>
+
+
+
+
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
@@ -108,43 +116,14 @@
                                             value="${bean.address}" maxlength="100">
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">狀態</div>
-                                    <div class="col-md-2 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="state">
-                                            <option ${bean.state=="在職" ?"selected":null} class="selItemOff">在職</option>
-                                            <option ${bean.state=="留職停薪" ?"selected":null} class="selItemOff">留職停薪
-                                            </option>
-                                            <option ${bean.state=="離職" ?"selected":null} class="selItemOff">離職</option>
-                                            <option ${bean.state=="試用" ?"selected":null} class="selItemOff">試用</option>
-                                            <option ${bean.state=="合約到期" ?"selected":null} class="selItemOff">合約到期
-                                            </option>
-                                            <option ${bean.state=="退休" ?"selected":null} class="selItemOff">退休</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">職位</div>
-                                    <div class="col-md-2 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="position">
-                                            <option ${bean.position=="職員" ?"selected":null} class="selItemOff">職員
-                                            </option>
 
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud"> 部門</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="department"
-                                            value="${bean.department}" maxlength="20">
-                                    </div>
-                                    <div class="col-md-1 cell cellbackgroud">直屬主管</div>
-                                    <div class="col-md-2 cell">
-                                        <input type="text" class=" form-control cellFrom" name="director"
-                                            value="${bean.director}" maxlength="20">
-                                    </div>
-                                </div>
+                                <input type="hidden" name="state" value="新">
+                                <input type="hidden" name="position" value="職員">
+                                <input type="hidden" name="" value="">
+                                <input type="hidden" name="" value="">
+                                <input type="hidden" name="" value="">
+
+
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">密碼*</div>
@@ -166,16 +145,13 @@
                                 </div>
 
 
-
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-6">
                                         <button type="submit" style="width: 100%;"
                                             class="btn btn-primary">新增/修改</button>
                                     </div>
-                                </div>
-
-                                
+                                </div>                                
                             </div>
                         </form>
 

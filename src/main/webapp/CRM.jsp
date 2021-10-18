@@ -20,8 +20,6 @@
             <script src="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.js"></script>
             <link rel="stylesheet" href="${pageContext.request.contextPath}jquery-ui-1.13.0.custom/jquery-ui.min.css">
 
-
-
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
             <title>CRM客戶管理系統</title>
@@ -38,7 +36,7 @@
                         <!-- 導覽列 -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="text-align: left;">
                             <div class="container-fluid">
-                                <a class="navbar-brand" href="${pageContext.request.contextPath}/">首頁</a>
+                                <a class="navbar-brand" href="${pageContext.request.contextPath}/">管理討論平台</a>
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                     aria-expanded="false" aria-label="Toggle navigation">
@@ -150,10 +148,10 @@
                                             </ul>
                                         </li>
                                     </ul>
-
-
-                                    未讀${user.mail.size()}
-
+                                    <div style="position: relative;">
+                                        <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀">
+                                        <span style="position: absolute; bottom: 0%;color: red; right: 0%; font-weight:bold;"> ${user.mail.size()}</span>                                        
+                                    </div>
                                     <form class="d-flex" method="post"
                                         action="${pageContext.request.contextPath}/selectBillboard">
                                         <input class="form-control me-2" type="search" placeholder="主題 or 發佈者"
@@ -188,8 +186,11 @@
                                         <tr style="Cursor: pointer ;vertical-align: middle;"
                                             onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'">
                                             <td>
-                                                <c:set var="img" value="<img src='${pageContext.request.contextPath}/img/TOP.png' alt='置頂'>" ></c:set>
-                                                <span style="color: red;">${s.top == "置頂"?img:""}</span> [${s.billtowngroup}] &nbsp;
+                                                <c:set var="img"
+                                                    value="<img src='${pageContext.request.contextPath}/img/TTT.png' alt='置頂'>">
+                                                </c:set>
+                                                <span style="color: red;">${s.top == "置頂"?img:""}</span>
+                                                [${s.billtowngroup}] &nbsp;
                                                 ${s.theme} <span style="color: red;">
                                                     <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
                                                     <c:if test="${not empty user.mail}">
@@ -203,7 +204,8 @@
                                             </td>
                                             <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
                                             <td style="text-align: center;">${s.reply[0].name}
-                                                <br>${s.reply[0].createtime}</td>
+                                                <br>${s.reply[0].createtime}
+                                            </td>
                                             <td style="text-align: center;">${s.reply.size()}</td>
                                         </tr>
 
@@ -298,11 +300,11 @@
             <script>
 
                 $(".dialog").dialog({
-                    autoOpen: true,
-                    position:{
-                        at:"right bottom"
-                }
-                    
+                    autoOpen: false,
+                    position: {
+                        at: "right bottom"
+                    }
+
                 });
                 function read(billboardid, username) {
                     console.log(username);

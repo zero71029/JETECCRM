@@ -11,8 +11,11 @@
             <div class="row">
                 <a href='${pageContext.request.contextPath}/' class='col-lg-2' style="font-size: 2.5rem;">CRM</a>
                 <div class='col-lg-7'></div>
-                <span class='col-lg-2' style="font-size: 2.5rem;">${user.name} <a class="Signout"
-                        href="${pageContext.request.contextPath}/Signout">登出</a>
+                <span class='col-lg-3' style="font-size: 2.5rem;">${user.name}
+                    <c:if test='${empty user}'>
+                        <a href="${pageContext.request.contextPath}/newAdmin.jsp">註冊</a>
+                    </c:if>  /
+                    <a class="Signout"  href="${pageContext.request.contextPath}/Signout">登出</a>
                 </span><br>
             </div>
         </header>

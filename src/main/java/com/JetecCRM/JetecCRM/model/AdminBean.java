@@ -31,6 +31,7 @@ public class AdminBean {
     private  Date create_data;//
     private String department;//部門	
     private String 	director;//主管
+    private String 	dutyDay;//到職日
     
 	@JsonIgnore
 	@OneToMany(targetEntity = AdminMailBean.class ,mappedBy = "adminid", cascade = CascadeType.ALL)
@@ -39,6 +40,12 @@ public class AdminBean {
     
     
     
+	public String getDutyDay() {
+		return dutyDay;
+	}
+	public void setDutyDay(String dutyDay) {
+		this.dutyDay = dutyDay;
+	}
 	public List<AdminMailBean> getMail() {
 		return mail;
 	}

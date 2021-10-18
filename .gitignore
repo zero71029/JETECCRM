@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+src/main/java/com/JetecCRM/JetecCRM/Tool/ZeroTools.java
+src/main/resources/static/file/*

@@ -33,7 +33,7 @@ import com.google.api.client.json.gson.GsonFactory;
 @Component
 public class ZeroTools {
 
-	// 筆記
+// 筆記
 //	一键复制至剪切板
 //	url.select();
 //    document.execCommand("Copy");
@@ -45,6 +45,7 @@ public class ZeroTools {
 //	ServletContext app = sce.getServletContext();
 //	app.setAttribute("billboardgroup", bgr.findAll());
 //////////ajax
+//	var formData = new FormData($(".uppdf")[0]);
 //	$.ajax({
 //        url: '${pageContext.request.contextPath}/CRM/selectContactByClientName/' + $("input[name='client']").val(),//接受請求的Servlet地址
 //        type: 'POST',

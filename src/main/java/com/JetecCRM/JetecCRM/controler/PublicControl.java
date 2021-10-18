@@ -27,6 +27,7 @@ import com.JetecCRM.JetecCRM.model.AdminMailBean;
 import com.JetecCRM.JetecCRM.model.AuthorizeBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardFileBean;
+import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
@@ -56,10 +57,10 @@ public class PublicControl {
 		List<String> unread = new ArrayList<String>();
 		model.addAttribute("list", ss.getBillboardList("發佈"));
 		AdminBean user = (AdminBean) session.getAttribute("user");
-		
+
 		if (user != null) {
-			AdminBean adminBean =ar.getById(user.getAdminid());
-			
+			AdminBean adminBean = ar.getById(user.getAdminid());
+
 			List<AdminMailBean> a = adminBean.getMail();
 			for (AdminMailBean bean : a) {
 				unread.add(br.getById(bean.getBillboardid()).getContent());
@@ -210,15 +211,15 @@ public class PublicControl {
 					String lastname = fileMap.get("file" + i).getOriginalFilename()
 							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
 					System.out.println(lastname);
-					fileMap.get("file" + i).transferTo(new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"
-							+ uuid+lastname));
+					fileMap.get("file" + i).transferTo(
+							new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\" + uuid + lastname));
 //fileMap.get("file" + i).transferTo(new File("classpath:/resources/static\\images\\product\\" + Productmodel + ".jpg"));
 //3. 儲存檔案名稱到資料庫
 					BillboardFileBean billBoardFileBean = new BillboardFileBean();
 					billBoardFileBean.setBillboardid(0);
 					billBoardFileBean.setAuthorize(authorizeId);
 					billBoardFileBean.setFileid(uuid);
-					billBoardFileBean.setUrl(uuid+lastname);
+					billBoardFileBean.setUrl(uuid + lastname);
 					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
@@ -265,14 +266,53 @@ public class PublicControl {
 	public String billboardid(@PathVariable("billboardid") Integer billboardid) {
 		System.out.println("*****置頂設定*****");
 		BillboardBean bean = br.getById(billboardid);
-		if(bean.getTop().equals("置頂")) {
+		if (bean.getTop().equals("置頂")) {
 			bean.setTop("");
 			br.save(bean);
-			return "取消成功";	
+			return "取消成功";
 		}
 		bean.setTop("置頂");
 		br.save(bean);
 		return "置頂成功";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//儲存公佈欄留言
+	@RequestMapping("/saveReply")
+	public String saveReply(BillboardReplyBean bean) {
+		System.out.println("*****儲存公佈欄留言*****");
+		if (ss.SaveReply(bean)) {
+			BillboardBean bb = br.getById(bean.getBillboardid());
+			AdminBean abean = ar.findByName(bb.getUser());
+			String mailTo = abean.getEmail();
+			String Subject = bean.getName() + "回覆留言";
+			String text = "主題 :" + bb.getTheme() + "<br>回覆 :" + bean.getContent();
+			StringBuilder maillist = new StringBuilder();
+			zTools.mail(mailTo, text, Subject, maillist.toString());
+		}
+		return "redirect:/billboardReply/" + bean.getBillboardid();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//修改留言
+	@RequestMapping("/replyChange")
+	public String replyChange(BillboardReplyBean bean) {
+		System.out.println("*****修改留言*****");
+		if (ss.SaveReply(bean)) {
+
+		}
+		return "redirect:/billboardReply/" + bean.getBillboardid();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除留言
+	@RequestMapping("/replyRemove/{replyId}")
+	public String replyRemove(@PathVariable("replyId") String replyId) {
+		System.out.println("*****刪除留言*****");
+		Integer Billboardid =  ss.delReply(replyId);
+
+		
+		return "redirect:/billboardReply/" + Billboardid;
 	}
 
 }

@@ -123,23 +123,7 @@ public class SystemControler {
 		return "刪除成功";
 	}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//儲存公佈欄留言
-	@RequestMapping("/saveReply")
-	public String saveReply(BillboardReplyBean bean) {
-		System.out.println("*****儲存公佈欄留言*****");
-		System.out.println(bean);
-		if (ss.SaveReply(bean)) {
-			BillboardBean bb = br.getById(bean.getBillboardid());
-			AdminBean abean = ar.findByName(bb.getUser());
-			String mailTo = abean.getEmail();
-			String Subject = bean.getName() + "回覆留言";
-			String text = "主題 :" + bb.getTheme() + "<br>回覆 :" + bean.getContent();
-			StringBuilder maillist = new StringBuilder();
-			zTools.mail(mailTo, text, Subject, maillist.toString());
-		}
-		return "redirect:/billboardReply/" + bean.getBillboardid();
-	}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //公佈欄授權
