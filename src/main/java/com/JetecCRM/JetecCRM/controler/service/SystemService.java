@@ -67,7 +67,10 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存員工
 	public String SaveAdmin(AdminBean abean) {
-		if(ar.existsByEmail(abean.getEmail()))return "失敗,Email 已被使用";
+		System.out.println(abean);
+		
+		if (ar.existsByEmail(abean.getEmail()) & abean.getAdminid() == null)
+			return "失敗,Email 已被使用";
 		ar.save(abean);
 		return "儲存成功,<a href=\"/time.jsp\">請重新登入</a>";
 	}
@@ -176,12 +179,14 @@ public class SystemService {
 		BillboardGroupBean bgb = bgr.findByBillboardgroupAndBillboardoption(bean.getBilltowngroup(),
 				bean.getBillboardgroupid());
 		bean.setBillboardgroupid(bgb.getBillboardgroupid());
-		//
+		// 儲存
 		BillboardBean save = br.save(bean);
-		if(save.getState().equals("封存")) {
-			amr.deleteAllByBillboardid(save.getBillboardid());			
+		// 如果封存 mail未讀全刪
+		if (save.getState().equals("封存")) {
+			amr.deleteAllByBillboardid(save.getBillboardid());
 			return save;
 		}
+		// 未讀處理
 		adminMailBean.setBillboardid(save.getBillboardid());
 		// 郵件
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
@@ -189,17 +194,22 @@ public class SystemService {
 		String Subject = bean.getTheme();
 		String text = bean.getContent();
 		StringBuilder maillist = new StringBuilder();
-		// 群發郵件
+		// 抓出所有人
 		for (AdminBean a : ar.findAll()) {
+			// 抓出所有人群發郵件
 			maillist.append(a.getEmail());
 			maillist.append(",");
 			// 抓出所有人插入maill
-			
-			if(!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid())) {
+			// 如果maill沒資料
+			if (!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid())) {
 				adminMailBean.setAdminmail(zTools.getUUID());
-				adminMailBean.setAdminid(a.getAdminid());
-				amr.save(adminMailBean);
+				//如果員工部門 和 發布的部門 一樣就儲存
+				if (a.getDepartment().equals(bean.getBilltowngroup())) {
+					adminMailBean.setAdminid(a.getAdminid());
+					amr.save(adminMailBean);
 				}
+
+			}
 		}
 		maillist.append("jeter.tony56@gmail.com");
 //		zTools.mail(mailTo, text, Subject, maillist.toString());
@@ -227,8 +237,9 @@ public class SystemService {
 //刪除公佈欄
 	public void delBillboard(List<Integer> id) {
 		for (Integer i : id) {
-			
-			if(amr.existsByBillboardid(i))amr.deleteAllByBillboardid(i);
+
+			if (amr.existsByBillboardid(i))
+				amr.deleteAllByBillboardid(i);
 			br.deleteById(i);
 		}
 
@@ -237,7 +248,7 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //點擊已讀
 	public String saveRead(Integer billboardid, Integer adminid) {
-		//刪除mail  插入read
+		// 刪除mail 插入read
 		if (amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
 			amr.deleteByBillboardidAndAdminid(billboardid, adminid);
 			AdminBean adminBean = ar.getById(adminid);
@@ -245,7 +256,7 @@ public class SystemService {
 			brb.setBillboardid(billboardid);
 			brb.setReadid(zTools.getUUID());
 			brb.setName(adminBean.getName());
-			brr.save(brb);			
+			brr.save(brb);
 			return "成功已讀";
 		} else {
 			return "找不到資料";
@@ -256,7 +267,7 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //取消已讀
 	public void ReRead(Integer billboardid, Integer adminid) {
-		//刪除read  插入mail
+		// 刪除read 插入mail
 		if (!amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
 			AdminMailBean aBean = new AdminMailBean();
 			aBean.setAdminid(adminid);
@@ -264,7 +275,7 @@ public class SystemService {
 			aBean.setAdminmail(zTools.getUUID());
 			amr.save(aBean);
 			AdminBean adminBean = ar.getById(adminid);
-			if(brr.existsByBillboardidAndName(billboardid,adminBean.getName())) {
+			if (brr.existsByBillboardidAndName(billboardid, adminBean.getName())) {
 				brr.deleteByBillboardidAndName(billboardid, adminBean.getName());
 			}
 		}
@@ -274,7 +285,8 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
 	public boolean SaveReply(BillboardReplyBean bean) {
-		if(bean.getReplyid() == null || bean.getReplyid().length() == 0)bean.setReplyid(zTools.getUUID());
+		if (bean.getReplyid() == null || bean.getReplyid().length() == 0)
+			bean.setReplyid(zTools.getUUID());
 		billboardReplyRepository.save(bean);
 		return true;
 	}
@@ -284,13 +296,13 @@ public class SystemService {
 	public String saveOption(String group, String option) {
 		if (bgr.existsByBillboardgroupAndBillboardoption(group, option)) {
 			return "改項目存在";
-		}else {	
-		BillboardGroupBean bean = new BillboardGroupBean();
-		bean.setBillboardgroup(group);
-		bean.setBillboardoption(option);
-		bean.setBillboardgroupid(zTools.getUUID());
-		bgr.save(bean);
-		return group+" "+option+""+"新增成功";
+		} else {
+			BillboardGroupBean bean = new BillboardGroupBean();
+			bean.setBillboardgroup(group);
+			bean.setBillboardoption(option);
+			bean.setBillboardgroupid(zTools.getUUID());
+			bgr.save(bean);
+			return group + " " + option + "" + "新增成功";
 		}
 	}
 
@@ -326,43 +338,48 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //刪除型錄
 	public void removefile(String fileid) {
-		BillboardFileBean billBoardFileBean =bfr.getById(fileid);
-		File file = new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"+billBoardFileBean.getUrl());
+		BillboardFileBean billBoardFileBean = bfr.getById(fileid);
+		File file = new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\" + billBoardFileBean.getUrl());
 		System.out.println(file.delete());
 		bfr.delete(billBoardFileBean);
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //搜索公布欄
 	public List<BillboardBean> selectBillboardt(String search) {
-		List<BillboardBean> result= new ArrayList<BillboardBean>();
+		List<BillboardBean> result = new ArrayList<BillboardBean>();
 		boolean boo = true;
 		// 搜索主題
-		Sort sort = Sort.by(Direction.DESC,"createtime"); 
-		for (BillboardBean p : br.findByThemeLikeIgnoreCaseAndState("%" + search + "%","發佈",sort)) {
+		Sort sort = Sort.by(Direction.DESC, "createtime");
+		for (BillboardBean p : br.findByThemeLikeIgnoreCaseAndState("%" + search + "%", "發佈", sort)) {
 			result.add(p);
 		}
 
 		// 用發表人搜索
-		for (BillboardBean p : br.findByUserLikeIgnoreCaseAndState("%" + search + "%","發佈",sort)) {
+		for (BillboardBean p : br.findByUserLikeIgnoreCaseAndState("%" + search + "%", "發佈", sort)) {
 			for (BillboardBean bean : result) {
 				if (bean.getBillboardgroupid() == p.getBillboardgroupid()) {
 					boo = false;
 				}
 			}
-			if (boo)result.add(p);
+			if (boo)
+				result.add(p);
 		}
 		return result;
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取留言by時間
 	public List<BillboardBean> getBillboardByTime() {
 		return br.getBillboardByTime();
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //刪除留言
 	public Integer delReply(String replyId) {
 		BillboardReplyBean bean = billboardReplyRepository.getById(replyId);
-		if(bean != null)billboardReplyRepository.delete(bean);
+		if (bean != null)
+			billboardReplyRepository.delete(bean);
 		return bean.getBillboardid();
 	}
 

@@ -56,15 +56,18 @@ public class PublicControl {
 		System.out.println("*****主頁面*****");
 		List<String> unread = new ArrayList<String>();
 		model.addAttribute("list", ss.getBillboardList("發佈"));
+		
+		//抓取登入者
 		AdminBean user = (AdminBean) session.getAttribute("user");
-
+		//如果有登入者
 		if (user != null) {
+			//抓新資訊
 			AdminBean adminBean = ar.getById(user.getAdminid());
-
 			List<AdminMailBean> a = adminBean.getMail();
 			for (AdminMailBean bean : a) {
 				unread.add(br.getById(bean.getBillboardid()).getContent());
 			}
+			session.setAttribute("user", adminBean);
 			model.addAttribute("unread", unread);
 		}
 		return "/CRM";

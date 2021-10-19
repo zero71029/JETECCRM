@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <br>
-                        <form action="${pageContext.request.contextPath}/system/SaveAdmin" method="post" id="myform"
+                        <form action="${pageContext.request.contextPath}/SaveAdmin" method="post" id="myform"
                             class="basefrom g-3 needs-validation">
                             <div class="row">
                                 <input type="hidden" name="adminid" value="${bean.adminid}">
@@ -173,7 +173,7 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">到職日</div>
                                     <div class="col-md-2 cell position-relative">
-                                        <input type="text" class=" form-control cellFrom" name="dutyDay"
+                                        <input type="text" class=" form-control cellFrom contacttime" name="dutyDay"
                                           value="${bean.dutyDay}" maxlength="20" readonly> 
                                     </div>
    

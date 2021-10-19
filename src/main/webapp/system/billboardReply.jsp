@@ -85,20 +85,7 @@
                                                         <c:set var="exitID" value="0"></c:set>
                                                     </c:if>
                                                 </c:forEach>
-                                                <!--  已讀 才顯示 -->
-                                                <c:if test='${i != "ture"}'>
-                                                    <a
-                                                        href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'><img
-                                                            src="${pageContext.request.contextPath}/img/unread.png"
-                                                            alt="取消已讀" data-bs-toggle="tooltip"
-                                                            data-bs-placement="bottom" title="取消已讀"></a>
-                                                </c:if>
-                                                <c:if test='${i == "ture"}'>
-                                                    <a href="javascript:read(${bean.billboardid},${user.adminid})"><img
-                                                            src="${pageContext.request.contextPath}/img/read.png"
-                                                            alt="已讀點擊" data-bs-toggle="tooltip"
-                                                            data-bs-placement="bottom" title="已讀點擊"></a>
-                                                </c:if>
+                                               
 
                                                 <img src="${pageContext.request.contextPath}/img/copy.png" alt="複製"
                                                     onclick="cop()" style="cursor: pointer;" data-bs-toggle="tooltip"
@@ -117,6 +104,20 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="取消置頂">
 
+                                                </c:if>
+                                                 <!--  已讀 才顯示 -->
+                                                 <c:if test='${i != "ture"}'>
+                                                    <a
+                                                        href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'><img
+                                                            src="${pageContext.request.contextPath}/img/unread.png"
+                                                            alt="取消已讀" data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom" title="取消已讀"></a>
+                                                </c:if>
+                                                <c:if test='${i == "ture"}'>
+                                                    <a href="javascript:read(${bean.billboardid},${user.adminid})"><img
+                                                            src="${pageContext.request.contextPath}/img/read.png"
+                                                            alt="已讀點擊" data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom" title="已讀點擊"></a>
                                                 </c:if>
                                             </span>
                                         </c:if>
@@ -149,9 +150,10 @@
                                         ${bean.content}
                                     </div>
                                 </div>
-                                <div class="row" onclick="advice()" hidden>
+                                <div class="row" onclick="advice()" >
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-9 cell content" style="word-wrap:break-word;">&nbsp;
+                                    <div class="col-md-1 cell position-relative cellbackgroud">標記</div>
+                                    <div class="col-md-8 cell content" style="word-wrap:break-word;">&nbsp;
                                     </div>
                                 </div>
 
@@ -429,20 +431,22 @@
             </script>
             <input type="hidden" name="myInput" class="myInput">
             <!-- 基本的对话框 -->
-            <!-- <c:if test="${not empty admin}">
+            <c:if test="${not empty admin}">
 
-                <div class="dialog row" title="標註人員">
+                <div class="dialog " title="標註人員">
+                    
                     <form action="">
                         <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}" var="admin">
-                            <div class="col-md-3">
+                            
                                 <input type="checkbox" name="" id="name${loop.index}" value="${admin.name}"><label
-                                    for="name${loop.index}">${admin.name} </label>&nbsp;&nbsp;&nbsp;
-                            </div>
+                                    for="name${loop.index}">${admin.name} </label><br>
+                            
 
                         </c:forEach>
+                        <button type="submit">submit</button>
                     </form>
                 </div>
-            </c:if> -->
+            </c:if>
         </body>
 
         </html>

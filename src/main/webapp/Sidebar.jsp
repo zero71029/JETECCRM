@@ -83,7 +83,7 @@
             var Signout = '${user.name}';
             if (Signout == '') {
                 $('.Signout').text("登入");
-                $('.Signout').attr("href", "/time.jsp");
+                $('.Signout').attr("href", "${pageContext.request.contextPath}/time.jsp");
             } else {
 
             }

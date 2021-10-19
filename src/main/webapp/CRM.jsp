@@ -22,7 +22,9 @@
 
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
-            <title>CRM客戶管理系統</title>
+            <c:set var="ddd" value="有未讀訊息(${user.mail.size()})"></c:set>
+            <span style="color: red;"></span>
+            <title>${user.mail.size() > 0 ? ddd:"CRM客戶管理系統"}</title>
         </head>
 
 
@@ -148,9 +150,12 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                    <div style="position: relative;">
-                                        <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀">
-                                        <span style="position: absolute; bottom: 0%;color: red; right: 0%; font-weight:bold;"> ${user.mail.size()}</span>                                        
+                                    <div style="position: relative; cursor: pointer;" onclick="sh()" >
+                                        <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀"
+                                            >
+                                        <span
+                                            style="position: absolute; bottom: 0%;color: red; right: 0%; font-weight:bold;">
+                                            ${user.mail.size()}</span>
                                     </div>
                                     <form class="d-flex" method="post"
                                         action="${pageContext.request.contextPath}/selectBillboard">
@@ -216,93 +221,29 @@
                         </table>
 
 
-                        <%-- <div class="row">
-                            <div class="col-lg-12 row">
-                                <c:if test="${not empty list}">
-                                    <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}"
-                                        var="s">
-                                        <table border="2" class="table">
-
-                                            <tr class="table-primary">
-                                                <td class="table-primary" colspan="2"
-                                                    onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'"
-                                                    style="Cursor: pointer">
-                                                    ${s.theme} <span style="color: red;">${s.top}</span></td>
-                                            </tr>
-                                            <tr style="position: relative;">
-                                                <td td class="table-primary" style=" height: 100px; width: 100px;">
-                                                    ${s.user} <br>(${s.billtowngroup})
-                                                </td>
-                                                <td>${s.content}
-                                                    <c:if test="${not empty user}">
-                                                        <!-- 有登入才顯示 -->
-                                                        <c:set var="i" value="false"></c:set>
-                                                        <c:forEach varStatus="loop" begin="0" end="${s.read.size()}"
-                                                            items="${s.read}" var="read">
-                                                            <!-- 已讀迴圈 -->
-                                                            <!-- 登入者 已讀 i == ture -->
-                                                            <c:if test="${user.name == read.name}">
-                                                                <c:set var="i" value="ture"></c:set>
-                                                                <c:set var="exitID" value="0"></c:set>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                        <!--  已讀 才顯示 -->
-                                                        <c:if test='${i == "ture"}'>
-                                                            <a href='${pageContext.request.contextPath}/ReRead/${s.billboardid}/${user.name}'
-                                                                style='position: absolute ; right: 1%; bottom: 30px;'>取消已讀</a>
-                                                        </c:if>
-                                                        <c:if test='${i != "ture"}'>
-                                                            <a href="javascript:read(${s.billboardid},'${user.name}')"
-                                                                style='position: absolute ; right: 1%; bottom: 30px;'>已讀點擊</a>
-                                                        </c:if>
-                                                    </c:if>
-                                                    <span
-                                                        style="position: absolute ; right: 0%; bottom: 0%;">發佈時間:${s.createtime}</span>
-                                                </td>
-                                            </tr>
-                                            <c:if test="${not empty s.reply}">
-                                                <c:forEach varStatus="loop" begin="0" end="${s.reply.size()-1}"
-                                                    items="${s.reply}" var="reply">
-                                                    <tr>
-                                                        <td class="table-primary">${reply.name} 回覆</td>
-                                                        <td>${reply.content}</td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </c:if>
 
 
-
-                                        </table><br>
-
-                                    </c:forEach>
-                                </c:if>
-
-
-                            </div>
-                            <div class="col-lg-1"></div>
                     </div>
-                    --%>
-                </div>
-                <div class="col-lg-3">
+                    <div class="col-lg-3">
 
-                    <!-- 基本的对话框 -->
-                    <c:if test="${not empty unread}">
-                        <c:forEach varStatus="loop" begin="0" end="${unread.size()}" items="${unread}" var="unread">
-                            <div class="dialog" title="新訊息">
-                                <p>${unread}</p>
-                            </div>
-                        </c:forEach>
+                        <!-- 基本的对话框 -->
+                        <c:if test="${not empty unread}">
+                            <c:forEach varStatus="loop" begin="0" end="${unread.size()}" items="${unread}" var="unread">
+                                <div class="dialog" title="新訊息">
+                                    <p>${unread}</p>
+                                </div>
+                            </c:forEach>
 
-                    </c:if>
+                        </c:if>
+                    </div>
                 </div>
-            </div>
             </div>
             <script>
 
                 $(".dialog").dialog({
                     autoOpen: false,
                     position: {
-                        at: "right bottom"
+                        at: "right top"
                     }
 
                 });
@@ -324,6 +265,10 @@
                             console.log(returndata);
                         }
                     });
+                }
+                function sh(){
+                    console.log("dddd");
+                    $('.dialog').dialog("open");
                 }
             </script>
         </body>
