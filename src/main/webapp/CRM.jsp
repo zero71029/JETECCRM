@@ -18,7 +18,7 @@
             <!-- <%-- jQuery放這裡 --%> -->
             <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
             <script src="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.js"></script>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}jquery-ui-1.13.0.custom/jquery-ui.min.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.css">
 
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
@@ -149,13 +149,30 @@
                                                 </c:forEach>
                                             </ul>
                                         </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                財務
+                                            </a>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown"
+                                                style="text-align: left;">
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "財務"}'>
+                                                        <li><a class="dropdown-item"
+                                                                href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a>
+                                                        </li>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </ul>
+                                        </li>
                                     </ul>
                                     <div style="position: relative; cursor: pointer;" onclick="sh()" >
                                         <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀"
                                             >
                                         <span
                                             style="position: absolute; bottom: 0%;color: red; right: 0%; font-weight:bold;">
-                                            ${user.mail.size()}</span>
+                                            ${user.mail.size()}/${user.advice.size()}</span>
                                     </div>
                                     <form class="d-flex" method="post"
                                         action="${pageContext.request.contextPath}/selectBillboard">
@@ -204,6 +221,16 @@
                                                             ${mail.billboardid == s.billboardid? "未讀":""}
                                                         </c:forEach>
                                                     </c:if>
+                                                  <!-- 如果 就是被@ -->
+                                                  <c:if test="${not empty user.advice}">
+                                                    <c:forEach varStatus="loop" begin="0"
+                                                        end="${user.advice.size()-1}" items="${user.advice}" var="advice">
+                                                        ${advice.billboardid == s.billboardid? "被標記":""}
+                                                    </c:forEach>
+                                                </c:if>
+
+
+
 
                                                 </span>
                                             </td>
@@ -247,29 +274,30 @@
                     }
 
                 });
-                function read(billboardid, username) {
-                    console.log(username);
-                    $.ajax({
-                        url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + username,//接受請求的Servlet地址
-                        type: 'POST',
-                        // data: formdata,
-                        // async: false,//同步請求
-                        // cache: false,//不快取頁面
-                        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
-                        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
-                        success: function (json) {
-                            alert(json);
-                            location.href = "${pageContext.request.contextPath}/";
-                        },
-                        error: function (returndata) {
-                            console.log(returndata);
-                        }
-                    });
-                }
-                function sh(){
-                    console.log("dddd");
+                function sh(){                    
                     $('.dialog').dialog("open");
                 }
+
+                // function read(billboardid, username) {
+                //     console.log(username);
+                //     $.ajax({
+                //         url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + username,//接受請求的Servlet地址
+                //         type: 'POST',
+                //         // data: formdata,
+                //         // async: false,//同步請求
+                //         // cache: false,//不快取頁面
+                //         // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                //         // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                //         success: function (json) {
+                //             alert(json);
+                //             location.href = "${pageContext.request.contextPath}/";
+                //         },
+                //         error: function (returndata) {
+                //             console.log(returndata);
+                //         }
+                //     });
+                // }
+
             </script>
         </body>
 

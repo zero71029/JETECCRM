@@ -36,10 +36,19 @@ public class AdminBean {
 	@JsonIgnore
 	@OneToMany(targetEntity = AdminMailBean.class ,mappedBy = "adminid", cascade = CascadeType.ALL)
 	private List<AdminMailBean> mail;
+	//@他人
+	@JsonIgnore
+	@OneToMany(targetEntity = BillboardAdviceBean.class ,mappedBy = "adviceto", cascade = CascadeType.ALL)
+	private List<BillboardAdviceBean> advice;
     
     
     
-    
+	public List<BillboardAdviceBean> getAdvice() {
+		return advice;
+	}
+	public void setAdvice(List<BillboardAdviceBean> advice) {
+		this.advice = advice;
+	}
 	public String getDutyDay() {
 		return dutyDay;
 	}

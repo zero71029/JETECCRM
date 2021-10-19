@@ -25,11 +25,13 @@ import com.JetecCRM.JetecCRM.controler.service.SystemService;
 import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.AdminMailBean;
 import com.JetecCRM.JetecCRM.model.AuthorizeBean;
+import com.JetecCRM.JetecCRM.model.BillboardAdviceBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardAdviceRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 
@@ -56,12 +58,12 @@ public class PublicControl {
 		System.out.println("*****主頁面*****");
 		List<String> unread = new ArrayList<String>();
 		model.addAttribute("list", ss.getBillboardList("發佈"));
-		
-		//抓取登入者
+
+		// 抓取登入者
 		AdminBean user = (AdminBean) session.getAttribute("user");
-		//如果有登入者
+		// 如果有登入者
 		if (user != null) {
-			//抓新資訊
+			// 抓新資訊
 			AdminBean adminBean = ar.getById(user.getAdminid());
 			List<AdminMailBean> a = adminBean.getMail();
 			for (AdminMailBean bean : a) {
@@ -312,10 +314,20 @@ public class PublicControl {
 	@RequestMapping("/replyRemove/{replyId}")
 	public String replyRemove(@PathVariable("replyId") String replyId) {
 		System.out.println("*****刪除留言*****");
-		Integer Billboardid =  ss.delReply(replyId);
+		Integer Billboardid = ss.delReply(replyId);
+		return "redirect:/billboardReply/" + Billboardid;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//@他人
+	@RequestMapping("/advice/{adminid}/{billboardid}")
+	public String advice(@RequestParam("adviceto") Integer[] adviceto,@RequestParam("formname") String[] formname,@PathVariable("adminid") Integer adminid,@PathVariable("billboardid") Integer billboardid) {
+		System.out.println("*****@他人*****");
+		ss.saveAdvice( adviceto,adminid,billboardid,formname);	
 
 		
-		return "redirect:/billboardReply/" + Billboardid;
+		return "redirect:/system/billboard/"+billboardid;
+
 	}
 
 }

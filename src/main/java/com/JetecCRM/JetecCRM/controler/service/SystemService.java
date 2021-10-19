@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.JetecCRM.JetecCRM.Tool.ZeroTools;
 import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.AdminMailBean;
+import com.JetecCRM.JetecCRM.model.BillboardAdviceBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
@@ -25,6 +26,7 @@ import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.model.NewsBean;
 import com.JetecCRM.JetecCRM.repository.AdminMailRepository;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardAdviceRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardGroupRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReadRepository;
@@ -49,6 +51,8 @@ public class SystemService {
 	BillboardGroupRepository bgr;
 	@Autowired
 	BillboardFileRepository bfr;
+	@Autowired
+	BillboardAdviceRepository bar;
 	@Autowired
 	ZeroTools zTools;
 
@@ -89,7 +93,7 @@ public class SystemService {
 //讀取公佈欄列表
 	public List<BillboardBean> getBillboardList(String state) {
 		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
-		Sort sort = Sort.by(Direction.DESC, "billboardid");
+		Sort sort = Sort.by(Direction.DESC, "createtime");
 		List<BillboardBean> list = br.getByStateAndTop(state, "置頂", sort);
 		for (BillboardBean bean : list)
 			resulet.add(bean);
@@ -153,7 +157,15 @@ public class SystemService {
 			for (BillboardBean bean : list)
 				resulet.add(bean);
 			return resulet;
-		} else {// 不是的話 根據billboardgroupid尋找
+		} else if ("01dasgregrehvbcvaaa財務".equals(billboardgroupid)) {
+			List<BillboardBean> list = br.getByStateAndBilltowngroupAndTop(state, "財務", "置頂", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			list = br.getByStateAndBilltowngroupAndTop(state, "財務", "", sort);
+			for (BillboardBean bean : list)
+				resulet.add(bean);
+			return resulet;
+		}else {// 不是的話 根據billboardgroupid尋找
 			List<BillboardBean> list = br.getByStateAndBillboardgroupidAndTop(state, billboardgroupid, "置頂", sort);
 			for (BillboardBean bean : list)
 				resulet.add(bean);
@@ -381,6 +393,23 @@ public class SystemService {
 		if (bean != null)
 			billboardReplyRepository.delete(bean);
 		return bean.getBillboardid();
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//@他人
+	public void saveAdvice(Integer[] adviceto, Integer adminid, Integer billboardid,String[] formname) {
+		BillboardAdviceBean bab = new BillboardAdviceBean();
+		bab.setBillboardid(billboardid);
+		bab.setAdvicefrom(adminid);
+		int index = 0;
+		for(Integer a : adviceto) {
+			if(!bar.existsByAdvicetoAndBillboardid(a,billboardid)) {
+				bab.setAdviceto(a);
+				bab.setAdviceid(zTools.getUUID());
+				bab.setFormname(formname[index++]);
+				bar.save(bab);
+			}			
+		}
+		
 	}
 
 }

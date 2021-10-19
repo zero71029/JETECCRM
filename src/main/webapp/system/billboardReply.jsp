@@ -85,7 +85,7 @@
                                                         <c:set var="exitID" value="0"></c:set>
                                                     </c:if>
                                                 </c:forEach>
-                                               
+
 
                                                 <img src="${pageContext.request.contextPath}/img/copy.png" alt="複製"
                                                     onclick="cop()" style="cursor: pointer;" data-bs-toggle="tooltip"
@@ -105,8 +105,8 @@
                                                         title="取消置頂">
 
                                                 </c:if>
-                                                 <!--  已讀 才顯示 -->
-                                                 <c:if test='${i != "ture"}'>
+                                                <!--  已讀 才顯示 -->
+                                                <c:if test='${i != "ture"}'>
                                                     <a
                                                         href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'><img
                                                             src="${pageContext.request.contextPath}/img/unread.png"
@@ -150,10 +150,31 @@
                                         ${bean.content}
                                     </div>
                                 </div>
-                                <div class="row" onclick="advice()" >
+                                <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">標記</div>
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">&nbsp;
+                                        <c:if test="${not empty bean.advice}">
+                                            <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()-1}"
+                                                items="${bean.advice}" var="ad">
+                                                <span class="ad${ad.adviceto}"> @${ad.formname}</span>
+                                                &nbsp;&nbsp;&nbsp;
+                                            </c:forEach>
+                                        </c:if>
+                                    
+                                            <style>
+                                                .ad${user.adminid}
+
+                                                    {
+                                                    background-color: blue;
+                                                    color: white;
+                                                    cursor: pointer;
+                                                }
+                                            </style>
+
+                                 
+
+
                                     </div>
                                 </div>
 
@@ -382,6 +403,7 @@
                     el.select();
                     document.execCommand('copy');
                     document.body.removeChild(el);
+                    alert("複製成功");
                 }
                 //點擊置頂
                 function tops() {
@@ -416,10 +438,7 @@
                 function replyRemove() {
                     $('.replyText').toggle();
                 }
-                //標註
-                function advice() {
-                    $(".dialog").dialog(open);
-                }
+
                 $(".dialog").dialog({
                     autoOpen: false,
                     position: {
@@ -430,23 +449,7 @@
 
             </script>
             <input type="hidden" name="myInput" class="myInput">
-            <!-- 基本的对话框 -->
-            <c:if test="${not empty admin}">
 
-                <div class="dialog " title="標註人員">
-                    
-                    <form action="">
-                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}" var="admin">
-                            
-                                <input type="checkbox" name="" id="name${loop.index}" value="${admin.name}"><label
-                                    for="name${loop.index}">${admin.name} </label><br>
-                            
-
-                        </c:forEach>
-                        <button type="submit">submit</button>
-                    </form>
-                </div>
-            </c:if>
         </body>
 
         </html>

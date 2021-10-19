@@ -51,8 +51,19 @@ public class BillboardBean {
 	@OneToMany(targetEntity = BillboardFileBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
 	private List<BillboardFileBean> file;
 	
+	//@他人
+	@JsonIgnore
+	@OneToMany(targetEntity = BillboardAdviceBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
+	private List<BillboardAdviceBean> advice;
 	
 	
+	
+	public List<BillboardAdviceBean> getAdvice() {
+		return advice;
+	}
+	public void setAdvice(List<BillboardAdviceBean> advice) {
+		this.advice = advice;
+	}
 	public List<BillboardFileBean> getFile() {
 		return file;
 	}
