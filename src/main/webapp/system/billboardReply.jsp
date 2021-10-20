@@ -91,24 +91,25 @@
                                                     onclick="cop()" style="cursor: pointer;" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title="複製">
 
-                                                <c:if test='${bean.top == ""}'>
-                                                    <img src="${pageContext.request.contextPath}/img/未釘選-01.png"
-                                                        alt="未釘選" onclick="tops()" style="cursor: pointer;"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="置頂">
 
-                                                </c:if>
+                                                <img src="${pageContext.request.contextPath}/img/未釘選-01.png" alt="未釘選"
+                                                    onclick="tops()" style="cursor: pointer;" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title="置頂" id="topImg">
+                                                <c:if test='${not empty user.top}'>
+                                                    <c:forEach varStatus="loop" begin="0" end="${user.top.size()-1}"
+                                                        items="${user.top}" var="top">
+                                                        <script>
+                                                            var billboardid = ${ top.billboardid };
+                                                            if (billboardid == ${ bean.billboardid }) {
+                                                                $("#topImg").attr("src" ,"${pageContext.request.contextPath}/img/CCC.png");
+                                                            }
 
-                                                <c:if test='${bean.top == "置頂"}'>
-                                                    <img src="${pageContext.request.contextPath}/img/CCC.png" alt="釘選"
-                                                        onclick="tops()" style="cursor: pointer;"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="取消置頂">
-
+                                                        </script>
+                                                    </c:forEach>
                                                 </c:if>
                                                 <!--  已讀 才顯示 -->
                                                 <c:if test='${i != "ture"}'>
-                                                    <a
-                                                        href='${pageContext.request.contextPath}/ReRead/${bean.billboardid}/${user.adminid}'><img
+                                                    <a  href='javascript:unread(${bean.billboardid}, ${user.adminid})'><img
                                                             src="${pageContext.request.contextPath}/img/unread.png"
                                                             alt="取消已讀" data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom" title="取消已讀"></a>
@@ -147,7 +148,7 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">內容</div>
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">
-                                        ${bean.content}
+                                        ${bean.content} 
                                     </div>
                                 </div>
                                 <div class="row">
@@ -156,13 +157,13 @@
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">&nbsp;
                                         <c:if test="${not empty bean.advice}">
                                             <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()-1}"
-                                                items="${bean.advice}" var="ad" >
-                                                <span class="ad${ad.adviceto}" > @${ad.formname}</span>
+                                                items="${bean.advice}" var="ad">
+                                                <span class="ad${ad.adviceto}"> ${ad.formname}</span>
                                                 &nbsp;&nbsp;&nbsp;
                                             </c:forEach>
                                         </c:if>
 
-                                       
+
 
 
                                     </div>
@@ -358,6 +359,18 @@
                     $("#formReply").validate();
 
                 });
+                
+                function unread(billboardid, adminid) {
+                    alert("取消已讀");
+                    location.href='${pageContext.request.contextPath}/ReRead/' + billboardid + '/' + adminid;
+
+                }
+
+
+
+
+
+
 
                 function read(billboardid, adminid) {
                     $.ajax({
@@ -398,7 +411,7 @@
                 //點擊置頂
                 function tops() {
                     $.ajax({
-                        url: '${pageContext.request.contextPath}/top/${bean.billboardid}',//接受請求的Servlet地址
+                        url: '${pageContext.request.contextPath}/top/${bean.billboardid}/${user.adminid}',//接受請求的Servlet地址
                         type: 'POST',
                         // data: formdata,
                         // async: false,//同步請求

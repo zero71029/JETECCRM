@@ -134,22 +134,6 @@
                                 <div class="col-lg-4 cell">${bean.createtime}</div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-1 cell cellbackgroud">置頂</div>
-                                <div class="col-lg-4 cell">
-                                    <select input type="text" class=" form-select cellFrom" name="top">
-                                        <option ${bean.top=="" ?"selected":null} class="selItemOff" value="">無
-                                        </option>
-                                        <option ${bean.top=="置頂" ?"selected":null} class="selItemOff" value="置頂">置頂
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
-                                <div class="col-lg-4 cell"> <a href="javascript:ReadNum()">${bean.read.size()}</a>
-
-                                </div>
-                            </div>
-                            <div class="row">
-
                                 <div class="col-lg-1 cell cellbackgroud">群組</div>
                                 <div class="col-lg-4 cell">
                                     <select input type="text" class=" form-select cellFrom billboardGroup"
@@ -179,12 +163,31 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="row">
+                                <input type="hidden" name="top" value="">                                
+                                <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
+                                <div class="col-lg-9 cell"> <a href="javascript:ReadNum()">${bean.read.size()}</a>
+                                </div>
+                                
+                            </div>
 
                             <c:if test="${not empty bean}">
                                 <div class="row">
-                                    <div class="col-lg-1 cell position-relative cellbackgroud">
-                                        <button type="button" style="width: 100%;" onclick="advice()">@</button>
+                                    <div onclick="advice()" class="col-lg-1 cell position-relative cellbackgroud adv">
                                     </div>
+                                    <style>
+                                        .adv {height: 27px;
+                                            background-image: url(${pageContext.request.contextPath}/img/aaa.png);
+                                            background-repeat: no-repeat;
+                                            background-size: contain;
+                                            background-position: center;
+                                            border-top: #ccc 3px solid;
+                                            border-right: black 2px solid;
+                                            border-bottom: #000 2px solid;
+                                            border-left: #ccc 3px solid;
+                                            cursor: pointer;
+                                        }
+                                    </style>
                                     <div class="col-lg-9 cell">
                                         <c:if test="${not empty bean.advice}">
                                             <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()-1}"
@@ -291,7 +294,7 @@
                             <!-- 基本的对话框 -->
                             <c:if test="${not empty admin}">
                                 <form
-                                    action="${pageContext.request.contextPath}/advice/${user.adminid}/${bean.billboardid}"
+                                    action="${pageContext.request.contextPath}/system/advice/${user.adminid}/${bean.billboardid}"
                                     method="post">
 
 
@@ -307,11 +310,10 @@
                                             var="s">
                                             <c:if test="${s.department == '生產'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="${s.name}"
-                                                        class="group1" value="${s.adminid}"><label
-                                                        for="${s.name}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group1"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                     
+
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
@@ -321,11 +323,10 @@
                                             var="s">
                                             <c:if test="${s.department == '採購'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="${s.name}"
-                                                        class="group2" value="${s.adminid}"><label
-                                                        for="${s.name}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group2"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                     
+
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
@@ -335,11 +336,10 @@
                                             var="s">
                                             <c:if test="${s.department == '研發'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="${s.name}"
-                                                        class="group3" value="${s.adminid}"><label
-                                                        for="${s.name}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group3"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                     
+
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
@@ -349,11 +349,10 @@
                                             var="s">
                                             <c:if test="${s.department == '業務'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="${s.name}"
-                                                        class="group4" value="${s.adminid}"><label
-                                                        for="${s.name}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group4"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                     
+
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
@@ -363,11 +362,10 @@
                                             var="s">
                                             <c:if test="${s.department == '行銷'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="${s.name}"
-                                                        class="group5" value="${s.adminid}"><label
-                                                        for="${s.name}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group5"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                     
+
                                                 </div>
                                             </c:if>
 
@@ -378,16 +376,17 @@
                                             var="s">
                                             <c:if test="${s.department == '財務'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="${s.name}"
-                                                        class="group6" value="${s.adminid}"><label
-                                                        for="${s.name}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group6"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                     
+
                                                 </div>
                                             </c:if>
                                         </c:forEach>
                                         <button type="submit">標記</button>
                                     </div>
+      
+                                   <input type="hidden" name="adviceto" value="6">
                                 </form>
                                 <script>
 
@@ -475,7 +474,7 @@
             <script>
                 var a = "${ad.formname}"
                 console.log(a);
-                $("#${ad.formname}").prop("checked",true);
+                $("#${ad.formname}").prop("checked", true);
 
 
             </script>

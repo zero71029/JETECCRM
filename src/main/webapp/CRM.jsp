@@ -67,13 +67,13 @@
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
                                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                生產
+                                                業務
                                             </a>
                                             <ul class="dropdown-menu " aria-labelledby="navbarDropdown"
                                                 style="text-align: left;">
                                                 <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
                                                     items="${billboardgroup}" var="s">
-                                                    <c:if test='${s.billboardgroup == "生產"}'>
+                                                    <c:if test='${s.billboardgroup == "業務"}'>
                                                         <li><a class="dropdown-item"
                                                                 href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a>
                                                         </li>
@@ -101,6 +101,24 @@
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
                                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                生產
+                                            </a>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown"
+                                                style="text-align: left;">
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "生產"}'>
+                                                        <li><a class="dropdown-item"
+                                                                href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a>
+                                                        </li>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </ul>
+                                        </li>
+
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 研發
                                             </a>
                                             <ul class="dropdown-menu " aria-labelledby="navbarDropdown"
@@ -108,40 +126,6 @@
                                                 <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
                                                     items="${billboardgroup}" var="s">
                                                     <c:if test='${s.billboardgroup == "研發"}'>
-                                                        <li><a class="dropdown-item"
-                                                                href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a>
-                                                        </li>
-                                                    </c:if>
-                                                </c:forEach>
-                                            </ul>
-                                        </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                業務
-                                            </a>
-                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown"
-                                                style="text-align: left;">
-                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
-                                                    items="${billboardgroup}" var="s">
-                                                    <c:if test='${s.billboardgroup == "業務"}'>
-                                                        <li><a class="dropdown-item"
-                                                                href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a>
-                                                        </li>
-                                                    </c:if>
-                                                </c:forEach>
-                                            </ul>
-                                        </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                行銷
-                                            </a>
-                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown"
-                                                style="text-align: left;">
-                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
-                                                    items="${billboardgroup}" var="s">
-                                                    <c:if test='${s.billboardgroup == "行銷"}'>
                                                         <li><a class="dropdown-item"
                                                                 href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a>
                                                         </li>
@@ -166,31 +150,51 @@
                                                 </c:forEach>
                                             </ul>
                                         </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                行銷
+                                            </a>
+                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown"
+                                                style="text-align: left;">
+                                                <c:forEach varStatus="loop" begin="0" end="${billboardgroup.size()-1}"
+                                                    items="${billboardgroup}" var="s">
+                                                    <c:if test='${s.billboardgroup == "行銷"}'>
+                                                        <li><a class="dropdown-item"
+                                                                href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.billboardoption}</a>
+                                                        </li>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </ul>
+                                        </li>
                                     </ul>
-                                    <div style="position: relative; cursor: pointer;" onclick="sh()">
-                                        <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀">
-                                        <div style="position: absolute; bottom: 0%;color: red; right: 0%; font-weight:bold;">
-                                            <span class="aaa"></span>/<span>${user.mail.size()}</span>
-                                        </div>
-
-                                    </div>
-                                    <script>var b = 0;</script>
+                                    <!-- 小鈴鐺 -->
                                     <c:if test="${not empty user}">
-                                        <c:forEach varStatus="loop" begin="0" end="${user.advice.size()-1}"
-                                            items="${user.advice}" var="ad">
-                                            <script>
-                                                var a = ${ ad.reply };
-                                                b += a;                                                
-                                            </script>
-                                        </c:forEach>
-                                        <script>$(".aaa").append(b);</script>
-                                    </c:if>
-                                    <form class="d-flex" method="post"
-                                        action="${pageContext.request.contextPath}/selectBillboard">
-                                        <input class="form-control me-2" type="search" placeholder="主題 or 發佈者"
-                                            aria-label="Search" name="search">
-                                        <button class="btn btn-outline-success" type="submit">Search</button>
-                                    </form>
+                                        <div style="position: relative; cursor: pointer;" onclick="sh()">
+                                            <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀">
+                                        </div>
+                                        <div onclick="sh()" style=" color: red;  font-weight:bold; cursor: pointer;">
+                                            <span class="aaa"></span>/<span>未讀:${user.mail.size()}</span>
+                                        </div>
+                                        <script>var b = 0;</script>
+                                        <c:if test="${not empty user.advice}">
+                                            <c:forEach varStatus="loop" begin="0" end="${user.advice.size()-1}"
+                                                items="${user.advice}" var="ad">
+                                                <script>
+                                                    var a = ${ ad.reply };
+                                                    b += a;
+                                                </script>
+                                            </c:forEach>
+                                            <script>$(".aaa").append("@:" + b);</script>
+                                        </c:if></c:if>
+                                        <!-- search -->
+                                        <form class="d-flex" method="post"
+                                            action="${pageContext.request.contextPath}/selectBillboard">
+                                            <input class="form-control me-2" type="search" placeholder="主題 or 發佈者"
+                                                aria-label="Search" name="search">
+                                            <button class="btn btn-outline-success" type="submit">Search</button>
+                                        </form>
+                                    
                                 </div>
                             </div>
                         </nav>
@@ -219,12 +223,27 @@
                                         <tr style="Cursor: pointer ;vertical-align: middle;"
                                             onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'">
                                             <td>
+                                                <!--置頂圖片  -->
                                                 <c:set var="img"
                                                     value="<img src='${pageContext.request.contextPath}/img/TTT.png' alt='置頂'>">
                                                 </c:set>
                                                 <span style="color: red;">${s.top == "置頂"?img:""}</span>
+                                                <!-- 如果 .......就是 個人置頂 -->
+                                                <c:if test="${not empty user.top}">
+                                                    <c:forEach varStatus="loop" begin="0" end="${user.top.size()-1}"
+                                                        items="${user.top}" var="top">
+                                                        <span style="color: red;">
+                                                            <c:if test="${top.billboardid == s.billboardid}">
+                                                                <img src="${pageContext.request.contextPath}/img/topA.png"
+                                                                    alt="">
+                                                            </c:if>
+                                                        </span>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <!-- 分類 -->
                                                 [${s.billtowngroup}] &nbsp;
-                                                ${s.theme} <span style="color: red;">
+                                                <!-- 標提 -->
+                                                ${s.theme} <span style="color: #777;">
                                                     <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
                                                     <c:if test="${not empty user.mail}">
                                                         <c:forEach varStatus="loop" begin="0"
@@ -232,7 +251,7 @@
                                                             ${mail.billboardid == s.billboardid? "未讀":""}
                                                         </c:forEach>
                                                     </c:if>
-                                                    <!-- 如果 就是被@ -->
+                                                    <!-- 如果 .......就是被@ -->
                                                     <c:if test="${not empty user.advice}">
                                                         <c:forEach varStatus="loop" begin="0"
                                                             end="${user.advice.size()-1}" items="${user.advice}"
@@ -240,10 +259,6 @@
                                                             ${advice.billboardid == s.billboardid? "@":""}
                                                         </c:forEach>
                                                     </c:if>
-
-
-
-
                                                 </span>
                                             </td>
                                             <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
@@ -268,8 +283,8 @@
                         <!-- 基本的对话框 -->
                         <c:if test="${not empty unread}">
                             <c:forEach varStatus="loop" begin="0" end="${unread.size()}" items="${unread}" var="unread">
-                                <div class="dialog" title="新訊息">
-                                    <p>${unread}</p>
+                                <div class="dialog" title="${unread.theme}被標記">
+                                    <p>${unread.content}</p>
                                 </div>
                             </c:forEach>
 

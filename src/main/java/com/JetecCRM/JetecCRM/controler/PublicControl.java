@@ -31,7 +31,6 @@ import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
-import com.JetecCRM.JetecCRM.repository.BillboardAdviceRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 
@@ -56,21 +55,25 @@ public class PublicControl {
 	@RequestMapping(path = { "/", "/index" })
 	public String index(Model model, HttpSession session) {
 		System.out.println("*****主頁面*****");
-		List<String> unread = new ArrayList<String>();
-		model.addAttribute("list", ss.getBillboardList("發佈"));
-
+		List<BillboardBean> unread = new ArrayList<BillboardBean>();
 		// 抓取登入者
 		AdminBean user = (AdminBean) session.getAttribute("user");
-		// 如果有登入者
+		// 如果有登入者 更新資料
 		if (user != null) {
-			// 抓新資訊
-			AdminBean adminBean = ar.getById(user.getAdminid());
-			List<AdminMailBean> a = adminBean.getMail();
-			for (AdminMailBean bean : a) {
-				unread.add(br.getById(bean.getBillboardid()).getContent());
+			// 抓被@的資料	
+			AdminBean adminBean = ar.getById(user.getAdminid()); 
+			List<BillboardAdviceBean> a = adminBean.getAdvice();
+			for (BillboardAdviceBean bean : a) {
+				if(bean.getReply().equals("1"))
+				unread.add(br.getById(bean.getBillboardid()));
 			}
+			//
+			model.addAttribute("list", ss.getBillboardList("發佈",adminBean));
 			session.setAttribute("user", adminBean);
 			model.addAttribute("unread", unread);
+		}else {
+			AdminBean xxx =null;
+			model.addAttribute("list", ss.getBillboardList("發佈",xxx));
 		}
 		return "/CRM";
 	}
@@ -105,8 +108,7 @@ public class PublicControl {
 			HttpSession session) {
 		System.out.println("*****點擊已讀*****");
 		String result = ss.saveRead(billboardid, adminid);
-		
-		
+
 		session.setAttribute("user", ar.getById(adminid));
 		return result;
 	}
@@ -154,7 +156,7 @@ public class PublicControl {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 儲存授權
 	@RequestMapping("/saveAuthorize/{uuid}")
-	public String saveAuthorize(@PathVariable("uuid") String uuid, BillboardBean bean, HttpSession session) {
+	public String saveAuthorize(@PathVariable("uuid") String uuid, BillboardBean bean, HttpSession session,Model model) {
 		System.out.println("*****儲存授權*****");
 
 		BillboardBean save = ss.SaveBillboard(bean, session);
@@ -163,9 +165,9 @@ public class PublicControl {
 			b.setBillboardid(save.getBillboardid());
 			bfr.save(b);
 		}
-//			authorizeRepository.deleteById(uuid);
+			authorizeRepository.deleteById(uuid);
 
-		return "redirect:/";
+		return "redirect:/billboardReply/" + save.getBillboardid();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,20 +271,15 @@ public class PublicControl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //置頂設定
-	@RequestMapping("/top/{billboardid}")
+	@RequestMapping("/top/{billboardid}/{adminid}")
 	@ResponseBody
-	public String billboardid(@PathVariable("billboardid") Integer billboardid) {
+	public String billboardid(@PathVariable("billboardid") Integer billboardid,@PathVariable("adminid") Integer adminid ,HttpSession session)  {
 		System.out.println("*****置頂設定*****");
-		BillboardBean bean = br.getById(billboardid);
-		if (bean.getTop().equals("置頂")) {
-			bean.setTop("");
-			br.save(bean);
-			return "取消成功";
-		}
-		bean.setTop("置頂");
-		br.save(bean);
-		return "置頂成功";
+		String result =ss.setTop(billboardid,adminid);
+		session.setAttribute("user", ar.getById(adminid));
+		return result;
 	}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
@@ -320,15 +317,5 @@ public class PublicControl {
 		Integer Billboardid = ss.delReply(replyId);
 		return "redirect:/billboardReply/" + Billboardid;
 	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//@他人
-	@RequestMapping("/advice/{adminid}/{billboardid}")
-	public String advice(@RequestParam("adviceto") Integer[] adviceto,@PathVariable("adminid") Integer adminid,@PathVariable("billboardid") Integer billboardid) {
-		System.out.println("*****@他人*****");
-		ss.saveAdvice( adviceto,adminid,billboardid);
-		return "redirect:/system/billboard/"+billboardid;
-	}
-
 
 }

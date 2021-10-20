@@ -62,7 +62,6 @@ public class SystemControler {
 		return "/system/admin";
 	}
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //刪除員工
 	@RequestMapping("/delAdmin")
@@ -77,18 +76,20 @@ public class SystemControler {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
 	@RequestMapping("/billboardList")
-	public String billboardList(Model model) {
+	public String billboardList(Model model, HttpSession session) {
 		System.out.println("*****讀取公佈欄列表*****");
-		model.addAttribute("list", ss.getBillboardList("發佈"));
+		AdminBean adminBean = (AdminBean) session.getAttribute("user");
+		model.addAttribute("list", ss.getBillboardList("發佈", adminBean));
 		return "/system/billboardList";
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
 	@RequestMapping("/OffShelf")
-	public String OffShelf(Model model) {
+	public String OffShelf(Model model, HttpSession session) {
 		System.out.println("*****讀取公佈欄列表*****");
-		model.addAttribute("list", ss.getBillboardList("封存"));
+		AdminBean adminBean = (AdminBean) session.getAttribute("user");
+		model.addAttribute("list", ss.getBillboardList("封存", adminBean));
 		return "/system/billboardList";
 	}
 
@@ -122,8 +123,6 @@ public class SystemControler {
 		return "刪除成功";
 	}
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //公佈欄授權
 	@RequestMapping("/authorize")
@@ -142,7 +141,7 @@ public class SystemControler {
 			String text = String.format("<a href='http://192.168.11.114:8081/authorize/%s'>點擊鍊接留言</a>", uuid);
 			String maillist = "";
 			zTools.mail(mailTo, text, Subject, maillist);
-		}else {
+		} else {
 			AuthorizeBean authorizeBean = new AuthorizeBean();
 			authorizeBean.setId(uuid);
 			authorizeBean.setUsed("所有人");
@@ -197,14 +196,14 @@ public class SystemControler {
 					String lastname = fileMap.get("file" + i).getOriginalFilename()
 							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
 					System.out.println(lastname);
-					fileMap.get("file" + i).transferTo(new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\"
-							+ uuid+lastname));
+					fileMap.get("file" + i).transferTo(
+							new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\" + uuid + lastname));
 //fileMap.get("file" + i).transferTo(new File("classpath:/resources/static\\images\\product\\" + Productmodel + ".jpg"));
 //3. 儲存檔案名稱到資料庫
 					BillboardFileBean billBoardFileBean = new BillboardFileBean();
 					billBoardFileBean.setBillboardid(billboardid);
 					billBoardFileBean.setFileid(uuid);
-					billBoardFileBean.setUrl(uuid+lastname);
+					billBoardFileBean.setUrl(uuid + lastname);
 					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
@@ -227,9 +226,19 @@ public class SystemControler {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //刪除型錄
 	@RequestMapping("/remove/{fileid}/{billboardid}")
-	public String remove(@PathVariable("fileid") String fileid,@PathVariable("billboardid") String billboardid) {
+	public String remove(@PathVariable("fileid") String fileid, @PathVariable("billboardid") String billboardid) {
 		System.out.println("*****刪除型錄*****");
 		ss.removefile(fileid);
-		return "redirect:/system/billboard/"+billboardid;
+		return "redirect:/system/billboard/" + billboardid;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//@他人
+	@RequestMapping("/advice/{adminid}/{billboardid}")
+	public String advice(@RequestParam("adviceto") Integer[] adviceto, @PathVariable("adminid") Integer adminid,
+			@PathVariable("billboardid") Integer billboardid) {
+		System.out.println("*****@他人*****");
+		ss.saveAdvice(adviceto, adminid, billboardid);
+		return "redirect:/system/billboard/" + billboardid;
 	}
 }

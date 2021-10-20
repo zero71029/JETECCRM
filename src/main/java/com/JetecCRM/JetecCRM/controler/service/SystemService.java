@@ -23,7 +23,7 @@ import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
 import com.JetecCRM.JetecCRM.model.BillboardReadBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
-import com.JetecCRM.JetecCRM.model.NewsBean;
+import com.JetecCRM.JetecCRM.model.BillboardTopBean;
 import com.JetecCRM.JetecCRM.repository.AdminMailRepository;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardAdviceRepository;
@@ -32,6 +32,7 @@ import com.JetecCRM.JetecCRM.repository.BillboardGroupRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReadRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReplyRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardTopRepository;
 
 @Service
 @Transactional
@@ -53,6 +54,8 @@ public class SystemService {
 	BillboardFileRepository bfr;
 	@Autowired
 	BillboardAdviceRepository bar;
+	@Autowired
+	BillboardTopRepository btr;
 	@Autowired
 	ZeroTools zTools;
 
@@ -91,16 +94,37 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
-	public List<BillboardBean> getBillboardList(String state) {
-		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
+	public List<BillboardBean> getBillboardList(String state,AdminBean adminBean) {
+		
 		Sort sort = Sort.by(Direction.DESC, "createtime");
-		List<BillboardBean> list = br.getByStateAndTop(state, "置頂", sort);
-		for (BillboardBean bean : list)
-			resulet.add(bean);
-		list = br.getByStateAndTop(state, "", sort);
-		for (BillboardBean bean : list)
-			resulet.add(bean);
+		List<BillboardBean> resulet = br.getByStateAndTop(state, "置頂", sort);
+		boolean boo =true;
+//		List<BillboardBean> list = br.getByStateAndTop(state, "置頂", sort);
+//		for (BillboardBean bean : list)
+//			resulet.add(bean);
+		if (adminBean != null) {
+			for(BillboardTopBean btb : adminBean.getTop()) {			
+				for (BillboardBean bean : resulet) {
+					if (bean.getBillboardid() == btb.getBillboardid()) {
+						boo = false;
+					}
+				}
+				if (boo)resulet.add(br.getById(btb.getBillboardid()));
+				boo =true;
+			}
+		}
 
+		List<BillboardBean> list = br.getByStateAndTop(state, "", sort);
+		for (BillboardBean b : list) {
+			for (BillboardBean bean : resulet) {
+				if (bean.getBillboardid() == b.getBillboardid()) {
+					boo = false;
+				}
+			}
+			if (boo)resulet.add(b);
+			boo =true;			
+		}
+		
 		return resulet;
 	}
 	// 讀取公佈欄列表 加分類
@@ -269,14 +293,13 @@ public class SystemService {
 			brb.setReadid(zTools.getUUID());
 			brb.setName(adminBean.getName());
 			brr.save(brb);
-			//@ 如果存在 就取出  插入reply=1
-			if (bar.existsByAdvicetoAndBillboardid( adminid,billboardid)) {
-				BillboardAdviceBean bab = bar.getByAdvicetoAndBillboardid(adminid,billboardid);
+			// @ 如果存在 就取出 插入reply=1
+			if (bar.existsByAdvicetoAndBillboardid(adminid, billboardid)) {
+				BillboardAdviceBean bab = bar.getByAdvicetoAndBillboardid(adminid, billboardid);
 				bab.setReply("0");
 				bar.save(bab);
 			}
-			
-			
+
 			return "成功已讀";
 		} else {
 			return "找不到資料";
@@ -411,18 +434,36 @@ public class SystemService {
 		bab.setAdvicefrom(adminid);
 		bab.setReply("1");
 		bar.deleteAllByBillboardid(billboardid);
-		for (Integer a : adviceto) {
-			AdminBean adminBean = ar.getById(a);
-			bab.setAdviceto(a);
-			bab.setAdviceid(zTools.getUUID());
-			bab.setFormname(adminBean.getName());
-			bar.save(bab);
-		}
+			for (Integer a : adviceto) {
+				if (a != null) {
+					AdminBean adminBean = ar.getById(a);
+					bab.setAdviceto(a);
+					bab.setAdviceid(zTools.getUUID());
+					bab.setFormname(adminBean.getName());
+					bar.save(bab);
+				}
+			}
 	}
 
 	public void saveAdvice(Integer adminid, Integer billboardid) {
 		bar.deleteAllByBillboardid(billboardid);
-		
+
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//置頂設定
+	public String setTop(Integer billboardid, Integer adminid) {
+		if (btr.existsByBillboardidAndAdminid(billboardid, adminid)) {
+			btr.deleteAllByBillboardidAndAdminid(billboardid, adminid);
+			return "取消成功";
+		} else {
+			BillboardTopBean btb = new BillboardTopBean();
+			btb.setAdminid(adminid);
+			btb.setBillboardid(billboardid);
+			btb.setTopid(zTools.getUUID());
+			btr.save(btb);
+			return "置成功";
+		}
 	}
 
 }

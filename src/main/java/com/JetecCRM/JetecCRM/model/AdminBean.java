@@ -40,9 +40,18 @@ public class AdminBean {
 	@JsonIgnore
 	@OneToMany(targetEntity = BillboardAdviceBean.class ,mappedBy = "adviceto", cascade = CascadeType.ALL)
 	private List<BillboardAdviceBean> advice;
+	@JsonIgnore
+	@OneToMany(targetEntity = BillboardTopBean.class ,mappedBy = "adminid", cascade = CascadeType.ALL)
+	private List<BillboardTopBean> top;
+	
     
     
-    
+	public List<BillboardTopBean> getTop() {
+		return top;
+	}
+	public void setTop(List<BillboardTopBean> top) {
+		this.top = top;
+	}
 	public List<BillboardAdviceBean> getAdvice() {
 		return advice;
 	}

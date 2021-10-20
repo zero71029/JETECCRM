@@ -152,36 +152,7 @@
                             </div>
                         </form>
                         <br><br>
-
-                        <c:if test="${empty authorizeBean}">
-                            <form action="${pageContext.request.contextPath}/system/authorize" method="POST"
-                                name="authorize">
-                                <div class="row">
-
-                                    <div class="col-lg-1 cell cellbackgroud">授權</div>
-                                    <div class="col-lg-9 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="adminid">
-
-                                            <c:if test="${not empty admin}">
-                                                <c:forEach varStatus="loop" begin="0" end="${admin.size()-1}"
-                                                    items="${admin}" var="s">
-                                                    <option class="selItemOff" value="${s.adminid}">${s.name}</option>
-                                                </c:forEach>
-                                            </c:if>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="row">
-
-                                        <div class="col-lg-10">
-                                            <button type="submit" style="width: 100%;"
-                                                class="btn btn-primary">發送</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </c:if>
+                        
                         <!-- 回覆內容 -->
                         <c:if test="${not empty bean.reply}">
                             <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
