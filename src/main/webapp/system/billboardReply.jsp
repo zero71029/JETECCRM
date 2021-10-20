@@ -156,23 +156,13 @@
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">&nbsp;
                                         <c:if test="${not empty bean.advice}">
                                             <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()-1}"
-                                                items="${bean.advice}" var="ad">
-                                                <span class="ad${ad.adviceto}"> @${ad.formname}</span>
+                                                items="${bean.advice}" var="ad" >
+                                                <span class="ad${ad.adviceto}" > @${ad.formname}</span>
                                                 &nbsp;&nbsp;&nbsp;
                                             </c:forEach>
                                         </c:if>
-                                    
-                                            <style>
-                                                .ad${user.adminid}
 
-                                                    {
-                                                    background-color: blue;
-                                                    color: white;
-                                                    cursor: pointer;
-                                                }
-                                            </style>
-
-                                 
+                                       
 
 
                                     </div>

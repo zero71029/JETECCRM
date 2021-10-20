@@ -17,12 +17,18 @@ public class BillboardAdviceBean {
 	private Integer adviceto;
 	private Integer billboardid;
 	private Date createtime;
+	private String reply;
 	
 	
 	
 	
 	
-	
+	public String getReply() {
+		return reply;
+	}
+	public void setReply(String reply) {
+		this.reply = reply;
+	}
 	public String getFormname() {
 		return formname;
 	}

@@ -167,13 +167,24 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                    <div style="position: relative; cursor: pointer;" onclick="sh()" >
-                                        <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀"
-                                            >
-                                        <span
-                                            style="position: absolute; bottom: 0%;color: red; right: 0%; font-weight:bold;">
-                                            ${user.mail.size()}/${user.advice.size()}</span>
+                                    <div style="position: relative; cursor: pointer;" onclick="sh()">
+                                        <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀">
+                                        <div style="position: absolute; bottom: 0%;color: red; right: 0%; font-weight:bold;">
+                                            <span class="aaa"></span>/<span>${user.mail.size()}</span>
+                                        </div>
+
                                     </div>
+                                    <script>var b = 0;</script>
+                                    <c:if test="${not empty user}">
+                                        <c:forEach varStatus="loop" begin="0" end="${user.advice.size()-1}"
+                                            items="${user.advice}" var="ad">
+                                            <script>
+                                                var a = ${ ad.reply };
+                                                b += a;                                                
+                                            </script>
+                                        </c:forEach>
+                                        <script>$(".aaa").append(b);</script>
+                                    </c:if>
                                     <form class="d-flex" method="post"
                                         action="${pageContext.request.contextPath}/selectBillboard">
                                         <input class="form-control me-2" type="search" placeholder="主題 or 發佈者"
@@ -221,13 +232,14 @@
                                                             ${mail.billboardid == s.billboardid? "未讀":""}
                                                         </c:forEach>
                                                     </c:if>
-                                                  <!-- 如果 就是被@ -->
-                                                  <c:if test="${not empty user.advice}">
-                                                    <c:forEach varStatus="loop" begin="0"
-                                                        end="${user.advice.size()-1}" items="${user.advice}" var="advice">
-                                                        ${advice.billboardid == s.billboardid? "被標記":""}
-                                                    </c:forEach>
-                                                </c:if>
+                                                    <!-- 如果 就是被@ -->
+                                                    <c:if test="${not empty user.advice}">
+                                                        <c:forEach varStatus="loop" begin="0"
+                                                            end="${user.advice.size()-1}" items="${user.advice}"
+                                                            var="advice">
+                                                            ${advice.billboardid == s.billboardid? "@":""}
+                                                        </c:forEach>
+                                                    </c:if>
 
 
 
@@ -274,7 +286,7 @@
                     }
 
                 });
-                function sh(){                    
+                function sh() {
                     $('.dialog').dialog("open");
                 }
 

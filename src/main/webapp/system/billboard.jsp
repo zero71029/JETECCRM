@@ -117,7 +117,7 @@
                                 <div class="col-lg-1 cell position-relative cellbackgroud">內容*</div>
                                 <div class="col-lg-9 cell ">
                                     <textarea class="cellFrom" name="content" cols="80" rows="10" required
-                                        maxlength="450">${bean.content}</textarea>
+                                        maxlength="450">${bean.content} </textarea>
                                 </div>
 
                             </div>
@@ -166,7 +166,7 @@
                                             value="業務">業務</option>
                                         <option ${bean.billtowngroup=="行銷" ?"selected":null} class="selItemOff"
                                             value="行銷">行銷</option>
-                                            <option ${bean.billtowngroup=="財務" ?"selected":null} class="selItemOff"
+                                        <option ${bean.billtowngroup=="財務" ?"selected":null} class="selItemOff"
                                             value="財務">財務</option>
                                     </select>
                                 </div>
@@ -183,29 +183,20 @@
                             <c:if test="${not empty bean}">
                                 <div class="row">
                                     <div class="col-lg-1 cell position-relative cellbackgroud">
-                                        <button type="button" style="width: 100%;" onclick="advice()">標記</button>
+                                        <button type="button" style="width: 100%;" onclick="advice()">@</button>
                                     </div>
                                     <div class="col-lg-9 cell">
                                         <c:if test="${not empty bean.advice}">
-                                            <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()-1}" items="${bean.advice}" var="ad">
-                                                @${ad.formname} &nbsp;&nbsp;&nbsp;
-                    
+                                            <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()-1}"
+                                                items="${bean.advice}" var="ad">
+                                                ${ad.formname} &nbsp;&nbsp;&nbsp;
+
                                             </c:forEach>
                                         </c:if>
                                     </div>
                                 </div>
 
                             </c:if>
-
-
-
-
-
-
-
-
-
-
                             <div class="row">
                                 <div class="col-lg-10">
                                     <button type="submit" style="width: 100%;background-color: #08604f;color: white;"
@@ -306,17 +297,21 @@
 
                                     <div class="row advice" style="border: #08604f 1px solid;">
                                         <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
-                                            id="all">全部: </div>
+                                                id="all">全部: </div>
                                         <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
                                                 id="group1">生產: </div>
+
+
+                                        <!-- admin 迴圈 -->
                                         <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
                                             var="s">
                                             <c:if test="${s.department == '生產'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="name${loop.index}" class="group1"
-                                                        value="${s.adminid}"><label for="name${loop.index}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}"
+                                                        class="group1" value="${s.adminid}"><label
+                                                        for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="hidden" name="formname" value="${s.name}">
+                                                     
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
@@ -326,10 +321,11 @@
                                             var="s">
                                             <c:if test="${s.department == '採購'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="name${loop.index}"class="group2"
-                                                        value="${s.adminid}"><label for="name${loop.index}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}"
+                                                        class="group2" value="${s.adminid}"><label
+                                                        for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="hidden" name="formname" value="${s.name}">
+                                                     
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
@@ -339,10 +335,11 @@
                                             var="s">
                                             <c:if test="${s.department == '研發'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="name${loop.index}"class="group3"
-                                                        value="${s.adminid}"><label for="name${loop.index}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}"
+                                                        class="group3" value="${s.adminid}"><label
+                                                        for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="hidden" name="formname" value="${s.name}">
+                                                     
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
@@ -352,10 +349,11 @@
                                             var="s">
                                             <c:if test="${s.department == '業務'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="name${loop.index}"class="group4"
-                                                        value="${s.adminid}"><label for="name${loop.index}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}"
+                                                        class="group4" value="${s.adminid}"><label
+                                                        for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="hidden" name="formname" value="${s.name}">
+                                                     
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
@@ -365,10 +363,11 @@
                                             var="s">
                                             <c:if test="${s.department == '行銷'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="name${loop.index}"class="group5"
-                                                        value="${s.adminid}"><label for="name${loop.index}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}"
+                                                        class="group5" value="${s.adminid}"><label
+                                                        for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="hidden" name="formname" value="${s.name}">
+                                                     
                                                 </div>
                                             </c:if>
 
@@ -379,18 +378,19 @@
                                             var="s">
                                             <c:if test="${s.department == '財務'}">
                                                 <div class="col-lg-4">
-                                                    <input type="checkbox" name="adviceto" id="name${loop.index}"class="group6"
-                                                        value="${s.adminid}"><label for="name${loop.index}">${s.name}
+                                                    <input type="checkbox" name="adviceto" id="${s.name}"
+                                                        class="group6" value="${s.adminid}"><label
+                                                        for="${s.name}">${s.name}
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="hidden" name="formname" value="${s.name}">
+                                                     
                                                 </div>
                                             </c:if>
                                         </c:forEach>
                                         <button type="submit">標記</button>
                                     </div>
                                 </form>
-                                <script>                                   
-                                    
+                                <script>
+
                                     var $all = $("input[name='adviceto']");
                                     var $group1 = $(".group1");
                                     var $group2 = $(".group2");
@@ -470,6 +470,25 @@
                 </div>
             </div>
         </body>
+        <!-- @ -->
+        <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()}" items="${bean.advice}" var="ad">
+            <script>
+                var a = "${ad.formname}"
+                console.log(a);
+                $("#${ad.formname}").prop("checked",true);
+
+
+            </script>
+        </c:forEach>
+
+
+
+
+
+
+
+
+
         <!-- 驗證UI -->
         <script src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
         <!-- 分類 -->

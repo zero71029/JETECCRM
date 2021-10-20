@@ -8,4 +8,8 @@ public interface BillboardAdviceRepository extends JpaRepository<BillboardAdvice
 
 	boolean existsByAdvicetoAndBillboardid(Integer adminid, Integer billboardid);
 
+	void deleteAllByBillboardid(Integer billboardid);
+
+	BillboardAdviceBean getByAdvicetoAndBillboardid(Integer adminid, Integer billboardid);
+
 }

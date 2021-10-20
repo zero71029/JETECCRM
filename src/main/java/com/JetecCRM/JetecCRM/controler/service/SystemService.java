@@ -72,7 +72,7 @@ public class SystemService {
 //儲存員工
 	public String SaveAdmin(AdminBean abean) {
 		System.out.println(abean);
-		
+
 		if (ar.existsByEmail(abean.getEmail()) & abean.getAdminid() == null)
 			return "失敗,Email 已被使用";
 		ar.save(abean);
@@ -165,7 +165,7 @@ public class SystemService {
 			for (BillboardBean bean : list)
 				resulet.add(bean);
 			return resulet;
-		}else {// 不是的話 根據billboardgroupid尋找
+		} else {// 不是的話 根據billboardgroupid尋找
 			List<BillboardBean> list = br.getByStateAndBillboardgroupidAndTop(state, billboardgroupid, "置頂", sort);
 			for (BillboardBean bean : list)
 				resulet.add(bean);
@@ -215,7 +215,7 @@ public class SystemService {
 			// 如果maill沒資料
 			if (!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid())) {
 				adminMailBean.setAdminmail(zTools.getUUID());
-				//如果員工部門 和 發布的部門 一樣就儲存
+				// 如果員工部門 和 發布的部門 一樣就儲存
 				if (a.getDepartment().equals(bean.getBilltowngroup())) {
 					adminMailBean.setAdminid(a.getAdminid());
 					amr.save(adminMailBean);
@@ -269,6 +269,14 @@ public class SystemService {
 			brb.setReadid(zTools.getUUID());
 			brb.setName(adminBean.getName());
 			brr.save(brb);
+			//@ 如果存在 就取出  插入reply=1
+			if (bar.existsByAdvicetoAndBillboardid( adminid,billboardid)) {
+				BillboardAdviceBean bab = bar.getByAdvicetoAndBillboardid(adminid,billboardid);
+				bab.setReply("0");
+				bar.save(bab);
+			}
+			
+			
 			return "成功已讀";
 		} else {
 			return "找不到資料";
@@ -394,21 +402,26 @@ public class SystemService {
 			billboardReplyRepository.delete(bean);
 		return bean.getBillboardid();
 	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //@他人
-	public void saveAdvice(Integer[] adviceto, Integer adminid, Integer billboardid,String[] formname) {
+	public void saveAdvice(Integer[] adviceto, Integer adminid, Integer billboardid) {
 		BillboardAdviceBean bab = new BillboardAdviceBean();
 		bab.setBillboardid(billboardid);
 		bab.setAdvicefrom(adminid);
-		int index = 0;
-		for(Integer a : adviceto) {
-			if(!bar.existsByAdvicetoAndBillboardid(a,billboardid)) {
-				bab.setAdviceto(a);
-				bab.setAdviceid(zTools.getUUID());
-				bab.setFormname(formname[index++]);
-				bar.save(bab);
-			}			
+		bab.setReply("1");
+		bar.deleteAllByBillboardid(billboardid);
+		for (Integer a : adviceto) {
+			AdminBean adminBean = ar.getById(a);
+			bab.setAdviceto(a);
+			bab.setAdviceid(zTools.getUUID());
+			bab.setFormname(adminBean.getName());
+			bar.save(bab);
 		}
+	}
+
+	public void saveAdvice(Integer adminid, Integer billboardid) {
+		bar.deleteAllByBillboardid(billboardid);
 		
 	}
 

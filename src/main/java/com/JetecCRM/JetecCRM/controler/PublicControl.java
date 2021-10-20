@@ -104,8 +104,11 @@ public class PublicControl {
 	public String read(@PathVariable("billboardid") Integer billboardid, @PathVariable("adminid") Integer adminid,
 			HttpSession session) {
 		System.out.println("*****點擊已讀*****");
+		String result = ss.saveRead(billboardid, adminid);
+		
+		
 		session.setAttribute("user", ar.getById(adminid));
-		return ss.saveRead(billboardid, adminid);
+		return result;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -321,13 +324,11 @@ public class PublicControl {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //@他人
 	@RequestMapping("/advice/{adminid}/{billboardid}")
-	public String advice(@RequestParam("adviceto") Integer[] adviceto,@RequestParam("formname") String[] formname,@PathVariable("adminid") Integer adminid,@PathVariable("billboardid") Integer billboardid) {
+	public String advice(@RequestParam("adviceto") Integer[] adviceto,@PathVariable("adminid") Integer adminid,@PathVariable("billboardid") Integer billboardid) {
 		System.out.println("*****@他人*****");
-		ss.saveAdvice( adviceto,adminid,billboardid,formname);	
-
-		
+		ss.saveAdvice( adviceto,adminid,billboardid);
 		return "redirect:/system/billboard/"+billboardid;
-
 	}
+
 
 }
