@@ -62,20 +62,20 @@
                         <table class="Table table-striped orderTable">
                             <tr>
                                 <td><input type="checkbox" id="activity"></td>
-                                <td>編號</td>
+
                                 <td>名稱</td>
-                                <td>部門</td>
-                                <td>職稱</td>
+                                <td><a href="${pageContext.request.contextPath}/system/adminList/department">部門</a>
+                                </td>
+                                <td><a href="${pageContext.request.contextPath}/system/adminList/position">職稱</a></td>
                                 <td>電話</td>
+                                <td><a href="${pageContext.request.contextPath}/system/adminList/dutyDay">到職日</a></td>
                                 <td>在職狀態</td>
                             </tr>
                             <c:if test="${not empty list}">
                                 <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}" var="s">
                                     <tr class="item">
                                         <td><input type="checkbox" value="${s.adminid}" name="mak"></td>
-                                        <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
-                                            ${s.adminid}</td>
+
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
                                             ${s.name}</td>
@@ -85,14 +85,15 @@
                                             ${s.department}</td>
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
-                                       
-                                             ${s.position}
-
+                                            ${s.position}
                                         </td>
 
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
                                             ${s.phone}</td>
+                                        <td
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
+                                            ${s.dutyDay}</td>
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
                                             ${s.state}</td>
@@ -119,7 +120,6 @@
             });
             //  刪除按鈕
             function sta() {
-
                 var $zx = $("input[name=mak]:checked");
                 if ($zx.length == 0) {
                     alert("須勾選要刪除項目");
@@ -151,8 +151,8 @@
                         });
                     }
                 }
-
             }
+
 
         </script>
 

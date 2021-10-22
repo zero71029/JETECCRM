@@ -26,7 +26,7 @@ public interface BillboardRepository extends JpaRepository<BillboardBean, Intege
 	List<BillboardBean> findByUserLikeIgnoreCaseAndState(String User, String State, Sort sort);
 
 	
-	@Query(value ="SELECT * FROM `billboard` WHERE  date_sub(curdate(), interval 7 day) <= createtime  ORDER BY createtime DESC", nativeQuery=true)
+	@Query(value ="SELECT * FROM `billboard` WHERE state = '發佈'  AND  date_sub(curdate(), interval 7 day) <= createtime  ORDER BY createtime DESC", nativeQuery=true)
 	List<BillboardBean> getBillboardByTime();
 
 	

@@ -121,9 +121,10 @@
                                             <option class="selItemOff" value="業務">業務</option>
                                             <option class="selItemOff" value="行銷">行銷</option>
                                             <option class="selItemOff" value="財務">財務</option>
+                                            <option class="selItemOff" value="IT">IT</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-1 cell cellbackgroud">到值日</div>
+                                    <div class="col-md-1 cell cellbackgroud">到職日</div>
                                     <div class="col-md-2 cell position-relative">
                                         <input type="text" class="form-control cellFrom contacttime" name="dutyDay"
                                             maxlength="20" readonly required>

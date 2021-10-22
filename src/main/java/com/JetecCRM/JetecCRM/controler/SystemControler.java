@@ -28,6 +28,8 @@ import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 
+import net.bytebuddy.asm.Advice.OffsetMapping.Sort;
+
 @Controller
 @RequestMapping("/system")
 public class SystemControler {
@@ -46,10 +48,10 @@ public class SystemControler {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取員工列表
-	@RequestMapping("/adminList")
-	public String adminList(Model model) {
+	@RequestMapping("/adminList/{so}")
+	public String adminList(Model model,@PathVariable("so") String so) {
 		System.out.println("*****讀取員工列表*****");
-		model.addAttribute("list", ss.getAdminList());
+		model.addAttribute("list", ss.getAdminList(so));
 		return "/system/adminList";
 	}
 
@@ -69,7 +71,6 @@ public class SystemControler {
 	public String delAdmin(@RequestParam("id") List<Integer> id, HttpServletRequest sce) {
 		System.out.println("*****刪除員工*****");
 		ss.delAdmin(id, sce);
-
 		return "刪除成功";
 	}
 
@@ -98,8 +99,8 @@ public class SystemControler {
 	@RequestMapping("/SaveBillboard")
 	public String SaveBillboard(BillboardBean bean, HttpSession session) {
 		System.out.println("*****儲存公佈欄*****");
-		ss.SaveBillboard(bean, session);
-		return "redirect:/system/billboardList";
+		BillboardBean save =ss.SaveBillboard(bean, session);
+		return "redirect:/system/billboard/"+save.getBillboardid();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,7 +239,14 @@ public class SystemControler {
 	public String advice(@RequestParam("adviceto") Integer[] adviceto, @PathVariable("adminid") Integer adminid,
 			@PathVariable("billboardid") Integer billboardid) {
 		System.out.println("*****@他人*****");
-		ss.saveAdvice(adviceto, adminid, billboardid);
+		System.out.println(adviceto.length);
+		System.out.println(adviceto[0]);
+		
+		if( adviceto.length == 1 &  adviceto[0] == 0) {
+			ss.saveAdvice( adminid,  billboardid);
+		}else {
+			ss.saveAdvice(adviceto, adminid, billboardid);
+		}
 		return "redirect:/system/billboard/" + billboardid;
 	}
 }

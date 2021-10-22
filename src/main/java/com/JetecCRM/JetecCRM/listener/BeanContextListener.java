@@ -23,7 +23,8 @@ public class BeanContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		System.out.println("bean context 初始化");
-		ServletContext app = sce.getServletContext();		
+		ServletContext app = sce.getServletContext();
+		
 		app.setAttribute("admin", ar.findAll());
 		app.setAttribute("client", cr.findAll());
 		app.setAttribute("billboardgroup", bgr.findAll());

@@ -83,9 +83,15 @@ public class AdminBean {
 		this.name = name;
 	}
 	public String getPhone() {
-		return phone;
+		StringBuffer sb = new StringBuffer(phone);
+		sb.insert(4, "-");
+		sb.insert(8, "-");
+		return sb.toString();
 	}
-	public void setPhone(String phone) {
+	public void setPhone(String phone) {	
+		phone = phone.replace("-", "");
+		phone = phone.replace("(", "");
+		phone = phone.replace(")", "");	
 		this.phone = phone;
 	}
 	public String getEmail() {

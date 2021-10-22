@@ -61,8 +61,9 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////	
 	// 讀取員工列表
-	public Object getAdminList() {
-		return ar.findAll();
+	public Object getAdminList(String so) {
+		Sort sort = Sort.by(Direction.ASC,so);
+		return ar.findAll(sort);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +80,7 @@ public class SystemService {
 		if (ar.existsByEmail(abean.getEmail()) & abean.getAdminid() == null)
 			return "失敗,Email 已被使用";
 		ar.save(abean);
-		return "儲存成功,<a href=\"/time.jsp\">請重新登入</a>";
+		return "儲存成功,<a href='/CRM/time.jsp'>請重新登入</a>";
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,7 +241,14 @@ public class SystemService {
 			if (!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid())) {
 				adminMailBean.setAdminmail(zTools.getUUID());
 				// 如果員工部門 和 發布的部門 一樣就儲存
+				System.out.println("aaaa"+a.getDepartment());
+				System.out.println("發布的部門"+ bean.getBilltowngroup());
 				if (a.getDepartment().equals(bean.getBilltowngroup())) {
+					System.out.println("Name"+a.getName());
+					adminMailBean.setAdminid(a.getAdminid());
+					amr.save(adminMailBean);
+				}
+				if ("一般公告".equals(bean.getBilltowngroup())) {
 					adminMailBean.setAdminid(a.getAdminid());
 					amr.save(adminMailBean);
 				}
@@ -276,6 +284,10 @@ public class SystemService {
 
 			if (amr.existsByBillboardid(i))
 				amr.deleteAllByBillboardid(i);
+				btr.deleteAllByBillboardid(i);
+			
+			
+			
 			br.deleteById(i);
 		}
 
@@ -300,7 +312,7 @@ public class SystemService {
 				bar.save(bab);
 			}
 
-			return "成功已讀";
+			return "成功已讀  “您已被標註“ 訊息取消";
 		} else {
 			return "找不到資料";
 		}
@@ -435,7 +447,7 @@ public class SystemService {
 		bab.setReply("1");
 		bar.deleteAllByBillboardid(billboardid);
 			for (Integer a : adviceto) {
-				if (a != null) {
+				if (a != 0) {
 					AdminBean adminBean = ar.getById(a);
 					bab.setAdviceto(a);
 					bab.setAdviceid(zTools.getUUID());

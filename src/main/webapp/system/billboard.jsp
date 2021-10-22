@@ -57,8 +57,6 @@
                     <button class="btn btn-outline-secondary" type="button" id="button-addon2"
                         onclick="addOption()">提交</button>
                 </div>
-
-
             </div>
             <!-- <%-- 彈窗/////////////////////////////////////--%> -->
             <!-- <%-- 插入側邊欄--%> -->
@@ -77,6 +75,39 @@
                             </div>
                         </div>
                         <br>
+
+                        
+                        <!-- 授權 -->
+                        <c:if test="${empty authorizeBean}">
+                            <c:if test="${empty bean}">
+                                <form action="${pageContext.request.contextPath}/system/authorize" method="POST"
+                                    name="authorize">
+                                    <div class="row">
+                                        <div class="col-lg-1 cell cellbackgroud">授權</div>
+                                        <div class="col-lg-5 cell">
+                                            <select input type="text" class=" form-select cellFrom" name="adminid">
+                                                <option class="selItemOff" value="0">新增</option>
+                                                <c:if test="${not empty admin}">
+                                                    <c:forEach varStatus="loop" begin="0" end="${admin.size()-1}"
+                                                        items="${admin}" var="s">
+                                                        <option class="selItemOff" value="${s.adminid}">${s.name}
+                                                        </option>
+                                                    </c:forEach>
+                                                </c:if>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-4 cell"><button type="submit"
+                                            style="width: 100%;background-color: #08604f;color: white;"
+                                            class="btn ">發送</button></div>
+                                    </div>                                    
+                                    <br><br>
+                                </form>
+                            </c:if>
+                        </c:if>
+
+
+
+                        
                         <c:if test="${empty authorizeBean}">
                             <form action="${pageContext.request.contextPath}/system/SaveBillboard" method="post"
                                 id="myform" class="g-3 needs-validation">
@@ -85,8 +116,6 @@
                             <form action="${pageContext.request.contextPath}/saveAuthorize/${authorizeBean.id}"
                                 method="post" id="myform" class="g-3 needs-validation">
                         </c:if>
-
-
 
 
                         <div class="row">
@@ -164,11 +193,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <input type="hidden" name="top" value="">                                
+                                <input type="hidden" name="top" value="">
                                 <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
                                 <div class="col-lg-9 cell"> <a href="javascript:ReadNum()">${bean.read.size()}</a>
                                 </div>
-                                
+
                             </div>
 
                             <c:if test="${not empty bean}">
@@ -176,7 +205,8 @@
                                     <div onclick="advice()" class="col-lg-1 cell position-relative cellbackgroud adv">
                                     </div>
                                     <style>
-                                        .adv {height: 27px;
+                                        .adv {
+                                            height: 27px;
                                             background-image: url(${pageContext.request.contextPath}/img/aaa.png);
                                             background-repeat: no-repeat;
                                             background-size: contain;
@@ -210,37 +240,8 @@
                         </form>
                         <br><br>
 
-                        <c:if test="${empty authorizeBean}">
-                            <form action="${pageContext.request.contextPath}/system/authorize" method="POST"
-                                name="authorize">
-                                <div class="row">
 
-                                    <div class="col-lg-1 cell cellbackgroud">授權</div>
-                                    <div class="col-lg-9 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="adminid">
-                                            <option class="selItemOff" value="0">新增</option>
-                                            <c:if test="${not empty admin}">
-                                                <c:forEach varStatus="loop" begin="0" end="${admin.size()-1}"
-                                                    items="${admin}" var="s">
-                                                    <option class="selItemOff" value="${s.adminid}">${s.name}</option>
-                                                </c:forEach>
-                                            </c:if>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="row">
 
-                                        <div class="col-lg-10">
-                                            <button type="submit"
-                                                style="width: 100%;background-color: #08604f;color: white;"
-                                                class="btn ">發送</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <br><br>
-                            </form>
-                        </c:if>
                         <!-- 回覆內容 -->
                         <c:if test="${not empty bean.reply}">
                             <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
@@ -385,8 +386,8 @@
                                         </c:forEach>
                                         <button type="submit">標記</button>
                                     </div>
-      
-                                   <input type="hidden" name="adviceto" value="6">
+
+                                    <input type="hidden" name="adviceto" value="0">
                                 </form>
                                 <script>
 
@@ -614,7 +615,7 @@
                 // 密碼驗證
                 jQuery.validator.setDefaults({
                     submitHandler: function () {
-                        if (confirm("題交確認")) form.submit();
+                        if (confirm("提交確認")) form.submit();
                     }
                 });
                 $.extend($.validator.messages, {

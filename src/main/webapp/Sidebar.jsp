@@ -14,8 +14,8 @@
                 <span class='col-lg-3' style="font-size: 2.5rem;">${user.name}
                     <c:if test='${empty user}'>
                         <a href="${pageContext.request.contextPath}/newAdmin.jsp">註冊</a>
-                    </c:if>  /
-                    <a class="Signout"  href="${pageContext.request.contextPath}/Signout">登出</a>
+                    </c:if> /
+                    <a class="Signout" href="${pageContext.request.contextPath}/Signout">登出</a>
                 </span><br>
             </div>
         </header>
@@ -47,12 +47,16 @@
                 <button class="list-group-item " onclick="javascript:location.href=''">
                     數據管理
                 </button>
-                <c:if test='${user.position == "主管"}'>
+                <c:if test='${user.position == "主管" || user.position == "系統"}'>
                     <button class="list-group-item " onclick="system()">
                         系統管理
                     </button>
-                    <button class="system"
-                        onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminList'">員工管理</button>
+                    <c:if test='${user.position == "系統"}'>
+                        <!-- <button class="system"
+                        onclick="javascript:location.href='#'">下拉選單管理</button> -->
+                        <button class="system"
+                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminList/adminid'">員工管理</button>
+                    </c:if>
                     <button class="system"
                         onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboardList'">討論區管理</button>
                 </c:if>

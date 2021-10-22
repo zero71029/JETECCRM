@@ -34,3 +34,4 @@ build/
 src/main/java/com/JetecCRM/JetecCRM/Tool/*
 src/main/resources/static/file/*
 src/main/java/com/JetecCRM/JetecCRM/Tool/ZeroTools.java
+src/main/resources/application.properties

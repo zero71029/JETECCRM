@@ -64,6 +64,12 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-2">
+
+
+
+
+
+                                
                                 <a href="javascript:history.back()"
                                     style="text-decoration: none;text-align: center; width: 100px;background-color: #AAA;display: block;">＜</a>
                             </div>
@@ -88,7 +94,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">電話*</div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud">手機*</div>
                                     <div class="col-md-2 cell">
                                         <input type="text" class=" form-control cellFrom" name="phone"
                                             value="${bean.phone}" maxlength="20" required>
@@ -126,7 +132,9 @@
                                     <div class="col-md-2 cell">
                                             <select input type="text" class=" form-select cellFrom" name="position">
                                                 <option ${bean.position=="職員" ?"selected":null} class="selItemOff">職員</option>
-                                                <option ${bean.position=="主管" ?"selected":null} class="selItemOff">主管</option> 
+                                                <option ${bean.position=="主管" ?"selected":null} class="selItemOff">主管</option>
+                                                <option ${bean.position=="系統" ?"selected":null} class="selItemOff" value="系統">系統</option>
+                                                <!-- <option ${bean.position=="總經理" ?"selected":null} class="selItemOff">總經理</option> -->
                                             </select>
                                     </div>
                                 </div>
@@ -142,6 +150,8 @@
                                             <option  ${bean.department=="業務" ?"selected":null} class="selItemOff" value="業務">業務</option>
                                             <option  ${bean.department=="行銷" ?"selected":null} class="selItemOff" value="行銷">行銷</option>
                                             <option  ${bean.department=="財務" ?"selected":null} class="selItemOff" value="財務">財務</option>
+                                            <option  ${bean.department=="IT" ?"selected":null} class="selItemOff" value="IT">IT</option>
+                                            <option  ${bean.department=="總經理" ?"selected":null} class="selItemOff" value="總經理">總經理</option>
                                         </select>
                                     </div>
                                     <div class="col-md-1 cell cellbackgroud">直屬主管</div>

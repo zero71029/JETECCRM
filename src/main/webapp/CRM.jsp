@@ -173,28 +173,41 @@
                                         <div style="position: relative; cursor: pointer;" onclick="sh()">
                                             <img src="${pageContext.request.contextPath}/img/bell.png" alt="未讀">
                                         </div>
-                                        <div onclick="sh()" style=" color: red;  font-weight:bold; cursor: pointer;">
-                                            <span class="aaa"></span>/<span>未讀:${user.mail.size()}</span>
+                                        <div style=" color: red;  font-weight:bold; cursor: pointer;">
+                                            <!-- @ -->
+                                            <script>var b = 0;</script>
+                                            <c:if test="${not empty user.advice}">
+                                                <c:forEach varStatus="loop" begin="0" end="${user.advice.size()-1}"
+                                                    items="${user.advice}" var="ad">
+                                                    <script>
+                                                        var a = ${ ad.reply };
+                                                        b += a;
+                                                    </script>
+                                                </c:forEach>
+                                                <span onclick="sh()" class="aaa"></span>
+                                            </c:if>
+
+
+                                            <!-- 未讀 -->
+                                            <c:if test="${not empty user.mail}">
+                                                <span onclick="showUnread()">未讀:${user.mail.size()}</span>
+                                            </c:if>
                                         </div>
-                                        <script>var b = 0;</script>
+
+                                        
                                         <c:if test="${not empty user.advice}">
-                                            <c:forEach varStatus="loop" begin="0" end="${user.advice.size()-1}"
-                                                items="${user.advice}" var="ad">
-                                                <script>
-                                                    var a = ${ ad.reply };
-                                                    b += a;
-                                                </script>
-                                            </c:forEach>
-                                            <script>$(".aaa").append("@:" + b);</script>
-                                        </c:if></c:if>
-                                        <!-- search -->
-                                        <form class="d-flex" method="post"
-                                            action="${pageContext.request.contextPath}/selectBillboard">
-                                            <input class="form-control me-2" type="search" placeholder="主題 or 發佈者"
-                                                aria-label="Search" name="search">
-                                            <button class="btn btn-outline-success" type="submit">Search</button>
-                                        </form>
-                                    
+
+                                            <script>if(b>0)   $(".aaa").append("@:" + b+"/");</script>
+                                        </c:if>
+                                    </c:if>
+                                    <!-- search -->
+                                    <form class="d-flex" method="post"
+                                        action="${pageContext.request.contextPath}/selectBillboard">
+                                        <input class="form-control me-2" type="search" placeholder="主題 or 發佈者"
+                                            aria-label="Search" name="search">
+                                        <button class="btn btn-outline-success" type="submit">Search</button>
+                                    </form>
+
                                 </div>
                             </div>
                         </nav>
@@ -242,21 +255,22 @@
                                                 </c:if>
                                                 <!-- 分類 -->
                                                 [${s.billtowngroup}] &nbsp;
+                                                <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
+                                                <c:if test="${not empty user.mail}">
+                                                    <c:forEach varStatus="loop" begin="0" end="${user.mail.size()-1}"
+                                                        items="${user.mail}" var="mail"><span style="color: #777;">
+                                                            ${mail.billboardid == s.billboardid? "未讀":""}</span>
+                                                    </c:forEach>
+                                                </c:if>
                                                 <!-- 標提 -->
                                                 ${s.theme} <span style="color: #777;">
-                                                    <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
-                                                    <c:if test="${not empty user.mail}">
-                                                        <c:forEach varStatus="loop" begin="0"
-                                                            end="${user.mail.size()-1}" items="${user.mail}" var="mail">
-                                                            ${mail.billboardid == s.billboardid? "未讀":""}
-                                                        </c:forEach>
-                                                    </c:if>
+
                                                     <!-- 如果 .......就是被@ -->
                                                     <c:if test="${not empty user.advice}">
                                                         <c:forEach varStatus="loop" begin="0"
                                                             end="${user.advice.size()-1}" items="${user.advice}"
                                                             var="advice">
-                                                            ${advice.billboardid == s.billboardid? "@":""}
+                                                            ${advice.billboardid == s.billboardid? "您已被標註":""}
                                                         </c:forEach>
                                                     </c:if>
                                                 </span>
@@ -280,29 +294,43 @@
                     </div>
                     <div class="col-lg-3">
 
-                        <!-- 基本的对话框 -->
+                        <!-- 彈窗 -->
                         <c:if test="${not empty unread}">
                             <c:forEach varStatus="loop" begin="0" end="${unread.size()}" items="${unread}" var="unread">
-                                <div class="dialog" title="${unread.theme}被標記">
+                                <div class="unread" title="${unread.theme}未讀">
                                     <p>${unread.content}</p>
                                 </div>
                             </c:forEach>
-
+                        </c:if>
+                        <c:if test="${not empty advice}">
+                            <c:forEach varStatus="loop" begin="0" end="${advice.size()}" items="${advice}" var="advice">
+                                <div class="dialog" title="${advice.theme}被標記">
+                                    <p>${advice.content}</p>
+                                </div>
+                            </c:forEach>
                         </c:if>
                     </div>
                 </div>
             </div>
             <script>
-
+                // 彈窗
                 $(".dialog").dialog({
                     autoOpen: false,
                     position: {
                         at: "right top"
                     }
-
                 });
                 function sh() {
                     $('.dialog').dialog("open");
+                }
+                $(".unread").dialog({
+                    autoOpen: false,
+                    position: {
+                        at: "right top"
+                    }
+                });
+                function showUnread() {
+                    $('.unread').dialog("open");
                 }
 
                 // function read(billboardid, username) {

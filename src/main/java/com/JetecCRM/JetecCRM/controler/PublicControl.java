@@ -55,6 +55,7 @@ public class PublicControl {
 	@RequestMapping(path = { "/", "/index" })
 	public String index(Model model, HttpSession session) {
 		System.out.println("*****主頁面*****");
+		List<BillboardBean> advice = new ArrayList<BillboardBean>();
 		List<BillboardBean> unread = new ArrayList<BillboardBean>();
 		// 抓取登入者
 		AdminBean user = (AdminBean) session.getAttribute("user");
@@ -65,11 +66,17 @@ public class PublicControl {
 			List<BillboardAdviceBean> a = adminBean.getAdvice();
 			for (BillboardAdviceBean bean : a) {
 				if(bean.getReply().equals("1"))
+					advice.add(br.getById(bean.getBillboardid()));
+			}
+			// 抓被未讀的資料				
+			List<AdminMailBean> mail = adminBean.getMail();
+			for (AdminMailBean bean : mail) {				
 				unread.add(br.getById(bean.getBillboardid()));
 			}
 			//
 			model.addAttribute("list", ss.getBillboardList("發佈",adminBean));
 			session.setAttribute("user", adminBean);
+			model.addAttribute("advice", advice);
 			model.addAttribute("unread", unread);
 		}else {
 			AdminBean xxx =null;
@@ -193,11 +200,29 @@ public class PublicControl {
 //儲存員工
 	@RequestMapping("/SaveAdmin")
 	@ResponseBody
-	public String SaveAdmin(AdminBean abean, HttpServletRequest req) {
+	public String SaveAdmin(AdminBean abean, HttpServletRequest req,HttpSession session) {
 		System.out.println("*****儲存員工*****");
+		
+
+//		phone.replaceAll("[0-9]{4}-[0-9]{3}-[0-9]{3}", replacement);
+//        if(str.matches("[0-9]{4}-[0-9]{6}")) 
+//            System.out.println("格式正確");
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		String save = ss.SaveAdmin(abean);
 		ServletContext sce = req.getServletContext();
 		sce.setAttribute("admin", ar.findAll());
+		AdminBean user = (AdminBean) session.getAttribute("user");
+		if( user.getPosition().equals("系統")) return "儲存成功,<a href='/system/adminList'>返回</a>";
 		return save;
 	}
 
