@@ -62,7 +62,7 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////	
 	// 讀取員工列表
 	public Object getAdminList(String so) {
-		Sort sort = Sort.by(Direction.ASC,so);
+		Sort sort = Sort.by(Direction.ASC, so);
 		return ar.findAll(sort);
 	}
 
@@ -95,23 +95,24 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
-	public List<BillboardBean> getBillboardList(String state,AdminBean adminBean) {
-		
+	public List<BillboardBean> getBillboardList(String state, AdminBean adminBean) {
+
 		Sort sort = Sort.by(Direction.DESC, "createtime");
 		List<BillboardBean> resulet = br.getByStateAndTop(state, "置頂", sort);
-		boolean boo =true;
+		boolean boo = true;
 //		List<BillboardBean> list = br.getByStateAndTop(state, "置頂", sort);
 //		for (BillboardBean bean : list)
 //			resulet.add(bean);
 		if (adminBean != null) {
-			for(BillboardTopBean btb : adminBean.getTop()) {			
+			for (BillboardTopBean btb : adminBean.getTop()) {
 				for (BillboardBean bean : resulet) {
 					if (bean.getBillboardid() == btb.getBillboardid()) {
 						boo = false;
 					}
 				}
-				if (boo)resulet.add(br.getById(btb.getBillboardid()));
-				boo =true;
+				if (boo)
+					resulet.add(br.getById(btb.getBillboardid()));
+				boo = true;
 			}
 		}
 
@@ -122,10 +123,11 @@ public class SystemService {
 					boo = false;
 				}
 			}
-			if (boo)resulet.add(b);
-			boo =true;			
+			if (boo)
+				resulet.add(b);
+			boo = true;
 		}
-		
+
 		return resulet;
 	}
 	// 讀取公佈欄列表 加分類
@@ -241,10 +243,10 @@ public class SystemService {
 			if (!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid())) {
 				adminMailBean.setAdminmail(zTools.getUUID());
 				// 如果員工部門 和 發布的部門 一樣就儲存
-				System.out.println("aaaa"+a.getDepartment());
-				System.out.println("發布的部門"+ bean.getBilltowngroup());
+				System.out.println("aaaa" + a.getDepartment());
+				System.out.println("發布的部門" + bean.getBilltowngroup());
 				if (a.getDepartment().equals(bean.getBilltowngroup())) {
-					System.out.println("Name"+a.getName());
+					System.out.println("Name" + a.getName());
 					adminMailBean.setAdminid(a.getAdminid());
 					amr.save(adminMailBean);
 				}
@@ -284,10 +286,8 @@ public class SystemService {
 
 			if (amr.existsByBillboardid(i))
 				amr.deleteAllByBillboardid(i);
-				btr.deleteAllByBillboardid(i);
-			
-			
-			
+			btr.deleteAllByBillboardid(i);
+
 			br.deleteById(i);
 		}
 
@@ -442,19 +442,44 @@ public class SystemService {
 //@他人
 	public void saveAdvice(Integer[] adviceto, Integer adminid, Integer billboardid) {
 		BillboardAdviceBean bab = new BillboardAdviceBean();
+		AdminMailBean adminMailBean = new AdminMailBean();
+		// 準備mail資料
+		BillboardBean billboardBean = br.getById(billboardid);
+		AdminBean bos = ar.getById(adminid);
+		String mailTo = bos.getEmail();
+		String Subject = billboardBean.getTheme() + "標記你了";
+		String text = billboardBean.getContent();
+		adminMailBean.setBillboardid(billboardid);
+		//
 		bab.setBillboardid(billboardid);
 		bab.setAdvicefrom(adminid);
 		bab.setReply("1");
+		// 刪除舊資料
 		bar.deleteAllByBillboardid(billboardid);
-			for (Integer a : adviceto) {
-				if (a != 0) {
-					AdminBean adminBean = ar.getById(a);
-					bab.setAdviceto(a);
-					bab.setAdviceid(zTools.getUUID());
-					bab.setFormname(adminBean.getName());
-					bar.save(bab);
+		StringBuilder maillist = new StringBuilder();
+		for (Integer a : adviceto) {
+			if (a != 0) {
+				// 插入Advice
+				AdminBean adminBean = ar.getById(a);
+				bab.setAdviceto(a);
+				bab.setAdviceid(zTools.getUUID());
+				bab.setFormname(adminBean.getName());
+				bar.save(bab);
+				// 抓出所有人群發郵件
+				maillist.append(adminBean.getEmail());
+				maillist.append(",");
+				// 抓出所有人插入maill
+				// 如果maill沒資料 就儲存
+				if (!amr.existsByBillboardidAndAdminid(billboardid, a)) {
+					adminMailBean.setAdminmail(zTools.getUUID());
+					adminMailBean.setAdminid(a);
+					amr.save(adminMailBean);
 				}
 			}
+		}
+		maillist.append("jeter.tony56@gmail.com");
+		zTools.mail(mailTo, text, Subject, maillist.toString());
+
 	}
 
 	public void saveAdvice(Integer adminid, Integer billboardid) {

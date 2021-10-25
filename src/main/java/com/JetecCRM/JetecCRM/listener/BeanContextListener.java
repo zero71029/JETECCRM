@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardGroupRepository;
 import com.JetecCRM.JetecCRM.repository.ClientRepository;
+import com.JetecCRM.JetecCRM.repository.LibraryRepository;
 
 @Component
 public class BeanContextListener implements ServletContextListener {
@@ -19,12 +20,13 @@ public class BeanContextListener implements ServletContextListener {
 	ClientRepository cr;
 	@Autowired
 	BillboardGroupRepository bgr;
-
+	@Autowired
+	LibraryRepository lr;
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		System.out.println("bean context 初始化");
 		ServletContext app = sce.getServletContext();
-		
+		app.setAttribute("library", lr.findAll());
 		app.setAttribute("admin", ar.findAll());
 		app.setAttribute("client", cr.findAll());
 		app.setAttribute("billboardgroup", bgr.findAll());

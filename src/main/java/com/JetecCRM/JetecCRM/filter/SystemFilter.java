@@ -22,7 +22,7 @@ public class SystemFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		AdminBean user = (AdminBean) request.getSession().getAttribute("user");
 		if (user != null) {
-			if ("主管".equals(user.getPosition()) || "系統".equals(user.getPosition())) {
+			if ("主管".equals(user.getPosition()) || "系統".equals(user.getPosition()) || "總經理".equals(user.getPosition())) {
 				chain.doFilter(servletRequest, servletResponse);
 			} else {
 				response.sendRedirect(request.getContextPath() + "/CRM.jsp?mess=1");

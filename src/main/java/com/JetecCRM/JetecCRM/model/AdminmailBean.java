@@ -9,7 +9,7 @@ import javax.persistence.Table;
 public class AdminMailBean {
     @Id   
     private String adminmail;
-    private Integer adminid	;
+    private Integer adminid;
     private Integer billboardid;
 	public String getAdminmail() {
 		return adminmail;

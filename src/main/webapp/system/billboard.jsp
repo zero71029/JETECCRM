@@ -76,7 +76,7 @@
                         </div>
                         <br>
 
-                        
+
                         <!-- 授權 -->
                         <c:if test="${empty authorizeBean}">
                             <c:if test="${empty bean}">
@@ -97,9 +97,9 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-4 cell"><button type="submit"
-                                            style="width: 100%;background-color: #08604f;color: white;"
-                                            class="btn ">發送</button></div>
-                                    </div>                                    
+                                                style="width: 100%;background-color: #08604f;color: white;"
+                                                class="btn ">發送</button></div>
+                                    </div>
                                     <br><br>
                                 </form>
                             </c:if>
@@ -107,7 +107,7 @@
 
 
 
-                        
+
                         <c:if test="${empty authorizeBean}">
                             <form action="${pageContext.request.contextPath}/system/SaveBillboard" method="post"
                                 id="myform" class="g-3 needs-validation">
@@ -383,7 +383,21 @@
 
                                                 </div>
                                             </c:if>
+                                        </c:forEach><br>
+                                        <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                                id="group7">IT:</div>
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == 'IT'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group7"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
                                         </c:forEach>
+
                                         <button type="submit">標記</button>
                                     </div>
 
@@ -398,6 +412,7 @@
                                     var $group4 = $(".group4");
                                     var $group5 = $(".group5");
                                     var $group6 = $(".group6");
+                                    var $group7 = $(".group7");
                                     // 勾選單項
                                     $("input[name='adviceto']").change(function () {
                                         var $aa = $("input[name='adviceto']:checked");
@@ -426,6 +441,10 @@
                                     $(".group6").change(function () {
                                         var $zx = $(".group6:checked");
                                         $("#group6").prop("checked", $zx.length == $group6.length);
+                                    });
+                                    $(".group7").change(function () {
+                                        var $zx = $(".group7:checked");
+                                        $("#group7").prop("checked", $zx.length == $group7.length);
                                     });
                                     // 勾選全部
                                     $("#all").change(function () {
@@ -461,7 +480,11 @@
                                         var $aa = $("input[name='adviceto']:checked");
                                         $("#all").prop("checked", $aa.length == $all.length);
                                     });
-
+                                    $("#group7").change(function () {
+                                        $group7.prop("checked", this.checked);
+                                        var $aa = $("input[name='adviceto']:checked");
+                                        $("#all").prop("checked", $aa.length == $all.length);
+                                    });
                                 </script>
                             </c:if>
                         </c:if>

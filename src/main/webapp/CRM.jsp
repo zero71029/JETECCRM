@@ -23,7 +23,7 @@
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
             <c:set var="ddd" value="有未讀訊息(${user.mail.size()})"></c:set>
-            <span style="color: red;"></span>
+            <span style="color: red;"></span>     
             <title>${user.mail.size() > 0 ? ddd:"CRM客戶管理系統"}</title>
         </head>
 
@@ -35,6 +35,7 @@
             <div class="container-fluid">
                 <div class="row justify-content-end">
                     <div class="col-lg-11">
+              
                         <!-- 導覽列 -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="text-align: left;">
                             <div class="container-fluid">

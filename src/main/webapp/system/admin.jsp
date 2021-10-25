@@ -133,7 +133,8 @@
                                             <select input type="text" class=" form-select cellFrom" name="position">
                                                 <option ${bean.position=="職員" ?"selected":null} class="selItemOff">職員</option>
                                                 <option ${bean.position=="主管" ?"selected":null} class="selItemOff">主管</option>
-                                                <option ${bean.position=="系統" ?"selected":null} class="selItemOff" value="系統">系統</option>
+                                                <option ${bean.position=="系統" ?"selected":null} class="selItemOff">系統</option>
+                                                <option ${bean.position=="總經理" ?"selected":null} class="selItemOff">總經理</option>
                                                 <!-- <option ${bean.position=="總經理" ?"selected":null} class="selItemOff">總經理</option> -->
                                             </select>
                                     </div>
