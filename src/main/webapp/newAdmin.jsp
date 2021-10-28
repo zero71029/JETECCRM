@@ -141,7 +141,7 @@
                                     <div class="col-md-1 cell cellbackgroud">密碼*</div>
                                     <div class="col-md-2 cell position-relative">
                                         <input type="password" class=" form-control cellFrom" name="password"
-                                            id="password" value="${bean.password}" maxlength="20">
+                                            id="password" value="${bean.password}" maxlength="20" minlength="6">
                                         <div class="invalid-tooltip">
                                             須輸入密碼
                                         </div>

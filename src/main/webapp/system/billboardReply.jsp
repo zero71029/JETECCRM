@@ -94,7 +94,7 @@
 
                                                 <img src="${pageContext.request.contextPath}/img/未釘選-01.png" alt="未釘選"
                                                     onclick="tops()" style="cursor: pointer;" data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom" title="置頂" id="topImg">
+                                                    data-bs-placement="bottom" title="追蹤" id="topImg">
                                                 <c:if test='${not empty user.top}'>
                                                     <c:forEach varStatus="loop" begin="0" end="${user.top.size()-1}"
                                                         items="${user.top}" var="top">
@@ -102,6 +102,7 @@
                                                             var billboardid = ${ top.billboardid };
                                                             if (billboardid == ${ bean.billboardid }) {
                                                                 $("#topImg").attr("src" ,"${pageContext.request.contextPath}/img/CCC.png");
+                                                                $("#topImg").attr("title" ,"取消追蹤");
                                                             }
 
                                                         </script>
@@ -180,8 +181,8 @@
                             }
                         </style>
                         <div class="row">
-                            <c:if test="${not empty bean.reply}">
-                                <c:forEach varStatus="loop" begin="0" end="${bean.reply.size()-1}" items="${bean.reply}"
+                            <c:if test="${not empty reply}">
+                                <c:forEach varStatus="loop" begin="0" end="${reply.size()-1}" items="${reply}"
                                     var="s">
                                     <div class="row" style="line-height: 2rem; min-height: 100px; ">
                                         <div class="col-md-1"></div>

@@ -56,7 +56,43 @@
                                 </div> -->
                             </form>
                         </div>
+                                                <!-- 分頁 -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=1">1</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=2">2</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=3">3</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag+1}">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- 分頁 ////////////////////-->
                         <!-- <%-- 中間主體--%> -->
+                                                <!-- 分頁 -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=1">1</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=2">2</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=3">3</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag+1}">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- 分頁 ////////////////////-->
 
 
                         <table class="Table table-striped orderTable">
@@ -64,11 +100,11 @@
                                 <td><input type="checkbox" id="activity"></td>
 
                                 <td>名稱</td>
-                                <td><a href="${pageContext.request.contextPath}/system/adminList/department">部門</a>
+                                <td><a href="javascript:so('department')">部門</a>
                                 </td>
-                                <td><a href="${pageContext.request.contextPath}/system/adminList/position">職稱</a></td>
+                                <td><a href="javascript:so('position')">職稱</a>
                                 <td>電話</td>
-                                <td><a href="${pageContext.request.contextPath}/system/adminList/dutyDay">到職日</a></td>
+                                <td><a href="${pageContext.request.contextPath}/system/adminList/dutyDay">到職日</a>
                                 <td>在職狀態</td>
                             </tr>
                             <c:if test="${not empty list}">
@@ -76,22 +112,20 @@
                                     <tr class="item">
                                         <td><input type="checkbox" value="${s.adminid}" name="mak"></td>
 
-                                        <td
+                                        <td class="admin${loop.index}"
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
                                             ${s.name}</td>
-                                        <td
+                                        <td class="department${loop.index}"
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
-
                                             ${s.department}</td>
-                                        <td
+                                        <td class="position${loop.index}"
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminDetail/${s.adminid}'">
-                                            ${s.position}
-                                        </td>
+                                            ${s.position}</td>
 
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
                                             ${s.phone}</td>
-                                        <td
+                                        <td class="dutyDay${loop.index}"
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/CRM/adminDetail/${s.adminid}'">
                                             ${s.dutyDay}</td>
                                         <td
@@ -151,6 +185,14 @@
                         });
                     }
                 }
+            }
+
+            // <td><a href="${pageContext.request.contextPath}/system/adminList/department">部門</a>
+
+            function so(men) {
+                console.log("sss");
+                console.log($("." + men + "0").text().trim());
+                location.href="${pageContext.request.contextPath}/system/adminList/"+men+"/"+$("." + men + "0").text().trim();
             }
 
 

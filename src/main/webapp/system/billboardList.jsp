@@ -57,6 +57,24 @@
                                 </div>
                             </form> -->
                         </div>
+                        <!-- 分頁 -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag<=1?1:param.pag-1}">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/system/billboardList?pag=1">1</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/system/billboardList?pag=2">2</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/system/billboardList?pag=3">3</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag+1}">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- 分頁 ////////////////////-->
                         <!-- <%-- 中間主體--%> -->
 
 
@@ -76,10 +94,13 @@
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
                                             ${s.billboardid}</td>
-                                            <td style="color: red;" onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">${s.top}</td>
+                                        <td style="color: red;"
+                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
+                                            ${s.top}</td>
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
-                                            ${s.theme}</td>
+                                            ${s.theme} <span style="color: #569b92;"> ${empty s.file?"":"有附件📎"}</span>
+                                        </td>
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
 

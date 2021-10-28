@@ -146,7 +146,7 @@
                                 <div class="col-lg-1 cell position-relative cellbackgroud">內容*</div>
                                 <div class="col-lg-9 cell ">
                                     <textarea class="cellFrom" name="content" cols="80" rows="10" required
-                                        maxlength="450">${bean.content} </textarea>
+                                        maxlength="950">${bean.content} </textarea>
                                 </div>
 
                             </div>
@@ -155,7 +155,7 @@
                                 <div class="col-lg-1 cell cellbackgroud">狀態</div>
                                 <div class="col-lg-4 cell">
                                     <select input type="text" class=" form-select cellFrom" name="state">
-                                        <option ${bean.state=="發佈" ?"selected":null} class="selItemOff">發佈</option>
+                                        <option ${bean.state=="公開" ?"selected":null} class="selItemOff">公開</option>
                                         <option ${bean.state=="封存" ?"selected":null} class="selItemOff">封存</option>
                                     </select>
                                 </div>
@@ -233,13 +233,15 @@
 
 
 
-                            
-                            <div class="row">
-                                <div class="col-lg-10">
-                                    <button type="submit" style="width: 100%;background-color: #08604f;color: white;"
-                                        class="btn ">儲存</button>
+                            <c:if test="${bean.user == user.name  || empty bean}">
+                                <div class="row">
+                                    <div class="col-lg-10">
+                                        <button type="submit"
+                                            style="width: 100%;background-color: #08604f;color: white;"
+                                            class="btn ">儲存</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </c:if>
                         </div>
                         </form>
                         <br><br>
@@ -554,6 +556,8 @@
                 if ($(".billtownoption").val() == "new") {
                     $(".cat").show();
                     $(".hazy").show();
+                    $(".optinUL").empty();
+                  
                     for (var option of billboardgroup) {
                         if (Object.keys(option)[0] == $group.val()) $(".optinUL").append('<li>' + option[$group.val()] + ' &nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:delOption(`' + option[$group.val()] + '`)">remove</a></li>');
                     }
@@ -564,10 +568,6 @@
                 $group = $(".billboardGroup");
                 group = $group.val();
                 console.log(group);
-
-
-
-
                 $option.empty();
                 for (var b of billboardgroup) {
                     if (Object.keys(b)[0] == $group.val()) {
@@ -590,7 +590,14 @@
                     // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
                     success: function (json) {
                         alert(json);
-                        location.href = '${pageContext.request.contextPath}/system/billboard/${bean.billboardid}';
+                        if ("${bean.billboardid}" == "") {
+                            location.href = '${pageContext.request.contextPath}/system/billboard.jsp';
+                            console.log("ddd" + "${bean.billboardid}");
+                        } else {
+                            location.href = '${pageContext.request.contextPath}/system/billboard/${bean.billboardid}';
+                        }
+
+
                     },
                     error: function (returndata) {
                         console.log(returndata);
@@ -598,6 +605,7 @@
                 });
             }
             //刪除子項
+
             function delOption(a) {
                 $.ajax({
                     url: '${pageContext.request.contextPath}/system/delOption/' + group + "/" + a,//接受請求的Servlet地址
@@ -609,7 +617,14 @@
                     // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
                     success: function (json) {
                         alert(json);
-                        location.href = '${pageContext.request.contextPath}/system/billboard/${bean.billboardid}';
+                        if ("${bean.billboardid}" == "") {
+                            location.href = '${pageContext.request.contextPath}/system/billboard.jsp';
+                        }
+                        else {
+                            location.href = '${pageContext.request.contextPath}/system/billboard/${bean.billboardid}';
+                        }
+
+
                     },
                     error: function (returndata) {
                         console.log(returndata);
@@ -627,7 +642,11 @@
             $(".hazy").hide();
             // 返回按鈕
             $(".catReturn").click(function () {
-                location.href = 'http://192.168.11.114:8081/system/billboard/${bean.billboardid}';
+                $(".cat").hide();
+                $(".hazy").hide();
+                $("option[value='全部']").prop("selected",true);
+
+
             });
 
             $(function () {

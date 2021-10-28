@@ -23,8 +23,9 @@
             <!-- <%-- 主要的CSS、JS放在這裡--%> -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
             <c:set var="ddd" value="有未讀訊息(${user.mail.size()})"></c:set>
-            <span style="color: red;"></span>     
-            <title>${user.mail.size() > 0 ? ddd:"CRM客戶管理系統"}</title>
+            <c:set var="CRM" value='${empty user?"未登入":"CRM"}'></c:set>
+            <span style="color: red;"></span>
+            <title>${user.mail.size() > 0 ? ddd:CRM}</title>
         </head>
 
 
@@ -35,7 +36,7 @@
             <div class="container-fluid">
                 <div class="row justify-content-end">
                     <div class="col-lg-11">
-              
+
                         <!-- 導覽列 -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="text-align: left;">
                             <div class="container-fluid">
@@ -195,10 +196,10 @@
                                             </c:if>
                                         </div>
 
-                                        
+
                                         <c:if test="${not empty user.advice}">
 
-                                            <script>if(b>0)   $(".aaa").append("@:" + b+"/");</script>
+                                            <script>if (b > 0) $(".aaa").append("@:" + b + "/");</script>
                                         </c:if>
                                     </c:if>
                                     <!-- search -->
@@ -212,11 +213,12 @@
                                 </div>
                             </div>
                         </nav>
-                        <!-- 導覽列 -->
+                        <!-- 導覽列/////////////////////////////////////////// -->
                     </div>
                 </div>
                 <div class="row justify-content-end">
                     <div class="col-lg-8">
+
                         <!-- <%-- 中間主體--%> -->
                         <h1 style="color: red;">${param.mess=="1"?"權限不夠":""}</h1>
                         <h1 style="color: red;">${param.mess=="2"?"須先登入":""}</h1>
@@ -236,6 +238,7 @@
                                         var="s">
                                         <tr style="Cursor: pointer ;vertical-align: middle;"
                                             onclick="location.href='${pageContext.request.contextPath}/billboardReply/${s.billboardid}'">
+                                            <!-- //////////////////////////////////////////////////// -->
                                             <td>
                                                 <!--置頂圖片  -->
                                                 <c:set var="img"
@@ -255,16 +258,20 @@
                                                     </c:forEach>
                                                 </c:if>
                                                 <!-- 分類 -->
-                                                [${s.billtowngroup}] &nbsp;
+                                                <span
+                                                    style="color: #777;font-size: 0.9rem;">[${s.billtowngroup}][${s.bgb.billboardoption}]
+                                                    &nbsp;</span>
+
                                                 <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
                                                 <c:if test="${not empty user.mail}">
                                                     <c:forEach varStatus="loop" begin="0" end="${user.mail.size()-1}"
-                                                        items="${user.mail}" var="mail"><span style="color: #777;">
+                                                        items="${user.mail}" var="mail"><span style="color: red;">
                                                             ${mail.billboardid == s.billboardid? "未讀":""}</span>
                                                     </c:forEach>
                                                 </c:if>
                                                 <!-- 標提 -->
-                                                ${s.theme} <span style="color: #777;">
+                                                ${s.theme}
+                                                <span style="color: #777;">
 
                                                     <!-- 如果 .......就是被@ -->
                                                     <c:if test="${not empty user.advice}">
@@ -275,7 +282,9 @@
                                                         </c:forEach>
                                                     </c:if>
                                                 </span>
+                                                <span style="color: #569b92;"> ${empty s.file?"":"有附件📎"}</span>
                                             </td>
+                                            <!-- //////////////////////////////////////////////////////////////// -->
                                             <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
                                             <td style="text-align: center;">${s.reply[0].name}
                                                 <br>${s.reply[0].createtime}
@@ -293,8 +302,26 @@
 
 
                     </div>
-                    <div class="col-lg-3">
 
+                    <div class="col-lg-3">
+                        <!-- 分頁 -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=1">1</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=2">2</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=3">3</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag+1}">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- 分頁 ＿////////////////////-->
                         <!-- 彈窗 -->
                         <c:if test="${not empty unread}">
                             <c:forEach varStatus="loop" begin="0" end="${unread.size()}" items="${unread}" var="unread">
@@ -314,6 +341,9 @@
                 </div>
             </div>
             <script>
+                window.setTimeout(function () {
+                    location.href = '${pageContext.request.contextPath}/';
+                }, 600000);
                 // 彈窗
                 $(".dialog").dialog({
                     autoOpen: false,

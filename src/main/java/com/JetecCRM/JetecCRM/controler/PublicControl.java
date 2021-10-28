@@ -1,7 +1,6 @@
 package com.JetecCRM.JetecCRM.controler;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,12 +50,23 @@ public class PublicControl {
 	BillboardFileRepository bfr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//主頁面
-	@RequestMapping(path = { "/", "/index" })
-	public String index(Model model, HttpSession session) {
+	//主頁面
+		@RequestMapping(path = { "/", "/index" })	
+		public String index() {
+			return "redirect:/billboard?pag=1";
+			
+		}
+	
+	
+	
+	//主頁面
+	@RequestMapping(path = { "billboard" })
+	public String billboard(Model model, HttpSession session, @RequestParam("pag") Integer pag) {
 		System.out.println("*****主頁面*****");
 		List<BillboardBean> advice = new ArrayList<BillboardBean>();
-		List<BillboardBean> unread = new ArrayList<BillboardBean>();
+		List<BillboardBean> unread = new ArrayList<BillboardBean>();		
+		
+		
 		// 抓取登入者
 		AdminBean user = (AdminBean) session.getAttribute("user");
 		// 如果有登入者 更新資料
@@ -74,13 +84,13 @@ public class PublicControl {
 				unread.add(br.getById(bean.getBillboardid()));
 			}
 			//
-			model.addAttribute("list", ss.getBillboardList("發佈",adminBean));
+			model.addAttribute("list", ss.getBillboardList("發佈",adminBean,pag));
 			session.setAttribute("user", adminBean);
 			model.addAttribute("advice", advice);
 			model.addAttribute("unread", unread);
 		}else {
 			AdminBean xxx =null;
-			model.addAttribute("list", ss.getBillboardList("發佈",xxx));
+			model.addAttribute("list", ss.getBillboardList("發佈",xxx,pag));
 		}
 		return "/CRM";
 	}
@@ -138,6 +148,7 @@ public class PublicControl {
 		System.out.println("*****讀取公佈欄細節****");
 		model.addAttribute("bean", ss.getBillboardById(id));
 		model.addAttribute("news", ss.getBillboardByTime());
+		model.addAttribute("reply", ss.getBillboardReply(id));
 		return "/system/billboardReply";
 	}
 
@@ -204,25 +215,11 @@ public class PublicControl {
 		System.out.println("*****儲存員工*****");
 		
 
-//		phone.replaceAll("[0-9]{4}-[0-9]{3}-[0-9]{3}", replacement);
-//        if(str.matches("[0-9]{4}-[0-9]{6}")) 
-//            System.out.println("格式正確");
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		String save = ss.SaveAdmin(abean);
 		ServletContext sce = req.getServletContext();
 		sce.setAttribute("admin", ar.findAll());
 		AdminBean user = (AdminBean) session.getAttribute("user");
-		if( user.getPosition().equals("系統")) return "儲存成功,<a href='/system/adminList'>返回</a>";
+		if( user.getPosition().equals("系統")) return "儲存成功,<a href='/CRM/system/adminList'>返回</a>";
 		return save;
 	}
 
@@ -246,15 +243,34 @@ public class PublicControl {
 					String lastname = fileMap.get("file" + i).getOriginalFilename()
 							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
 					System.out.println(lastname);
-					fileMap.get("file" + i).transferTo(
-							new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\" + uuid + lastname));
-//fileMap.get("file" + i).transferTo(new File("classpath:/resources/static\\images\\product\\" + Productmodel + ".jpg"));
+					
+					
+					
+					// 獲取Tomcat伺服器所在的路徑
+					String tomcat_path = System.getProperty( "user.dir" );
+					System.out.println("Tomcat伺服器所在的路徑: "+tomcat_path);
+					// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
+					String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("/")+1,tomcat_path.length());
+					System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: "+bin_path);
+					// 判斷最後一個檔案目錄是否為bin目錄					
+					if(("bin").equals(bin_path)){ 
+						// 獲取儲存上傳圖片的檔案路徑
+						String pic_path = tomcat_path.substring(0,System.getProperty( "user.dir" ).lastIndexOf("/")) +"/webapps/CRM"+"/file/";
+						fileMap.get("file" + i).transferTo( new File(pic_path +fileMap.get("file" + i).getOriginalFilename()));
+						System.out.println(pic_path +fileMap.get("file" + i).getOriginalFilename());
+					}else{					
+						String path2 = "C:\\Users\\Rong\\Desktop\\apache-tomcat-9.0.53\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\";
+						fileMap.get("file" + i).transferTo( new File(path2 +fileMap.get("file" + i).getOriginalFilename()));
+						System.out.println(path2 +fileMap.get("file" + i).getOriginalFilename());
+					}
+					
+					
 //3. 儲存檔案名稱到資料庫
 					BillboardFileBean billBoardFileBean = new BillboardFileBean();
 					billBoardFileBean.setBillboardid(0);
 					billBoardFileBean.setAuthorize(authorizeId);
 					billBoardFileBean.setFileid(uuid);
-					billBoardFileBean.setUrl(uuid + lastname);
+					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
 					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
@@ -267,7 +283,7 @@ public class PublicControl {
 //productPictureJpaReposit.save(pBean);
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return "儲存失敗";
 		}

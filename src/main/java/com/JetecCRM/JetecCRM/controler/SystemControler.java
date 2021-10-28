@@ -2,9 +2,11 @@ package com.JetecCRM.JetecCRM.controler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -24,11 +26,10 @@ import com.JetecCRM.JetecCRM.model.AdminBean;
 import com.JetecCRM.JetecCRM.model.AuthorizeBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardFileBean;
+import com.JetecCRM.JetecCRM.model.LibraryBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
-
-import net.bytebuddy.asm.Advice.OffsetMapping.Sort;
 
 @Controller
 @RequestMapping("/system")
@@ -42,16 +43,97 @@ public class SystemControler {
 	BillboardRepository br;
 	@Autowired
 	AuthorizeRepository authorizeRepository;
-
 	@Autowired
 	ZeroTools zTools;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取員工列表
 	@RequestMapping("/adminList/{so}")
-	public String adminList(Model model,@PathVariable("so") String so) {
+	public String adminList(Model model, @PathVariable("so") String so) {
 		System.out.println("*****讀取員工列表*****");
 		model.addAttribute("list", ss.getAdminList(so));
+		return "/system/adminList";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@SuppressWarnings("unchecked")
+	// 員工列表排序
+	@RequestMapping("/adminList/{so}/{name}")
+	public String adminListSort(Model model, @PathVariable("so") String so, @PathVariable("name") String name,
+			HttpServletRequest sce) {
+		System.out.println("*****員工列表排序*****");
+		ServletContext app = sce.getServletContext();
+		List<LibraryBean> list = (List<LibraryBean>) app.getAttribute("library");
+		List<String> department = new ArrayList<String>();
+		List<String> nnn = new ArrayList<String>();
+		if(so.equals("department")) {
+			for (LibraryBean library : list) {
+				if(library.getLibrarygroup().equals("department"))
+					department.add(library.getLibraryoption());
+			}
+			boolean index =false;
+			for(String a :  department) {
+				if(index) {
+					nnn.add(a);
+				}
+				if(a.equals(name) ) {
+					index = true;
+				}
+			}
+			for(String a :  department) {
+				if(a.equals(name) ) {
+					index = false;
+				}
+				if(index) {
+					nnn.add(a);
+				}
+			}
+		}
+		//如果是依照position排序
+		if(so.equals("position")) {
+			//從library  抓取position列表
+			for (LibraryBean library : list) {
+				if(library.getLibrarygroup().equals("position"))
+					department.add(library.getLibraryoption());
+			}
+			//從輸入開始抓取
+			boolean index =false;
+			for(String a :  department) {
+				if(index) {
+					nnn.add(a);
+				}
+				if(a.equals(name) ) {
+					index = true;
+				}
+			}
+			//填充前面資料
+			for(String a :  department) {
+				if(a.equals(name) ) {
+					index = false;
+				}
+				if(index) {
+					nnn.add(a);
+				}
+			}
+		}
+//		System.out.println(department);
+//		System.out.println(nnn);
+		nnn.add(name);
+		List<AdminBean> Billboard =  new ArrayList<AdminBean>();	
+		List<AdminBean> dList = new ArrayList<AdminBean>();
+		for(String d : nnn) {
+			if(so.equals("department")) {
+				 dList = ar.getByDepartment(d);
+			}else {
+				 dList = ar.getByPosition(d);
+			}
+			for(AdminBean r: dList )
+			Billboard.add(r);
+		}
+		
+		
+
+		model.addAttribute("list", Billboard);
 		return "/system/adminList";
 	}
 
@@ -77,10 +159,10 @@ public class SystemControler {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
 	@RequestMapping("/billboardList")
-	public String billboardList(Model model, HttpSession session) {
+	public String billboardList(Model model, HttpSession session, @RequestParam("pag") Integer pag) {
 		System.out.println("*****讀取公佈欄列表*****");
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
-		model.addAttribute("list", ss.getBillboardList("發佈", adminBean));
+		model.addAttribute("list", ss.getBillboardList("發佈", adminBean,pag));
 		return "/system/billboardList";
 	}
 
@@ -90,7 +172,7 @@ public class SystemControler {
 	public String OffShelf(Model model, HttpSession session) {
 		System.out.println("*****讀取公佈欄列表*****");
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
-		model.addAttribute("list", ss.getBillboardList("封存", adminBean));
+		model.addAttribute("list", ss.getBillboardList("封存", adminBean,0));
 		return "/system/billboardList";
 	}
 
@@ -99,8 +181,8 @@ public class SystemControler {
 	@RequestMapping("/SaveBillboard")
 	public String SaveBillboard(BillboardBean bean, HttpSession session) {
 		System.out.println("*****儲存公佈欄*****");
-		BillboardBean save =ss.SaveBillboard(bean, session);
-		return "redirect:/system/billboard/"+save.getBillboardid();
+		BillboardBean save = ss.SaveBillboard(bean, session);
+		return "redirect:/system/billboard/" + save.getBillboardid();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +221,7 @@ public class SystemControler {
 			authorizeBean.setId(uuid);
 			authorizeBean.setUsed(aBean.getName());
 			authorizeRepository.save(authorizeBean);
-			String text = String.format("<a href='http://192.168.11.114:8081/authorize/%s'>點擊鍊接留言</a>", uuid);
+			String text = String.format("<a href='http://192.168.11.114:8080/CRM/authorize/%s'>點擊鍊接留言</a>", uuid);
 			String maillist = "";
 			zTools.mail(mailTo, text, Subject, maillist);
 		} else {
@@ -148,7 +230,7 @@ public class SystemControler {
 			authorizeBean.setUsed("所有人");
 			authorizeRepository.save(authorizeBean);
 		}
-		return String.format("http://192.168.11.114:8081/authorize/%s", uuid);
+		return String.format("http://192.168.11.114:8080/CRM/authorize/%s", uuid);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,14 +279,42 @@ public class SystemControler {
 					String lastname = fileMap.get("file" + i).getOriginalFilename()
 							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
 					System.out.println(lastname);
-					fileMap.get("file" + i).transferTo(
-							new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\" + uuid + lastname));
-//fileMap.get("file" + i).transferTo(new File("classpath:/resources/static\\images\\product\\" + Productmodel + ".jpg"));
+					
+					
+					// 獲取Tomcat伺服器所在的路徑
+					String tomcat_path = System.getProperty( "user.dir" );
+					System.out.println("Tomcat伺服器所在的路徑: "+tomcat_path);
+					// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
+					String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("/")+1,tomcat_path.length());
+					System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: "+bin_path);
+					// 判斷最後一個檔案目錄是否為bin目錄
+					System.out.println("binbinbinbinbinbinbinbinbinbinbinbin");
+					if(("bin").equals(bin_path)){ 
+						// 獲取儲存上傳圖片的檔案路徑
+						System.out.println("*******************"+bin_path);
+						String pic_path = tomcat_path.substring(0,System.getProperty( "user.dir" ).lastIndexOf("/")) +"/webapps/CRM"+"/file/";
+						fileMap.get("file" + i).transferTo( new File(pic_path +fileMap.get("file" + i).getOriginalFilename()));
+						System.out.println(pic_path +fileMap.get("file" + i).getOriginalFilename());
+					}else{					
+						String path2 = "C:\\Users\\Rong\\Desktop\\apache-tomcat-9.0.53\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\";
+						fileMap.get("file" + i).transferTo( new File(path2 +fileMap.get("file" + i).getOriginalFilename()));
+						System.out.println(path2 +fileMap.get("file" + i).getOriginalFilename());
+					}
+					//使用uuid建檔名
+//					fileMap.get("file" + i).transferTo(
+//							new File(pic_path + uuid + lastname));
+//					System.out.println(pic_path + uuid + lastname);
+
+
+					
+					
+
 //3. 儲存檔案名稱到資料庫
 					BillboardFileBean billBoardFileBean = new BillboardFileBean();
 					billBoardFileBean.setBillboardid(billboardid);
 					billBoardFileBean.setFileid(uuid);
-					billBoardFileBean.setUrl(uuid + lastname);
+//					billBoardFileBean.setUrl(uuid + lastname); //使用uuid建檔名
+					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
 					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
@@ -241,10 +351,10 @@ public class SystemControler {
 		System.out.println("*****@他人*****");
 		System.out.println(adviceto.length);
 		System.out.println(adviceto[0]);
-		
-		if( adviceto.length == 1 &  adviceto[0] == 0) {
-			ss.saveAdvice( adminid,  billboardid);
-		}else {
+
+		if (adviceto.length == 1 & adviceto[0] == 0) {
+			ss.saveAdvice(adminid, billboardid);
+		} else {
 			ss.saveAdvice(adviceto, adminid, billboardid);
 		}
 		return "redirect:/system/billboard/" + billboardid;

@@ -1,8 +1,11 @@
 package com.JetecCRM.JetecCRM.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.JetecCRM.JetecCRM.model.AdminBean;
+import com.JetecCRM.JetecCRM.model.BillboardBean;
 
 public interface AdminRepository extends JpaRepository<AdminBean, Integer>{
 
@@ -13,5 +16,9 @@ public interface AdminRepository extends JpaRepository<AdminBean, Integer>{
 	AdminBean findByName(String user);
 
 	boolean existsByEmail(String email);
+
+	List<AdminBean> getByDepartment(String d);
+
+	List<AdminBean> getByPosition(String d);
 
 }

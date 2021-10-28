@@ -58,7 +58,7 @@
                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/adminList/adminid'">員工管理</button>
                     </c:if>
                     <button class="system"
-                        onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboardList'">討論區管理</button>
+                        onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboardList?pag=1'">討論區管理</button>
                 </c:if>
 
             </ul>

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -95,10 +97,24 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
-	public List<BillboardBean> getBillboardList(String state, AdminBean adminBean) {
+	public List<BillboardBean> getBillboardList(String state, AdminBean adminBean,Integer pag) {
 
-		Sort sort = Sort.by(Direction.DESC, "createtime");
-		List<BillboardBean> resulet = br.getByStateAndTop(state, "置頂", sort);
+//		Sort sort = Sort.by(Direction.DESC, "createtime");
+		
+//		分頁
+
+//		Page<BillboardBean> page = br.findAll( PageRequest.of(pag, 12, sort));
+//		page.getSize();每頁條數
+//		page.getNumber();當前頁
+//		page.getNumberOfElements();本頁條數
+//		page.getTotalElements();全部幾筆
+//		page.getTotalPages();全部有幾頁		
+//		List<BillboardBean> result = page.getContent();
+		if (pag < 1) pag = 1;
+		pag--;
+		Pageable p = (Pageable) PageRequest.of(pag, 12, Direction.DESC, "createtime");
+//		Page<BillboardBean> page = br.findByStateAndTop("發佈", "置頂",p);
+		List<BillboardBean> resulet = br.findByStateAndTop(state, "置頂",p);
 		boolean boo = true;
 //		List<BillboardBean> list = br.getByStateAndTop(state, "置頂", sort);
 //		for (BillboardBean bean : list)
@@ -112,11 +128,12 @@ public class SystemService {
 				}
 				if (boo)
 					resulet.add(br.getById(btb.getBillboardid()));
-				boo = true;
+				boo = true; 
 			}
 		}
 
-		List<BillboardBean> list = br.getByStateAndTop(state, "", sort);
+		List<BillboardBean> list = br.findByStateAndTop(state, "",p);
+		
 		for (BillboardBean b : list) {
 			for (BillboardBean bean : resulet) {
 				if (bean.getBillboardid() == b.getBillboardid()) {
@@ -243,8 +260,6 @@ public class SystemService {
 			if (!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid())) {
 				adminMailBean.setAdminmail(zTools.getUUID());
 				// 如果員工部門 和 發布的部門 一樣就儲存
-				System.out.println("aaaa" + a.getDepartment());
-				System.out.println("發布的部門" + bean.getBilltowngroup());
 				if (a.getDepartment().equals(bean.getBilltowngroup())) {
 					System.out.println("Name" + a.getName());
 					adminMailBean.setAdminid(a.getAdminid());
@@ -394,8 +409,27 @@ public class SystemService {
 //刪除型錄
 	public void removefile(String fileid) {
 		BillboardFileBean billBoardFileBean = bfr.getById(fileid);
-		File file = new File("E:\\JetecCRM\\src\\main\\resources\\static\\file\\" + billBoardFileBean.getUrl());
-		System.out.println(file.delete());
+		
+		
+		// 獲取Tomcat伺服器所在的路徑
+		String tomcat_path = System.getProperty( "user.dir" );
+		System.out.println("Tomcat伺服器所在的路徑: "+tomcat_path);
+		// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
+		String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("/")+1,tomcat_path.length());
+		System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: "+bin_path);
+		// 判斷最後一個檔案目錄是否為bin目錄
+		if(("bin").equals(bin_path)){ 
+			// 獲取儲存上傳圖片的檔案路徑
+			String pic_path = tomcat_path.substring(0,System.getProperty( "user.dir" ).lastIndexOf("/")) +"/webapps/CRM"+"/file/";
+			File file = new File(pic_path + billBoardFileBean.getUrl());
+			System.out.println(file.delete());
+		}
+		
+		
+		
+		
+		
+
 		bfr.delete(billBoardFileBean);
 	}
 
@@ -501,6 +535,12 @@ public class SystemService {
 			btr.save(btb);
 			return "置成功";
 		}
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取回覆
+	public List<BillboardReplyBean> getBillboardReply(Integer Billboardid) {
+		Sort sort = Sort.by(Direction.DESC,"createtime");		
+		return billboardReplyRepository.getByBillboardid(Billboardid,sort);
 	}
 
 }

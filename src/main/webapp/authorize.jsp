@@ -95,7 +95,7 @@
                                     </div>
 
                                 </div>
-                                <input type="hidden" name="state" value="發佈">
+                                <input type="hidden" name="state" value="公開">
                                 <div class="row">
 
                                     <div class="col-lg-1 cell cellbackgroud">置頂</div>
