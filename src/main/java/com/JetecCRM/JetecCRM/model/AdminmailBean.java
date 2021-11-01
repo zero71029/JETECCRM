@@ -11,6 +11,18 @@ public class AdminMailBean {
     private String adminmail;
     private Integer adminid;
     private Integer billboardid;
+    private String reply;
+    
+    
+    
+    
+    
+	public String getReply() {
+		return reply;
+	}
+	public void setReply(String reply) {
+		this.reply = reply;
+	}
 	public String getAdminmail() {
 		return adminmail;
 	}

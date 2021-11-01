@@ -2,43 +2,26 @@ package com.JetecCRM.JetecCRM.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-@Table(name = "billboardreply")
-public class BillboardReplyBean {
+@Table(name = "replyreply")
+public class ReplyreplyBean {
+	
 	@Id
-	private String replyid;	
-	private Integer billboardid;	
+	private String id;	
+	private String replyid;		
 	private String name;
 	private String content;
 	private Date createtime;
-	
-	
-	
-	
-	//回覆
-	@JsonIgnore
-	@OneToMany(targetEntity = ReplyreplyBean.class ,mappedBy = "replyid", cascade = CascadeType.ALL)
-	@OrderBy("createtime DESC")
-	private List<BillboardReplyBean> reply;
-	
-	
-	
-	public List<BillboardReplyBean> getReply() {
-		return reply;
+	public String getId() {
+		return id;
 	}
-	public void setReply(List<BillboardReplyBean> reply) {
-		this.reply = reply;
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getReplyid() {
 		return replyid;
@@ -46,19 +29,12 @@ public class BillboardReplyBean {
 	public void setReplyid(String replyid) {
 		this.replyid = replyid;
 	}
-	public Integer getBillboardid() {
-		return billboardid;
-	}
-	public void setBillboardid(Integer billboardid) {
-		this.billboardid = billboardid;
-	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public String getContent() {
 		return content;
 	}
@@ -74,9 +50,9 @@ public class BillboardReplyBean {
 	}
 	@Override
 	public String toString() {
-		return "BillboardReplyBean [replyid=" + replyid + ", billboardid=" + billboardid + ", name=" + name
+		return "replyreplyBean [id=" + id + ", replyid=" + replyid +  ", name=" + name
 				+ ", content=" + content + ", createtime=" + createtime + "]";
 	}
-	
+
 	
 }

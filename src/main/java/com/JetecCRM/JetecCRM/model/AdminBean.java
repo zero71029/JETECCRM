@@ -84,8 +84,10 @@ public class AdminBean {
 	}
 	public String getPhone() {
 		StringBuffer sb = new StringBuffer(phone);
-		sb.insert(4, "-");
-		sb.insert(8, "-");
+		if(sb.length()>9) {
+			sb.insert(4, "-");
+			sb.insert(8, "-");
+		}
 		return sb.toString();
 	}
 	public void setPhone(String phone) {	

@@ -47,11 +47,11 @@
                 <button class="list-group-item " onclick="javascript:location.href=''">
                     數據管理
                 </button>
-                <c:if test='${user.position == "主管" || user.position == "系統"}'>
+                <c:if test='${user.position == "主管" || user.position == "系統" ||user.position == "總經理"}'>
                     <button class="list-group-item " onclick="system()">
                         系統管理
                     </button>
-                    <c:if test='${user.position == "系統"}'>
+                    <c:if test='${user.position == "系統"||user.position == "總經理"}'>
                         <!-- <button class="system"
                         onclick="javascript:location.href='#'">下拉選單管理</button> -->
                         <button class="system"

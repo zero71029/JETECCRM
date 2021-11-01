@@ -192,13 +192,30 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="row">
-                                <input type="hidden" name="top" value="">
+
                                 <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
                                 <div class="col-lg-9 cell"> <a href="javascript:ReadNum()">${bean.read.size()}</a>
                                 </div>
 
                             </div>
+                            <c:if test='${user.position == "系統" || user.position == "總經理"}'>
+                                <div class="row">
+                                    <div class="col-lg-1 cell cellbackgroud">置頂</div>
+                                    <div class="col-lg-9 cell">
+                                        <input type="radio" name="top" id="asd" value="" ${empty bean?"checked" :""}     ${bean.top==""?"checked":""}> <label for="asd">一般</label> 
+                                        <input type="radio" name="top" id="top" value="置頂" ${bean.top=="置頂"?"checked":""}><label for="top">置頂</label> 
+                                    </div>
+
+                                </div>
+                            </c:if>
+                            <c:if test='${!(user.position == "系統" || user.position == "總經理")}'>
+                                <input type="hidden" name="top" value="">
+                            </c:if>
+
+
+
 
                             <c:if test="${not empty bean}">
                                 <div class="row">
@@ -228,9 +245,7 @@
                                         </c:if>
                                     </div>
                                 </div>
-
                             </c:if>
-
 
 
                             <c:if test="${bean.user == user.name  || empty bean}">
@@ -324,6 +339,7 @@
                                                 </div>
                                             </c:if>
                                         </c:forEach><br>
+
                                         <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
                                                 id="group2">採購:</div>
                                         <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
@@ -557,7 +573,7 @@
                     $(".cat").show();
                     $(".hazy").show();
                     $(".optinUL").empty();
-                  
+
                     for (var option of billboardgroup) {
                         if (Object.keys(option)[0] == $group.val()) $(".optinUL").append('<li>' + option[$group.val()] + ' &nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:delOption(`' + option[$group.val()] + '`)">remove</a></li>');
                     }
@@ -644,7 +660,7 @@
             $(".catReturn").click(function () {
                 $(".cat").hide();
                 $(".hazy").hide();
-                $("option[value='全部']").prop("selected",true);
+                $("option[value='全部']").prop("selected", true);
 
 
             });

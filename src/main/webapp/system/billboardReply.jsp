@@ -60,7 +60,9 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-lg-8">
-                                        <a href="${pageContext.request.contextPath}/" style="text-decoration: none;">
+                                        <!-- 上一頁 -->
+                                        <a href="javascript:window.history.back();location.reload();"
+                                            style="text-decoration: none;">
                                             <img src="${pageContext.request.contextPath}/img/Pre.png" alt="上一頁">
                                         </a>${bean.bgb.billboardgroup}>${bean.bgb.billboardoption}
                                     </div>
@@ -74,17 +76,7 @@
                                         <!-- 有登入才顯示 -->
                                         <c:if test='${not empty user}'>
                                             <span style="position: absolute; right: 0%; top: 0%;">
-                                                <!-- 有資料才顯示 -->
-                                                <c:set var="i" value="false"></c:set>
-                                                <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}"
-                                                    items="${user.mail}" var="mail">
-                                                    <!-- 已讀迴圈 -->
-                                                    <!-- 登入者 已讀 i == ture -->
-                                                    <c:if test="${bean.billboardid == mail.billboardid}">
-                                                        <c:set var="i" value="ture"></c:set>
-                                                        <c:set var="exitID" value="0"></c:set>
-                                                    </c:if>
-                                                </c:forEach>
+
 
 
                                                 <img src="${pageContext.request.contextPath}/img/copy.png" alt="複製"
@@ -101,21 +93,42 @@
                                                         <script>
                                                             var billboardid = ${ top.billboardid };
                                                             if (billboardid == ${ bean.billboardid }) {
-                                                                $("#topImg").attr("src" ,"${pageContext.request.contextPath}/img/CCC.png");
-                                                                $("#topImg").attr("title" ,"取消追蹤");
+                                                                $("#topImg").attr("src", "${pageContext.request.contextPath}/img/CCC.png");
+                                                                $("#topImg").attr("title", "取消追蹤");
                                                             }
 
                                                         </script>
                                                     </c:forEach>
                                                 </c:if>
+
+                                                <!-- 有資料才顯示 -->
+                                                <c:set var="i" value="false"></c:set>
+                                                <c:forEach varStatus="loop" begin="0" end="${user.advice.size()}"
+                                                    items="${user.advice}" var="advice">
+                                                    <!-- 已讀迴圈 -->
+                                                    <!-- 登入者  有被@   i == ture -->
+                                                    <c:if test="${bean.billboardid == advice.billboardid}">
+                                                        <c:set var="i" value="ture"></c:set>
+                                                    </c:if>
+                                                </c:forEach>
+
+                                                <c:set var="m" value="false"></c:set>
+                                                <c:forEach varStatus="loop" begin="0" end="${user.mail.size()}"
+                                                    items="${user.mail}" var="mail">
+                                                    <!-- 已讀迴圈 -->
+                                                    <!-- 登入者  有mail     i == ture -->
+                                                    <c:if test="${bean.billboardid == mail.billboardid}">
+                                                        <c:set var="m" value="ture"></c:set>
+                                                    </c:if>
+                                                </c:forEach>
+
                                                 <!--  已讀 才顯示 -->
-                                                <c:if test='${i != "ture"}'>
-                                                    <a  href='javascript:unread(${bean.billboardid}, ${user.adminid})'><img
-                                                            src="${pageContext.request.contextPath}/img/unread.png"
-                                                            alt="取消已讀" data-bs-toggle="tooltip"
-                                                            data-bs-placement="bottom" title="取消已讀"></a>
+                                                <c:if test='${m != "ture" }'>
+                                                    <img src="${pageContext.request.contextPath}/img/unread.png"
+                                                        alt="已讀" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="已讀">
                                                 </c:if>
-                                                <c:if test='${i == "ture"}'>
+                                                <c:if test='${m == "ture"}'>
                                                     <a href="javascript:read(${bean.billboardid},${user.adminid})"><img
                                                             src="${pageContext.request.contextPath}/img/read.png"
                                                             alt="已讀點擊" data-bs-toggle="tooltip"
@@ -149,7 +162,7 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell position-relative cellbackgroud">內容</div>
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">
-                                        ${bean.content} 
+                                        ${bean.content}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -182,8 +195,7 @@
                         </style>
                         <div class="row">
                             <c:if test="${not empty reply}">
-                                <c:forEach varStatus="loop" begin="0" end="${reply.size()-1}" items="${reply}"
-                                    var="s">
+                                <c:forEach varStatus="loop" begin="0" end="${reply.size()-1}" items="${reply}" var="s">
                                     <div class="row" style="line-height: 2rem; min-height: 100px; ">
                                         <div class="col-md-1"></div>
                                         <div class="col-md-1  " style="background-color: #a5b5b1;">${s.name}</div>
@@ -222,7 +234,51 @@
                                                     onclick="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</button>
                                             </c:if>
                                         </div>
-                                    </div>
+                                    </div>                                  
+                                    <c:if test="${not empty s.reply}">
+                                        <c:forEach varStatus="loop" begin="0" end="${s.reply.size()-1}"
+                                            items="${s.reply}" var="reply">
+                                            <div class="row">
+                                                <div class="col-md-1 "></div>
+                                                <div class="col-md-1  ccc" style="background-color: #a5b5b1;">${reply.name}</div>
+                                                <div class="col-md-5 ccc"
+                                                    style="position: relative; word-wrap:break-word;background-color: #d9e2e0;color: #8e8e8e;">
+                                                    ${reply.content}
+                                                </div>
+                                                <div class="col-md-1 ccc"
+                                                    style="position: relative; word-wrap:break-word;background-color: #d9e2e0;color: #8e8e8e;">
+                                                <a href="${pageContext.request.contextPath}/removeReplyreply/${reply.id}">remove</a>
+                                                </div>
+                                                <div class="col-md-2 ccc"
+                                                    style="position: relative; word-wrap:break-word;background-color: #d9e2e0;color: #8e8e8e;">
+                                                    ${reply.createtime}
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                    </c:if>
+
+                                    <c:if test="${not empty user}">
+                                        <form action="${pageContext.request.contextPath}/saveReplyreply" method="post">
+                                            <div class="row">
+                                                <div class="col-md-1 "></div>
+                                                <div class="col-md-9 ccc">
+                                                    <input type="hidden" name="replyid" value="${s.replyid}">
+                                                    <input type="hidden" name="name" value="${user.name}">
+                                                    <input type="hidden" name="billboardid" value="${bean.billboardid}">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="content"
+                                                            placeholder="限定450個字" aria-label="Recipient's username"
+                                                            aria-describedby="button-addon2" required>
+                                                        <button class="btn  btn-primary" type="submit"
+                                                            id="button-addon2 ">評論</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 "></div>
+                                            </div>
+                                        </form>
+                                    </c:if>
+
+
 
 
 
@@ -360,10 +416,10 @@
                     $("#formReply").validate();
 
                 });
-                
+
                 function unread(billboardid, adminid) {
                     alert("取消已讀");
-                    location.href='${pageContext.request.contextPath}/ReRead/' + billboardid + '/' + adminid;
+                    location.href = '${pageContext.request.contextPath}/ReRead/' + billboardid + '/' + adminid;
 
                 }
 

@@ -56,45 +56,8 @@
                                 </div> -->
                             </form>
                         </div>
-                                                <!-- 分頁 -->
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">Previous</a>
-                                </li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=1">1</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=2">2</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=3">3</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag+1}">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <!-- 分頁 ////////////////////-->
+
                         <!-- <%-- 中間主體--%> -->
-                                                <!-- 分頁 -->
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">Previous</a>
-                                </li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=1">1</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=2">2</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=3">3</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag+1}">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <!-- 分頁 ////////////////////-->
-
-
                         <table class="Table table-striped orderTable">
                             <tr>
                                 <td><input type="checkbox" id="activity"></td>
@@ -177,7 +140,7 @@
 
                             success: function (json) {
                                 alert(json);
-                                window.location.href = "${pageContext.request.contextPath}/system/adminList";
+                                window.location.href = "${pageContext.request.contextPath}/system/adminList/adminid";
                             },
                             error: function (returndata) {
                                 console.log(returndata);

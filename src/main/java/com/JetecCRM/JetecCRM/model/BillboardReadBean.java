@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 
 
-
+ //計算幾人讀過用
 @Entity
 @Table(name = "billboardread")
 public class BillboardReadBean {

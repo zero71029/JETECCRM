@@ -61,7 +61,7 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag<=1?1:param.pag-1}">Previous</a>
+                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag<=1?1:param.pag-1}">←</a>
                                 </li>
                                 <li class="page-item"><a class="page-link"
                                         href="${pageContext.request.contextPath}/system/billboardList?pag=1">1</a></li>
@@ -70,7 +70,7 @@
                                 <li class="page-item"><a class="page-link"
                                         href="${pageContext.request.contextPath}/system/billboardList?pag=3">3</a></li>
                                 <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag+1}">Next</a>
+                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}">→</a>
                                 </li>
                             </ul>
                         </nav>
@@ -99,7 +99,23 @@
                                             ${s.top}</td>
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
-                                            ${s.theme} <span style="color: #569b92;"> ${empty s.file?"":"有附件📎"}</span>
+                                            <!-- 如果 .......就是 個人置頂 -->
+                                            <c:if test="${not empty user.top}">
+                                                <c:forEach varStatus="loop" begin="0" end="${user.top.size()-1}"
+                                                    items="${user.top}" var="top">
+                                                    <span style="color: red;">
+                                                        <c:if test="${top.billboardid == s.billboardid}">
+                                                            <img src="${pageContext.request.contextPath}/img/topA.png"
+                                                                alt="">
+                                                        </c:if>
+                                                    </span>
+                                                </c:forEach>
+                                            </c:if>
+                                            <!-- 個人置頂/////////////////////////////////// -->
+                                            <!--  主題-->
+                                            ${s.theme}
+                                            <!-- 有附件 -->
+                                            <span style="color: #569b92;"> ${empty s.file?"":"📎"}</span>
                                         </td>
                                         <td
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
@@ -158,7 +174,7 @@
 
                             success: function (json) {
                                 alert(json);
-                                window.location.href = "${pageContext.request.contextPath}/system/billboardList";
+                                window.location.href = "${pageContext.request.contextPath}/system/billboardList?pag=1";
                             },
                             error: function (returndata) {
                                 console.log(returndata);

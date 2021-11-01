@@ -97,7 +97,7 @@
                                     <div class="col-md-1 cell position-relative cellbackgroud">手機*</div>
                                     <div class="col-md-2 cell">
                                         <input type="text" class=" form-control cellFrom" name="phone"
-                                            value="${bean.phone}" maxlength="20" required>
+                                            value="${bean.phone}" maxlength="20" required minlength="10">
                                         <div class="invalid-tooltip">須輸入</div>
                                     </div>
                                     <div class="col-md-1 cell cellbackgroud">Email*</div>

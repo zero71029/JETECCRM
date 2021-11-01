@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.JetecCRM.JetecCRM.model.AdminBean;
-import com.JetecCRM.JetecCRM.model.BillboardBean;
 
 public interface AdminRepository extends JpaRepository<AdminBean, Integer>{
 

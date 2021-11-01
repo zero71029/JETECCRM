@@ -26,6 +26,7 @@ import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
 import com.JetecCRM.JetecCRM.model.BillboardReadBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.model.BillboardTopBean;
+import com.JetecCRM.JetecCRM.model.ReplyreplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminMailRepository;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardAdviceRepository;
@@ -35,6 +36,7 @@ import com.JetecCRM.JetecCRM.repository.BillboardReadRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReplyRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardTopRepository;
+import com.JetecCRM.JetecCRM.repository.ReplyreplyRepository;
 
 @Service
 @Transactional
@@ -42,8 +44,10 @@ public class SystemService {
 
 	@Autowired
 	AdminRepository ar;
+	//mail顯示未讀用
 	@Autowired
 	AdminMailRepository amr;
+	
 	@Autowired
 	BillboardRepository br;
 	@Autowired
@@ -54,10 +58,14 @@ public class SystemService {
 	BillboardGroupRepository bgr;
 	@Autowired
 	BillboardFileRepository bfr;
+	//被標註
 	@Autowired
 	BillboardAdviceRepository bar;
 	@Autowired
 	BillboardTopRepository btr;
+//	留言的留言
+	@Autowired
+	ReplyreplyRepository rrr;
 	@Autowired
 	ZeroTools zTools;
 
@@ -97,12 +105,9 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
-	public List<BillboardBean> getBillboardList(String state, AdminBean adminBean,Integer pag) {
-
-//		Sort sort = Sort.by(Direction.DESC, "createtime");
-		
+	public List<BillboardBean> getBillboardList(String state, AdminBean adminBean, Integer pag) {
+//		Sort sort = Sort.by(Direction.DESC, "createtime");		
 //		分頁
-
 //		Page<BillboardBean> page = br.findAll( PageRequest.of(pag, 12, sort));
 //		page.getSize();每頁條數
 //		page.getNumber();當前頁
@@ -110,30 +115,26 @@ public class SystemService {
 //		page.getTotalElements();全部幾筆
 //		page.getTotalPages();全部有幾頁		
 //		List<BillboardBean> result = page.getContent();
-		if (pag < 1) pag = 1;
-		pag--;
-		Pageable p = (Pageable) PageRequest.of(pag, 12, Direction.DESC, "createtime");
-//		Page<BillboardBean> page = br.findByStateAndTop("發佈", "置頂",p);
-		List<BillboardBean> resulet = br.findByStateAndTop(state, "置頂",p);
+
+		Pageable p = (Pageable) PageRequest.of(pag, 20, Direction.DESC, "createtime");
+
+		List<BillboardBean> resulet = br.findByStateAndTop(state, "置頂", p);
 		boolean boo = true;
-//		List<BillboardBean> list = br.getByStateAndTop(state, "置頂", sort);
-//		for (BillboardBean bean : list)
-//			resulet.add(bean);
-		if (adminBean != null) {
-			for (BillboardTopBean btb : adminBean.getTop()) {
-				for (BillboardBean bean : resulet) {
-					if (bean.getBillboardid() == btb.getBillboardid()) {
+		if (adminBean != null && pag == 0) {// 如果有登入
+			for (BillboardTopBean btb : adminBean.getTop()) {// 讀取個人追蹤 追蹤迴圈
+				for (BillboardBean bean : resulet) {// 列表迴圈
+					if (bean.getBillboardid() == btb.getBillboardid()) {// 如果追蹤id == 列表id
 						boo = false;
 					}
 				}
 				if (boo)
 					resulet.add(br.getById(btb.getBillboardid()));
-				boo = true; 
+				boo = true;
 			}
 		}
 
-		List<BillboardBean> list = br.findByStateAndTop(state, "",p);
-		
+		List<BillboardBean> list = br.findByStateAndTop(state, "", p);
+
 		for (BillboardBean b : list) {
 			for (BillboardBean bean : resulet) {
 				if (bean.getBillboardid() == b.getBillboardid()) {
@@ -147,7 +148,7 @@ public class SystemService {
 
 		return resulet;
 	}
-	// 讀取公佈欄列表 加分類
+	// 讀取公佈欄列表 依分類
 
 	public List<BillboardBean> getBillboardList(String state, String billboardgroupid) {
 		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
@@ -242,7 +243,7 @@ public class SystemService {
 			amr.deleteAllByBillboardid(save.getBillboardid());
 			return save;
 		}
-		// 未讀處理
+		//// 未讀處理
 		adminMailBean.setBillboardid(save.getBillboardid());
 		// 郵件
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
@@ -256,20 +257,12 @@ public class SystemService {
 			maillist.append(a.getEmail());
 			maillist.append(",");
 			// 抓出所有人插入maill
-			// 如果maill沒資料
-			if (!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid())) {
-				adminMailBean.setAdminmail(zTools.getUUID());
-				// 如果員工部門 和 發布的部門 一樣就儲存
-				if (a.getDepartment().equals(bean.getBilltowngroup())) {
-					System.out.println("Name" + a.getName());
-					adminMailBean.setAdminid(a.getAdminid());
-					amr.save(adminMailBean);
-				}
-				if ("一般公告".equals(bean.getBilltowngroup())) {
-					adminMailBean.setAdminid(a.getAdminid());
-					amr.save(adminMailBean);
-				}
-
+			// 如果maill沒資料  //如果不是發布者
+			if (!amr.existsByBillboardidAndAdminid(save.getBillboardid(), a.getAdminid()) && a.getAdminid() != adminBean.getAdminid()) {
+					adminMailBean.setAdminmail(zTools.getUUID());//maill插入uuid
+					System.out.println("插入maill Name" + a.getName());
+					adminMailBean.setAdminid(a.getAdminid());//maill插入  人id
+					amr.save(adminMailBean);// 儲存maill
 			}
 		}
 		maillist.append("jeter.tony56@gmail.com");
@@ -281,7 +274,16 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄細節 公佈欄用
-	public BillboardBean getBillboardById(Integer id) {
+	public BillboardBean getBillboardById(Integer id,AdminBean adminBean) {
+		
+		if(adminBean != null) {//如果有登入
+			//如果mail有資料  如果advice沒資料
+			if(amr.existsByBillboardidAndAdminid(id, adminBean.getAdminid()) && !bar.existsByAdvicetoAndBillboardid(adminBean.getAdminid(),id)){
+				amr.deleteByBillboardidAndAdminid(id, adminBean.getAdminid());
+			}
+		}
+		
+		
 		BillboardBean bean = br.getById(id);
 //		bean.setContent(bean.getContent().replaceAll("<br>", "\n"));		
 		return bean;
@@ -311,7 +313,7 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //點擊已讀
 	public String saveRead(Integer billboardid, Integer adminid) {
-		// 刪除mail 插入read
+		//如果mail有資料     刪除mail 插入read
 		if (amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
 			amr.deleteByBillboardidAndAdminid(billboardid, adminid);
 			AdminBean adminBean = ar.getById(adminid);
@@ -355,9 +357,8 @@ public class SystemService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
 	public boolean SaveReply(BillboardReplyBean bean) {
-		if (bean.getReplyid() == null || bean.getReplyid().length() == 0)
-			bean.setReplyid(zTools.getUUID());
-		billboardReplyRepository.save(bean);
+		if (bean.getReplyid() == null || bean.getReplyid().length() == 0)bean.setReplyid(zTools.getUUID());
+			billboardReplyRepository.save(bean);
 		return true;
 	}
 
@@ -409,26 +410,23 @@ public class SystemService {
 //刪除型錄
 	public void removefile(String fileid) {
 		BillboardFileBean billBoardFileBean = bfr.getById(fileid);
-		
-		
+
 		// 獲取Tomcat伺服器所在的路徑
-		String tomcat_path = System.getProperty( "user.dir" );
-		System.out.println("Tomcat伺服器所在的路徑: "+tomcat_path);
+		String tomcat_path = System.getProperty("user.dir");
+		System.out.println("Tomcat伺服器所在的路徑: " + tomcat_path);
 		// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
-		String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("/")+1,tomcat_path.length());
-		System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: "+bin_path);
+		String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\") + 1, tomcat_path.length());
+		System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: " + bin_path);
 		// 判斷最後一個檔案目錄是否為bin目錄
-		if(("bin").equals(bin_path)){ 
+		if (("bin").equals(bin_path)) {
 			// 獲取儲存上傳圖片的檔案路徑
-			String pic_path = tomcat_path.substring(0,System.getProperty( "user.dir" ).lastIndexOf("/")) +"/webapps/CRM"+"/file/";
+			String pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("\\"))
+					+ "/webapps/CRM" + "/file/";
 			File file = new File(pic_path + billBoardFileBean.getUrl());
 			System.out.println(file.delete());
 		}
-		
-		
-		
-		
-		
+		File file = new File("E:/CRMfile/" + billBoardFileBean.getUrl());
+		System.out.println("E:/CRMfile/" + file.delete());
 
 		bfr.delete(billBoardFileBean);
 	}
@@ -440,12 +438,12 @@ public class SystemService {
 		boolean boo = true;
 		// 搜索主題
 		Sort sort = Sort.by(Direction.DESC, "createtime");
-		for (BillboardBean p : br.findByThemeLikeIgnoreCaseAndState("%" + search + "%", "發佈", sort)) {
+		for (BillboardBean p : br.findByThemeLikeIgnoreCaseAndState("%" + search + "%", "公開", sort)) {
 			result.add(p);
 		}
 
 		// 用發表人搜索
-		for (BillboardBean p : br.findByUserLikeIgnoreCaseAndState("%" + search + "%", "發佈", sort)) {
+		for (BillboardBean p : br.findByUserLikeIgnoreCaseAndState("%" + search + "%", "公開", sort)) {
 			for (BillboardBean bean : result) {
 				if (bean.getBillboardgroupid() == p.getBillboardgroupid()) {
 					boo = false;
@@ -536,11 +534,39 @@ public class SystemService {
 			return "置成功";
 		}
 	}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取回覆
 	public List<BillboardReplyBean> getBillboardReply(Integer Billboardid) {
-		Sort sort = Sort.by(Direction.DESC,"createtime");		
-		return billboardReplyRepository.getByBillboardid(Billboardid,sort);
+		Sort sort = Sort.by(Direction.DESC, "createtime");
+		return billboardReplyRepository.getByBillboardid(Billboardid, sort);
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//存留言
+	public void saveMail(Integer adminid, Integer billboardid, String reply) {
+		
+		//如果 mail 沒資料  就存儲
+		if (!amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
+			AdminMailBean adminMailBean = new AdminMailBean();
+			adminMailBean.setAdminmail(zTools.getUUID());
+			adminMailBean.setAdminid(adminid);
+			adminMailBean.setBillboardid(billboardid);
+			adminMailBean.setReply(reply);
+			amr.save(adminMailBean);
+		}
+
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//儲存留言的留言
+	public void saveReplyreply(ReplyreplyBean replyreplyBean) {
+		replyreplyBean.setId(zTools.getUUID());
+		rrr.save(replyreplyBean);		
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除留言的留言
+	public String removeReplyreply(String replyreplyId) {
+		rrr.deleteById(replyreplyId);
+		return "刪除成功";
 	}
 
 }

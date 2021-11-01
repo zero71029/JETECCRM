@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,7 +29,7 @@ public class BillboardBean {
 	private String content; //內容	
 	private String state; //狀態	
 	private Date createtime; //創造時間	
-	private String endtime; //結束時間	
+	private String replytime; //最後回覆時間	
 	private String time;//
 	private String top;//
 	private String readcount;//保留給已讀人數用
@@ -42,6 +43,7 @@ public class BillboardBean {
 	//回覆
 	@JsonIgnore
 	@OneToMany(targetEntity = BillboardReplyBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
+	@OrderBy("createtime DESC")
 	private List<BillboardReplyBean> reply;
 	//分類群組
 	@ManyToOne(targetEntity = BillboardGroupBean.class,fetch = FetchType.EAGER)
@@ -78,6 +80,14 @@ public class BillboardBean {
 	}
 	
 
+	
+	
+	public String getReplytime() {
+		return replytime;
+	}
+	public void setReplytime(String replytime) {
+		this.replytime = replytime;
+	}
 	public String getBilltowngroup() {
 		return billtowngroup;
 	}
@@ -159,16 +169,10 @@ public class BillboardBean {
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
-	public String getEndtime() {
-		return endtime;
-	}
-	public void setEndtime(String endtime) {
-		this.endtime = endtime;
-	}
-	@Override
+
 	public String toString() {
 		return "BillboardBean [billboardid=" + billboardid + ", user=" + user + ", theme=" + theme + ", content="
-				+ content + ", state=" + state + ", createtime=" + createtime + ", endtime=" + endtime + "]";
+				+ content + ", state=" + state + ", createtime=" + createtime +  "]";
 	}
 	
 	

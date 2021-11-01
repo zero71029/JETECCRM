@@ -92,7 +92,7 @@
                                     <div class="col-md-1 cell position-relative cellbackgroud">電話*</div>
                                     <div class="col-md-2 cell">
                                         <input type="text" class=" form-control cellFrom" name="phone"
-                                            value="${bean.phone}" maxlength="20" required>
+                                            value="${bean.phone}" maxlength="20" required minlength="10">
                                         <div class="invalid-tooltip">須輸入</div>
                                     </div>
                                     <div class="col-md-1 cell cellbackgroud">Email*</div>
@@ -127,7 +127,7 @@
                                     <div class="col-md-1 cell cellbackgroud">到職日</div>
                                     <div class="col-md-2 cell position-relative">
                                         <input type="text" class="form-control cellFrom contacttime" name="dutyDay"
-                                            maxlength="20" readonly required>
+                                            maxlength="20" readonly >
                                     </div>
                                 </div>
 

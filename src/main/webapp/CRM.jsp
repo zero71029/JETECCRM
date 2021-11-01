@@ -29,6 +29,14 @@
         </head>
 
 
+
+        <style>
+            .body {
+                background-color: white;
+                width: 100%;
+            }
+        </style>
+
         <body>
             <!-- <%-- 插入側邊欄--%> -->
             <jsp:include page="/Sidebar.jsp"></jsp:include>
@@ -219,7 +227,7 @@
                 <div class="row justify-content-end">
                     <div class="col-lg-8">
 
-                        <!-- <%-- 中間主體--%> -->
+                        <!-- <%-- 中間主體--%> -->.
                         <h1 style="color: red;">${param.mess=="1"?"權限不夠":""}</h1>
                         <h1 style="color: red;">${param.mess=="2"?"須先登入":""}</h1>
                         <h1 style="color: red;">${param.mess=="3"?"授權碼過期":""}</h1>
@@ -228,7 +236,7 @@
                                 <tr style="text-align:center">
                                     <th scope="col-lg" style="width: 700px;">主題</th>
                                     <th scope="col-lg">發布時間</th>
-                                    <th scope="col-lg">最後回覆時間</th>
+                                    <th scope="col-lg"><a href="${pageContext.request.contextPath}/billboard?pag=1?sor=replytime?sortType=DESC"></a>最後回覆時間</th>
                                     <th scope="col-lg">回應</th>
                                 </tr>
                             </thead>
@@ -257,15 +265,55 @@
                                                         </span>
                                                     </c:forEach>
                                                 </c:if>
-                                                <!-- 分類 -->
-                                                <span
-                                                    style="color: #777;font-size: 0.9rem;">[${s.billtowngroup}][${s.bgb.billboardoption}]
-                                                    &nbsp;</span>
+                                                <!-- 分群-->
+                                                <span style="color: #777;font-size: 0.9rem;">
+                                                    <c:if test='${s.billtowngroup == "生產"}'>
+                                                        <a
+                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvddd生產">${s.billtowngroup}</a>
+                                                    </c:if>
+                                                    <c:if test='${s.billtowngroup == "研發"}'>
+                                                        <a
+                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvaaa研發">${s.billtowngroup}</a>
+                                                    </c:if>
+                                                    <c:if test='${s.billtowngroup == "財務"}'>
+                                                        <a
+                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvaaa財務">${s.billtowngroup}</a>
+                                                    </c:if>
+                                                    <c:if test='${s.billtowngroup == "業務"}'>
+                                                        <a
+                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvbbb業務">${s.billtowngroup}</a>
+                                                    </c:if>
+                                                    <c:if test='${s.billtowngroup == "行銷"}'>
+                                                        <a
+                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvccc行銷">${s.billtowngroup}</a>
+                                                    </c:if>
+                                                    <c:if test='${s.billtowngroup == "採購"}'>
+                                                        <a
+                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvfggg採購">${s.billtowngroup}</a>
+                                                    </c:if>
+                                                    <c:if test='${s.billtowngroup == "一般公告"}'>
+                                                        <a
+                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcv一般公告">${s.billtowngroup}</a>
+                                                    </c:if>
+
+
+
+
+                                                    →
+                                                    <a
+                                                        href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.bgb.billboardoption}</a>
+
+
+
+
+                                                    &nbsp;
+                                                </span>
 
                                                 <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
                                                 <c:if test="${not empty user.mail}">
                                                     <c:forEach varStatus="loop" begin="0" end="${user.mail.size()-1}"
                                                         items="${user.mail}" var="mail"><span style="color: red;">
+                                                            ${mail.billboardid == s.billboardid? mail.reply:""}
                                                             ${mail.billboardid == s.billboardid? "未讀":""}</span>
                                                     </c:forEach>
                                                 </c:if>
@@ -282,13 +330,21 @@
                                                         </c:forEach>
                                                     </c:if>
                                                 </span>
-                                                <span style="color: #569b92;"> ${empty s.file?"":"有附件📎"}</span>
+                                                <!-- 有附件 -->
+                                                <span style="color: #569b92;"> ${empty s.file?"":"📎"}</span>
                                             </td>
                                             <!-- //////////////////////////////////////////////////////////////// -->
+                                            <!-- 發布時間 -->
                                             <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
-                                            <td style="text-align: center;">${s.reply[0].name}
+                                            <!-- 最後回覆時間 -->
+
+                                            <td style="text-align: center;">
+
+                                                ${s.reply[0].name}
                                                 <br>${s.reply[0].createtime}
+                                                ${reply}
                                             </td>
+                                            <!-- 回應 -->
                                             <td style="text-align: center;">${s.reply.size()}</td>
                                         </tr>
 
@@ -308,16 +364,19 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">Previous</a>
+                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">←</a>
                                 </li>
+
+
+                                <!-- 如果 pag < 2   ,    pag> max-2 -->
+                                <c:forEach varStatus="loop" begin="${param.pag-2 <1 ? 1:param.pag-2}"
+                                    end="${param.pag+2 >TotalPages ? TotalPages :param.pag+2}">
+                                    <li class='page-item      ${param.pag == loop.index ? "active ":""}         '><a class="page-link"
+                                        href="${pageContext.request.contextPath}/billboard?pag=${loop.index}">${loop.index}</a></li>
+
+                                </c:forEach>  
                                 <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=1">1</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=2">2</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=3">3</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag+1}">Next</a>
+                                        href='${pageContext.request.contextPath}/billboard?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}'>→</a>
                                 </li>
                             </ul>
                         </nav>

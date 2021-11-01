@@ -96,25 +96,8 @@
 
                                 </div>
                                 <input type="hidden" name="state" value="公開">
+                                <input type="hidden" name="top" value="">
                                 <div class="row">
-
-                                    <div class="col-lg-1 cell cellbackgroud">置頂</div>
-                                    <div class="col-lg-4 cell">
-                                        <select input type="text" class=" form-select cellFrom" name="top">
-                                            <option ${bean.top=="" ?"selected":null} class="selItemOff" value="">無
-                                            </option>
-                                            <option ${bean.top=="置頂" ?"selected":null} class="selItemOff" value="置頂">置頂
-                                            </option>
-
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-1 cell cellbackgroud">XX</div>
-                                    <div class="col-lg-4 cell"> <a href="javascript:ReadNum()"></a>
-
-                                    </div>
-                                </div>
-                                <div class="row">
-
                                     <div class="col-lg-1 cell cellbackgroud">群組</div>
                                     <div class="col-lg-4 cell">
                                         <select input type="text" class=" form-select cellFrom billboardGroup"

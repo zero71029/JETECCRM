@@ -2,6 +2,7 @@ package com.JetecCRM.JetecCRM.controler;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -162,12 +167,19 @@ public class SystemControler {
 	public String billboardList(Model model, HttpSession session, @RequestParam("pag") Integer pag) {
 		System.out.println("*****讀取公佈欄列表*****");
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
-		model.addAttribute("list", ss.getBillboardList("發佈", adminBean,pag));
+		if (pag < 1) pag = 1;
+		pag--;
+		// 分頁 全部有幾頁
+		Pageable p = (Pageable) PageRequest.of(pag, 20, Direction.DESC, "createtime");
+		Page<BillboardBean> page = (Page<BillboardBean>) br.getByStateAndTop("公開", "", p);
+		model.addAttribute("TotalPages", page.getTotalPages());
+		//公佈欄列表
+		model.addAttribute("list", ss.getBillboardList("公開", adminBean,pag));
 		return "/system/billboardList";
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//讀取公佈欄列表
+//讀取公佈欄列表 封存
 	@RequestMapping("/OffShelf")
 	public String OffShelf(Model model, HttpSession session) {
 		System.out.println("*****讀取公佈欄列表*****");
@@ -190,7 +202,7 @@ public class SystemControler {
 	@RequestMapping("/billboard/{id}")
 	public String billboard(Model model, @PathVariable("id") Integer id) {
 		System.out.println("*****讀取公佈欄細節****");
-		BillboardBean bean = ss.getBillboardById(id);
+		BillboardBean bean = ss.getBillboard(id);
 		bean.setContent(bean.getContent().replaceAll("<br>", "\n"));
 		model.addAttribute("bean", bean);
 		return "/system/billboard";
@@ -285,21 +297,36 @@ public class SystemControler {
 					String tomcat_path = System.getProperty( "user.dir" );
 					System.out.println("Tomcat伺服器所在的路徑: "+tomcat_path);
 					// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
-					String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("/")+1,tomcat_path.length());
+					String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\")+1,tomcat_path.length());
 					System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: "+bin_path);
 					// 判斷最後一個檔案目錄是否為bin目錄
-					System.out.println("binbinbinbinbinbinbinbinbinbinbinbin");
+					System.out.println("bin_path == "+bin_path);
+					String path2 = "C:\\Users\\Rong\\Desktop\\apache-tomcat-9.0.53\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\";
 					if(("bin").equals(bin_path)){ 
-						// 獲取儲存上傳圖片的檔案路徑
-						System.out.println("*******************"+bin_path);
+						System.out.println("binbinbinbinbinbinbinbinbinbinbinbin");
+						// 獲取儲存上傳圖片的檔案路徑						
 						String pic_path = tomcat_path.substring(0,System.getProperty( "user.dir" ).lastIndexOf("/")) +"/webapps/CRM"+"/file/";
-						fileMap.get("file" + i).transferTo( new File(pic_path +fileMap.get("file" + i).getOriginalFilename()));
-						System.out.println(pic_path +fileMap.get("file" + i).getOriginalFilename());
+						fileMap.get("file" + i).transferTo( new File(pic_path +fileMap.get("file" + i).getOriginalFilename()));						
 					}else{					
-						String path2 = "C:\\Users\\Rong\\Desktop\\apache-tomcat-9.0.53\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\";
+						
 						fileMap.get("file" + i).transferTo( new File(path2 +fileMap.get("file" + i).getOriginalFilename()));
 						System.out.println(path2 +fileMap.get("file" + i).getOriginalFilename());
 					}
+					
+					try {
+						File source = new File(path2 +fileMap.get("file" + i).getOriginalFilename());
+						File dest = new File("E:/CRMfile/"+fileMap.get("file" + i).getOriginalFilename());	
+						Files.copy(source.toPath(), dest.toPath());
+						System.out.println("複製成功");
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					
+					
+
+					
+					
+					
 					//使用uuid建檔名
 //					fileMap.get("file" + i).transferTo(
 //							new File(pic_path + uuid + lastname));
