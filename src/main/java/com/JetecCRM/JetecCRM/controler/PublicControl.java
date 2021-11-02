@@ -170,9 +170,13 @@ public class PublicControl {
 	public String billboardReply(Model model, @PathVariable("id") Integer id, HttpSession session) {
 		System.out.println("*****讀取公佈欄細節****");
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
+		//讀取公佈欄細節  如果有登入就已讀
 		model.addAttribute("bean", ss.getBillboardById(id, adminBean));
-//		session.setAttribute("user", ar.getById(adminBean.getAdminid()));
+		//如果有登入 更新資料
+		if(adminBean != null)session.setAttribute("user", ar.getById(adminBean.getAdminid()));
+		//讀取2星期內的訊息
 		model.addAttribute("news", ss.getBillboardByTime());
+		//讀取回覆
 		model.addAttribute("reply", ss.getBillboardReply(id));
 		return "/system/billboardReply";
 	}
@@ -345,11 +349,11 @@ public class PublicControl {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
 	@RequestMapping("/saveReply")
-	public String saveReply(BillboardReplyBean bean) {
+	public String saveReply(BillboardReplyBean bean,HttpSession session) {
 		System.out.println("*****儲存公佈欄留言*****");
 		if (ss.SaveReply(bean)) {// 如果儲存成功
 			BillboardBean bb = br.getById(bean.getBillboardid());// 取出公布欄的訊息
-
+			AdminBean user =	(AdminBean) session.getAttribute("user");//登入者
 			// 插入最後回覆時間時間
 			Date date = new Date();
 			bb.setReplytime(zTools.getTime(date));
@@ -361,15 +365,18 @@ public class PublicControl {
 			StringBuilder maillist = new StringBuilder();
 			zTools.mail(mailTo, text, Subject, maillist.toString());
 			// 給發佈人 存mail
+			if(!user.getName().equals(abean.getName()))
 			ss.saveMail(abean.getAdminid(), bean.getBillboardid(), "新留言");
 			// 給被@的人 存mail
 			List<BillboardAdviceBean> adviceList = bb.getAdvice();
 			for (BillboardAdviceBean advice : adviceList) {
+				if(!user.getName().equals(advice.getFormname()))
 				ss.saveMail(advice.getAdviceto(), bean.getBillboardid(), "新留言");
 			}
 			// 留言過的人 存mail
 			List<BillboardReplyBean> replyList = bb.getReply();
 			for (BillboardReplyBean reply : replyList) {
+				if(!user.getName().equals(reply.getName()))
 				ss.saveMail(ar.findByName(reply.getName()).getAdminid(), bean.getBillboardid(), "新留言");// 用名子去admin找人
 																										// 找到後取出Adminid
 			}
@@ -404,6 +411,13 @@ public class PublicControl {
 		System.out.println("*****儲存留言的留言*****");
 		System.out.println(replyreplyBean);
 		ss.saveReplyreply(replyreplyBean);
+		
+		
+		
+		
+		
+		
+		
 		return "redirect:/billboardReply/" + billboardid;
 	}
 

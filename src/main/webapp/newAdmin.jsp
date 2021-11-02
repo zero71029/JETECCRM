@@ -192,7 +192,7 @@
                 // 密碼驗證
                 jQuery.validator.setDefaults({
                     submitHandler: function () {
-                        if (confirm("題交確認")) form.submit();
+                        if (confirm("提交確認")) form.submit();
 
                     }
                 });

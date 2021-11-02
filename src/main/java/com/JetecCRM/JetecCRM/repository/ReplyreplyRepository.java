@@ -6,4 +6,6 @@ import com.JetecCRM.JetecCRM.model.ReplyreplyBean;
 
 public interface ReplyreplyRepository extends JpaRepository<ReplyreplyBean, String>{
 
+	void deleteByReplyid(String replyId);
+
 }

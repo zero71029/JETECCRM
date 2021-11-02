@@ -236,11 +236,20 @@
                                 <tr style="text-align:center">
                                     <th scope="col-lg" style="width: 700px;">主題</th>
                                     <th scope="col-lg">發布時間</th>
-                                    <th scope="col-lg"><a href="${pageContext.request.contextPath}/billboard?pag=1?sor=replytime?sortType=DESC"></a>最後回覆時間</th>
+                                    <th scope="col-lg"><a
+                                            href="${pageContext.request.contextPath}/billboard?pag=1?sor=replytime?sortType=DESC"></a>最後回覆時間
+                                    </th>
                                     <th scope="col-lg">回應</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <style>
+                                    tr  td span a{
+                                        color: #777;
+                                        font-size: 0.9rem;
+                                        text-decoration: none;
+                                    }
+                                </style>
                                 <c:if test="${not empty list}">
                                     <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}"
                                         var="s">
@@ -266,7 +275,9 @@
                                                     </c:forEach>
                                                 </c:if>
                                                 <!-- 分群-->
-                                                <span style="color: #777;font-size: 0.9rem;">
+
+
+                                                <span style="color: #777;font-size: 0.9rem;" class="group">
                                                     <c:if test='${s.billtowngroup == "生產"}'>
                                                         <a
                                                             href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvddd生產">${s.billtowngroup}</a>
@@ -302,12 +313,11 @@
                                                     →
                                                     <a
                                                         href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.bgb.billboardoption}</a>
-
-
-
-
-                                                    &nbsp;
+                                                                &nbsp;
                                                 </span>
+
+
+
 
                                                 <!-- 如果 mail.billboardid = 留言id 就是未讀 -->
                                                 <c:if test="${not empty user.mail}">
@@ -371,10 +381,12 @@
                                 <!-- 如果 pag < 2   ,    pag> max-2 -->
                                 <c:forEach varStatus="loop" begin="${param.pag-2 <1 ? 1:param.pag-2}"
                                     end="${param.pag+2 >TotalPages ? TotalPages :param.pag+2}">
-                                    <li class='page-item      ${param.pag == loop.index ? "active ":""}         '><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=${loop.index}">${loop.index}</a></li>
+                                    <li class='page-item      ${param.pag == loop.index ? "active ":""}         '><a
+                                            class="page-link"
+                                            href="${pageContext.request.contextPath}/billboard?pag=${loop.index}">${loop.index}</a>
+                                    </li>
 
-                                </c:forEach>  
+                                </c:forEach>
                                 <li class="page-item"><a class="page-link"
                                         href='${pageContext.request.contextPath}/billboard?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}'>→</a>
                                 </li>
