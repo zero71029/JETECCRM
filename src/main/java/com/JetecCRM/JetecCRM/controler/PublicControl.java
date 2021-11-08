@@ -76,7 +76,7 @@ public class PublicControl {
 		if (pag < 1)
 			pag = 1;
 		pag--;
-		Pageable p = (Pageable) PageRequest.of(pag, 20, Direction.DESC, "createtime");
+		Pageable p = (Pageable) PageRequest.of(pag, 30, Direction.DESC, "createtime");
 		Page<BillboardBean> page = (Page<BillboardBean>) br.getByStateAndTop("公開", "", p);
 //		全部有幾頁
 		model.addAttribute("TotalPages", page.getTotalPages());
@@ -278,9 +278,8 @@ public class PublicControl {
 					String path2 = "E:/CRMfile/";
 					String path3 = "C:\\Users\\Rong\\Desktop\\tomcat-9.0.41\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\";
 					// 檔案輸出
-					String filePath = path2 + uuid + lastname;
-					System.out.println("檔案輸出到" + filePath);
-					fileMap.get("file" + i).transferTo(new File(filePath));
+					System.out.println(path2 + fileMap.get("file" + i).getOriginalFilename());
+					fileMap.get("file" + i).transferTo(new File(path2 + fileMap.get("file" + i).getOriginalFilename()));
 					// 檔案複製
 					String pic_path = null;
 					try {
@@ -291,15 +290,15 @@ public class PublicControl {
 							pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("\\"))
 									+ "/webapps/CRM/WEB-INF/classes/static/file/";
 							// 列印路徑
-							System.out.println("複製到" + pic_path + fileMap.get("file" + i).getOriginalFilename());
-							File source = new File(filePath);
+							System.out.println(pic_path + fileMap.get("file" + i).getOriginalFilename());
+							File source = new File(path3 + fileMap.get("file" + i).getOriginalFilename());
 							File dest = new File(pic_path + fileMap.get("file" + i).getOriginalFilename());
 							Files.copy(source.toPath(), dest.toPath());
 							System.out.println("複製成功");
 						} else {
-							File source = new File(filePath);
+							File source = new File(path2 + fileMap.get("file" + i).getOriginalFilename());
 							File dest = new File(path3 + fileMap.get("file" + i).getOriginalFilename());
-							System.out.println("複製到" + path3 + fileMap.get("file" + i).getOriginalFilename());
+							System.out.println(path2 + fileMap.get("file" + i).getOriginalFilename());
 							Files.copy(source.toPath(), dest.toPath());
 							System.out.println("複製成功");
 						}
@@ -313,8 +312,8 @@ public class PublicControl {
 					billBoardFileBean.setBillboardid(0);
 					billBoardFileBean.setAuthorize(authorizeId);
 					billBoardFileBean.setFileid(uuid);
-					billBoardFileBean.setUrl(uuid + lastname); // 使用uuid建檔名
-//					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
+//					billBoardFileBean.setUrl(uuid + lastname); // 使用uuid建檔名
+					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
 					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
@@ -446,42 +445,49 @@ public class PublicControl {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //下載檔案
-	@RequestMapping("/download/{fileUrl}")
-	public String download(@PathVariable("fileUrl") String fileUrl) {
-		System.out.println("*****下載檔案*****");
-		BillboardFileBean billBoardFileBean = bfr.getByUrl(fileUrl);
-		// 獲取Tomcat伺服器所在的路徑
-		String tomcat_path = System.getProperty("user.dir");
-		System.out.println("Tomcat伺服器所在的路徑: " + tomcat_path);
-		// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
-		String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\") + 1, tomcat_path.length());
-		// 判斷最後一個檔案目錄是否為bin目錄
-		String pic_path = null;
-		System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: " + bin_path);
-		// 獲取儲存上傳圖片的檔案路徑
-		pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("\\")) + "/webapps/CRM"
-				+ "/file/";
-		System.out.println(pic_path);
-		File source = new File(pic_path + billBoardFileBean.getUrl());
-		File dest = new File(pic_path + billBoardFileBean.getName());
-		try {
-			Files.copy(source.toPath(), dest.toPath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-//				Rong
-			pic_path = "E:/CRMfile/";
-			source = new File(pic_path + billBoardFileBean.getUrl());
-			dest = new File(pic_path + billBoardFileBean.getName());
-			try {
-				Files.copy(source.toPath(), dest.toPath());
-			} catch (IOException ee) {
-				// TODO Auto-generated catch block
-				ee.printStackTrace();
-			}
-		}
-
-		return "redirect:/file/" + billBoardFileBean.getName();
-	}
+//	@RequestMapping("/download/{fileUrl}")	
+//	public String download(@PathVariable("fileUrl") String fileUrl) {
+//		System.out.println("*****下載檔案*****");
+//		BillboardFileBean billBoardFileBean = bfr.getByUrl(fileUrl);
+//		// 獲取Tomcat伺服器所在的路徑
+//		String tomcat_path = System.getProperty("user.dir");
+//		System.out.println("Tomcat伺服器所在的路徑: " + tomcat_path);
+//		// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
+//		String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\") + 1, tomcat_path.length());
+//		// 判斷最後一個檔案目錄是否為bin目錄
+//		String pic_path = null;
+//		System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: " + bin_path);
+//		// 獲取儲存上傳圖片的檔案路徑
+//		pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("\\")) + "/webapps/CRM/WEB-INF/classes/static/file/";
+//		System.out.println(pic_path);
+//		System.out.println("來源:"+pic_path + billBoardFileBean.getUrl());
+//		File source = new File(pic_path + billBoardFileBean.getUrl());
+//		System.out.println("輸出:"+pic_path + billBoardFileBean.getName());
+//		File dest = new File(pic_path + billBoardFileBean.getName());
+//		try {
+//			System.out.println("複製前");
+//			Files.copy(source.toPath(), dest.toPath());			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			System.out.println("失敗1******************************************************************");
+//			e.printStackTrace();
+////				Rong
+//			pic_path = "E:/CRMfile/";
+//			System.out.println("來源2:"+pic_path + billBoardFileBean.getUrl());
+//			source = new File(pic_path + billBoardFileBean.getUrl());
+//			System.out.println("輸出2:"+pic_path + billBoardFileBean.getName());
+//			dest = new File(pic_path + billBoardFileBean.getName());
+//			try {
+//				System.out.println("複製2前");
+//				Files.copy(source.toPath(), dest.toPath());
+//			} catch (IOException ee) {
+//				System.out.println("失敗2");
+//				// TODO Auto-generated catch block
+//				ee.printStackTrace();			
+//			}
+//		}
+//
+//		return "redirect:/file/" + billBoardFileBean.getName();
+//	}
 
 }
