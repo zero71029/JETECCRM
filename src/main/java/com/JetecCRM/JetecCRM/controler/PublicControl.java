@@ -1,6 +1,8 @@
 package com.JetecCRM.JetecCRM.controler;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -170,13 +172,14 @@ public class PublicControl {
 	public String billboardReply(Model model, @PathVariable("id") Integer id, HttpSession session) {
 		System.out.println("*****讀取公佈欄細節****");
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
-		//讀取公佈欄細節  如果有登入就已讀
+		// 讀取公佈欄細節 如果有登入就已讀
 		model.addAttribute("bean", ss.getBillboardById(id, adminBean));
-		//如果有登入 更新資料
-		if(adminBean != null)session.setAttribute("user", ar.getById(adminBean.getAdminid()));
-		//讀取2星期內的訊息
+		// 如果有登入 更新資料
+		if (adminBean != null)
+			session.setAttribute("user", ar.getById(adminBean.getAdminid()));
+		// 讀取2星期內的訊息
 		model.addAttribute("news", ss.getBillboardByTime());
-		//讀取回覆
+		// 讀取回覆
 		model.addAttribute("reply", ss.getBillboardReply(id));
 		return "/system/billboardReply";
 	}
@@ -258,35 +261,51 @@ public class PublicControl {
 			for (int i = 0; i <= fileMap.size(); i++) {
 //2. 儲存圖片到資料夾
 				if (fileMap.get("file" + i) != null) {
+//					讀取檔眳
 					System.out.println(fileMap.get("file" + i).getOriginalFilename());
-//改名+存檔
+//					讀取副檔名
 					String lastname = fileMap.get("file" + i).getOriginalFilename()
 							.substring(fileMap.get("file" + i).getOriginalFilename().indexOf("."));
 					System.out.println(lastname);
-
 					// 獲取Tomcat伺服器所在的路徑
 					String tomcat_path = System.getProperty("user.dir");
 					System.out.println("Tomcat伺服器所在的路徑: " + tomcat_path);
 					// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
-					String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("/") + 1, tomcat_path.length());
+					String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\") + 1, tomcat_path.length());
 					System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: " + bin_path);
-					// 判斷最後一個檔案目錄是否為bin目錄
-					if (("bin").equals(bin_path)) {
-						// 獲取儲存上傳圖片的檔案路徑
-						String pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("/"))
-								+ "/webapps/CRM" + "/file/";
-						fileMap.get("file" + i)
-								.transferTo(new File(pic_path + fileMap.get("file" + i).getOriginalFilename()));
-						fileMap.get("file" + i)
-								.transferTo(new File("E:/CRMfile " + fileMap.get("file" + i).getOriginalFilename()));
-						System.out.println(pic_path + fileMap.get("file" + i).getOriginalFilename());
-					} else {
-						String path2 = "C:\\Users\\Rong\\Desktop\\apache-tomcat-9.0.53\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\";
-						fileMap.get("file" + i)
-								.transferTo(new File(path2 + fileMap.get("file" + i).getOriginalFilename()));
-						System.out.println(path2 + fileMap.get("file" + i).getOriginalFilename());
-						fileMap.get("file" + i)
-								.transferTo(new File("E:/CRMfile " + fileMap.get("file" + i).getOriginalFilename()));
+					System.out.println("bin_path == " + bin_path);
+//					String path2 = "E:/CRMfile/";
+					String path2 = "E:/CRMfile/";
+					String path3 = "C:\\Users\\Rong\\Desktop\\tomcat-9.0.41\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\";
+					// 檔案輸出
+					String filePath = path2 + uuid + lastname;
+					System.out.println("檔案輸出到" + filePath);
+					fileMap.get("file" + i).transferTo(new File(filePath));
+					// 檔案複製
+					String pic_path = null;
+					try {
+						// 判斷最後一個檔案目錄是否為bin目錄
+						if (("bin").equals(bin_path)) {
+							System.out.println("binbinbinbinbinbinbinbinbinbinbinbin");
+							// 獲取儲存上傳圖片的檔案路徑
+							pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("\\"))
+									+ "/webapps/CRM/WEB-INF/classes/static/file/";
+							// 列印路徑
+							System.out.println("複製到" + pic_path + fileMap.get("file" + i).getOriginalFilename());
+							File source = new File(filePath);
+							File dest = new File(pic_path + fileMap.get("file" + i).getOriginalFilename());
+							Files.copy(source.toPath(), dest.toPath());
+							System.out.println("複製成功");
+						} else {
+							File source = new File(filePath);
+							File dest = new File(path3 + fileMap.get("file" + i).getOriginalFilename());
+							System.out.println("複製到" + path3 + fileMap.get("file" + i).getOriginalFilename());
+							Files.copy(source.toPath(), dest.toPath());
+							System.out.println("複製成功");
+						}
+
+					} catch (Exception e) {
+						System.out.println("複製失敗");
 					}
 
 //3. 儲存檔案名稱到資料庫
@@ -294,7 +313,8 @@ public class PublicControl {
 					billBoardFileBean.setBillboardid(0);
 					billBoardFileBean.setAuthorize(authorizeId);
 					billBoardFileBean.setFileid(uuid);
-					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
+					billBoardFileBean.setUrl(uuid + lastname); // 使用uuid建檔名
+//					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
 					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
 
@@ -349,11 +369,11 @@ public class PublicControl {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
 	@RequestMapping("/saveReply")
-	public String saveReply(BillboardReplyBean bean,HttpSession session) {
+	public String saveReply(BillboardReplyBean bean, HttpSession session) {
 		System.out.println("*****儲存公佈欄留言*****");
 		if (ss.SaveReply(bean)) {// 如果儲存成功
 			BillboardBean bb = br.getById(bean.getBillboardid());// 取出公布欄的訊息
-			AdminBean user =	(AdminBean) session.getAttribute("user");//登入者
+			AdminBean user = (AdminBean) session.getAttribute("user");// 登入者
 			// 插入最後回覆時間時間
 			Date date = new Date();
 			bb.setReplytime(zTools.getTime(date));
@@ -365,20 +385,20 @@ public class PublicControl {
 			StringBuilder maillist = new StringBuilder();
 			zTools.mail(mailTo, text, Subject, maillist.toString());
 			// 給發佈人 存mail
-			if(!user.getName().equals(abean.getName()))
-			ss.saveMail(abean.getAdminid(), bean.getBillboardid(), "新留言");
+			if (!user.getName().equals(abean.getName()))
+				ss.saveMail(abean.getAdminid(), bean.getBillboardid(), "新留言");
 			// 給被@的人 存mail
 			List<BillboardAdviceBean> adviceList = bb.getAdvice();
 			for (BillboardAdviceBean advice : adviceList) {
-				if(!user.getName().equals(advice.getFormname()))
-				ss.saveMail(advice.getAdviceto(), bean.getBillboardid(), "新留言");
+				if (!user.getName().equals(advice.getFormname()))
+					ss.saveMail(advice.getAdviceto(), bean.getBillboardid(), "新留言");
 			}
 			// 留言過的人 存mail
 			List<BillboardReplyBean> replyList = bb.getReply();
 			for (BillboardReplyBean reply : replyList) {
-				if(!user.getName().equals(reply.getName()))
-				ss.saveMail(ar.findByName(reply.getName()).getAdminid(), bean.getBillboardid(), "新留言");// 用名子去admin找人
-																										// 找到後取出Adminid
+				if (!user.getName().equals(reply.getName()))
+					ss.saveMail(ar.findByName(reply.getName()).getAdminid(), bean.getBillboardid(), "新留言");// 用名子去admin找人
+																											// 找到後取出Adminid
 			}
 		}
 		return "redirect:/billboardReply/" + bean.getBillboardid();
@@ -411,13 +431,6 @@ public class PublicControl {
 		System.out.println("*****儲存留言的留言*****");
 		System.out.println(replyreplyBean);
 		ss.saveReplyreply(replyreplyBean);
-		
-		
-		
-		
-		
-		
-		
 		return "redirect:/billboardReply/" + billboardid;
 	}
 
@@ -429,6 +442,46 @@ public class PublicControl {
 		System.out.println("*****刪除留言的留言*****");
 		String result = ss.removeReplyreply(ReplyreplyId);
 		return result;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//下載檔案
+	@RequestMapping("/download/{fileUrl}")
+	public String download(@PathVariable("fileUrl") String fileUrl) {
+		System.out.println("*****下載檔案*****");
+		BillboardFileBean billBoardFileBean = bfr.getByUrl(fileUrl);
+		// 獲取Tomcat伺服器所在的路徑
+		String tomcat_path = System.getProperty("user.dir");
+		System.out.println("Tomcat伺服器所在的路徑: " + tomcat_path);
+		// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
+		String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\") + 1, tomcat_path.length());
+		// 判斷最後一個檔案目錄是否為bin目錄
+		String pic_path = null;
+		System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: " + bin_path);
+		// 獲取儲存上傳圖片的檔案路徑
+		pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("\\")) + "/webapps/CRM"
+				+ "/file/";
+		System.out.println(pic_path);
+		File source = new File(pic_path + billBoardFileBean.getUrl());
+		File dest = new File(pic_path + billBoardFileBean.getName());
+		try {
+			Files.copy(source.toPath(), dest.toPath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+//				Rong
+			pic_path = "E:/CRMfile/";
+			source = new File(pic_path + billBoardFileBean.getUrl());
+			dest = new File(pic_path + billBoardFileBean.getName());
+			try {
+				Files.copy(source.toPath(), dest.toPath());
+			} catch (IOException ee) {
+				// TODO Auto-generated catch block
+				ee.printStackTrace();
+			}
+		}
+
+		return "redirect:/file/" + billBoardFileBean.getName();
 	}
 
 }

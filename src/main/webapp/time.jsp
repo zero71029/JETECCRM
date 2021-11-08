@@ -37,8 +37,7 @@
         <input type="password" placeholder="密碼" name="userPassword" ><br>
         <span style="color: red;">${param.mess=="1"?"帳號密碼錯誤 或 權限不夠":""}</span>
         <input type="submit" value="登入">
-        <button type="button" style="background-color: #0d1326;border: 0px solid #0d1326; color: #0d1326;" 
-        onclick="javascript:$('input[name=userName]').val('AAA@AAA.com');$('input[name=userPassword]').val('AAA');">xxx</button>
+        
       </form>
 
       <br />
