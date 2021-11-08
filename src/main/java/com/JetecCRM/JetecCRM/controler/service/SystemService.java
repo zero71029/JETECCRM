@@ -116,7 +116,7 @@ public class SystemService {
 //		page.getTotalPages();全部有幾頁		
 //		List<BillboardBean> result = page.getContent();
 
-		Pageable p = (Pageable) PageRequest.of(pag, 20, Direction.DESC, "createtime");
+		Pageable p = (Pageable) PageRequest.of(pag, 30, Direction.DESC, "createtime");
 		//結果容器
 		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
 		//把系統置頂抓出來
@@ -324,6 +324,9 @@ public class SystemService {
 		if (amr.existsByBillboardidAndAdminid(billboardid, adminid)) {
 			amr.deleteByBillboardidAndAdminid(billboardid, adminid);
 			AdminBean adminBean = ar.getById(adminid);
+			if(brr.existsByBillboardidAndName(billboardid, adminBean.getName())) {
+				brr.deleteByBillboardidAndName(billboardid, adminBean.getName());
+			}
 			BillboardReadBean brb = new BillboardReadBean();
 			brb.setBillboardid(billboardid);
 			brb.setReadid(zTools.getUUID());
@@ -336,7 +339,7 @@ public class SystemService {
 				bar.save(bab);
 			}
 
-			return "成功已讀  “您已被標註“ 訊息取消";
+			return "成功已讀  “您已被標註“訊息取消";
 		} else {
 			return "找不到資料";
 		}
@@ -417,7 +420,10 @@ public class SystemService {
 //刪除型錄
 	public void removefile(String fileid) {
 		BillboardFileBean billBoardFileBean = bfr.getById(fileid);
-
+		File file = new File("E:/CRMfile/" + billBoardFileBean.getUrl());
+		System.out.println("刪除檔案" + file.delete());
+		file = new File("E:/CRMfile/" + billBoardFileBean.getName());
+		System.out.println("刪除檔案" + file.delete());
 		// 獲取Tomcat伺服器所在的路徑
 		String tomcat_path = System.getProperty("user.dir");
 		System.out.println("Tomcat伺服器所在的路徑: " + tomcat_path);
@@ -429,12 +435,11 @@ public class SystemService {
 			// 獲取儲存上傳圖片的檔案路徑
 			String pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("\\"))
 					+ "/webapps/CRM" + "/file/";
-			File file = new File(pic_path + billBoardFileBean.getUrl());
+			 file = new File(pic_path + billBoardFileBean.getUrl());
+			System.out.println(file.delete());
+			 file = new File(pic_path + billBoardFileBean.getName());
 			System.out.println(file.delete());
 		}
-		File file = new File("E:/CRMfile/" + billBoardFileBean.getUrl());
-		System.out.println("E:/CRMfile/" + file.delete());
-
 		bfr.delete(billBoardFileBean);
 	}
 

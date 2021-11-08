@@ -10,22 +10,11 @@
             <link rel="preconnect" href="https://fonts.gstatic.com">
             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
 
-            <!-- bootstrap的CSS、JS樣式放這裡  -->
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/css/bootstrap.min.css">
-            <link rel="stylesheet"
-                href="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/css/bootstrap.rtl.min.css">
-            <script src="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
-            <!-- <%-- jQuery放這裡 --%> -->
-            <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
-            <script src="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.js"></script>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/jquery-ui-1.13.0.custom/jquery-ui.min.css">
-
-            <!-- <%-- 主要的CSS、JS放在這裡--%> -->
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
             <c:set var="ddd" value="有未讀訊息(${user.mail.size()})"></c:set>
             <c:set var="CRM" value='${empty user?"未登入":"CRM"}'></c:set>
             <span style="color: red;"></span>
             <title>${user.mail.size() > 0 ? ddd:CRM}</title>
+
         </head>
 
 
@@ -44,7 +33,6 @@
             <div class="container-fluid">
                 <div class="row justify-content-end">
                     <div class="col-lg-11">
-
                         <!-- 導覽列 -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="text-align: left;">
                             <div class="container-fluid">
@@ -227,7 +215,7 @@
                 <div class="row justify-content-end">
                     <div class="col-lg-8">
 
-                        <!-- <%-- 中間主體--%> -->.
+                        <!-- <%-- 中間主體--%> -->
                         <h1 style="color: red;">${param.mess=="1"?"權限不夠":""}</h1>
                         <h1 style="color: red;">${param.mess=="2"?"須先登入":""}</h1>
                         <h1 style="color: red;">${param.mess=="3"?"授權碼過期":""}</h1>
@@ -244,7 +232,7 @@
                             </thead>
                             <tbody>
                                 <style>
-                                    tr  td span a{
+                                    tr td span a {
                                         color: #777;
                                         font-size: 0.9rem;
                                         text-decoration: none;
@@ -313,7 +301,7 @@
                                                     →
                                                     <a
                                                         href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.bgb.billboardoption}</a>
-                                                                &nbsp;
+                                                    &nbsp;
                                                 </span>
 
 
@@ -373,10 +361,16 @@
                         <!-- 分頁 -->
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">←</a>
-                                </li>
 
+                                <!-- 首頁 -->
+                                <c:if test="${param.pag > 1}">
+                                    <li class="page-item"><a class="page-link"
+                                            href="${pageContext.request.contextPath}/billboard?pag=1">首頁</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link"
+                                            href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">←</a>
+                                    </li>
+                                </c:if>
 
                                 <!-- 如果 pag < 2   ,    pag> max-2 -->
                                 <c:forEach varStatus="loop" begin="${param.pag-2 <1 ? 1:param.pag-2}"
@@ -387,9 +381,15 @@
                                     </li>
 
                                 </c:forEach>
+
+                                <c:if test="${param.pag != TotalPages}">
                                 <li class="page-item"><a class="page-link"
                                         href='${pageContext.request.contextPath}/billboard?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}'>→</a>
                                 </li>
+                                <li class="page-item"><a class="page-link"
+                                        href='${pageContext.request.contextPath}/billboard?pag=${TotalPages}'>尾頁</a>
+                                </li>
+                                </c:if>
                             </ul>
                         </nav>
                         <!-- 分頁 ＿////////////////////-->

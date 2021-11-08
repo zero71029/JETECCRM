@@ -10,12 +10,8 @@
             <link rel="preconnect" href="https://fonts.gstatic.com">
             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
 
-            <!-- bootstrap的CSS、JS樣式放這裡  -->
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.rtl.min.css">
-            <script src="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
-            <!-- <%-- 主要的CSS、JS放在這裡--%> -->
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+
+
 
 
             <title>CRM客戶管理系統</title>
@@ -61,7 +57,7 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-lg-8">
                                         <!-- 上一頁 -->
-                                        <a href="javascript:window.history.back();location.reload();"
+                                        <a href="#" onclick="self.location=document.referrer;" .
                                             style="text-decoration: none;">
                                             <img src="${pageContext.request.contextPath}/img/Pre.png" alt="上一頁">
                                         </a>${bean.bgb.billboardgroup}>${bean.bgb.billboardoption}
@@ -70,15 +66,12 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-9"
-                                        style="background-color: #569b92; border: solid 1px #569b92; position: relative; color: white;">
+                                        style="background-color: #569b92; border: solid 1px #569b92; position: relative; color: white;font-size: 18px;">
                                         討論區
 
                                         <!-- 有登入才顯示 -->
                                         <c:if test='${not empty user}'>
                                             <span style="position: absolute; right: 0%; top: 0%;">
-
-
-
                                                 <img src="${pageContext.request.contextPath}/img/copy.png" alt="複製"
                                                     onclick="cop()" style="cursor: pointer;" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title="複製">
@@ -124,7 +117,7 @@
 
                                                 <!--  已讀 才顯示 -->
                                                 <c:if test='${m != "ture" }'>
-                                                   
+
                                                     <img src="${pageContext.request.contextPath}/img/unread.png"
                                                         alt="已讀" data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="已讀">
@@ -143,14 +136,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">發佈者</div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 18px;">
+                                        發佈者</div>
                                     <div class="col-md-8 cell">${bean.user}</div>
                                 </div>
 
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">主題</div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 18px;">
+                                        主題</div>
                                     <div class="col-md-8 cell" style="position: relative;">
                                         ${bean.theme}
                                         <span
@@ -161,14 +156,16 @@
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">內容</div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 18px;">
+                                        內容</div>
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">
                                         ${bean.content}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud">標記</div>
+                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 18px;">
+                                        標記</div>
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">&nbsp;
                                         <c:if test="${not empty bean.advice}">
                                             <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()-1}"
@@ -190,104 +187,113 @@
 
                         <!-- 回覆內容 -->
                         <style>
-                            .ccc {
-                                border-bottom: 2px solid #FFF;
+                            .replyA a {
+                                font-size: 14px;
+                                color: #569b92;
+                                text-decoration: none;
                             }
                         </style>
                         <div class="row">
-                            <c:if test="${not empty reply}">
-                                <c:forEach varStatus="loop" begin="0" end="${reply.size()-1}" items="${reply}" var="s">
-                                    <div class="row" style="line-height: 2rem; min-height: 100px; ">
-                                        <div class="col-md-1"></div>
-                                        <div class="col-md-1  " style="background-color: #a5b5b1;">${s.name}</div>
-                                        <div class="col-md-8 "
-                                            style="position: relative; word-wrap:break-word;background-color: #d9e2e0;">
-                                            ${s.content}
-
-                                            <c:if test="${s.name == user.name}">
-                                                <form action="${pageContext.request.contextPath}/replyChange"
-                                                    class="replyText" method="post">
-                                                    <textarea name="content" id="" cols="70" rows="3"
-                                                        maxlength="950">${s.content}</textarea>
-                                                    <input type="hidden" name="replyid" value="${s.replyid}">
-                                                    <input type="hidden" name="billboardid" value="${s.billboardid}">
-                                                    <input type="hidden" name="name" value="${s.name}">
-
-                                                    <button type="submit"
-                                                        style="width: 95%;background-color: #08604f; color: white;"
-                                                        class="btn ">修改</button>
-                                                </form>
-                                            </c:if>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-1 "></div>
-                                        <div class="col-md-1  ccc" style="background-color: #a5b5b1;"></div>
-                                        <div class="col-md-6 ccc"
-                                            style="position: relative; word-wrap:break-word;background-color: #d9e2e0;color: #8e8e8e;">
-                                            ${s.createtime}
-
-                                        </div>
-                                        <div class="col-md-2 ccc" style="background-color: #d9e2e0;">
-                                            <c:if test="${s.name == user.name}">
-                                                <button onclick="replyChange();">修改</button>
-                                                <button
-                                                    onclick="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</button>
-                                            </c:if>
-                                        </div>
-                                    </div>                                  
-                                    <c:if test="${not empty s.reply}">
-                                        <c:forEach varStatus="loop" begin="0" end="${s.reply.size()-1}"
-                                            items="${s.reply}" var="reply">
-                                            <div class="row">
-                                                <div class="col-md-1 "></div>
-                                                <div class="col-md-1  ccc" style="background-color: #a5b5b1;">${reply.name}</div>
-                                                <div class="col-md-5 ccc"
-                                                    style="position: relative; word-wrap:break-word;background-color: #d9e2e0;color: #8e8e8e;">
-                                                    ${reply.content}
-                                                </div>
-                                                <div class="col-md-1 ccc"
-                                                    style="position: relative; word-wrap:break-word;background-color: #d9e2e0;color: #8e8e8e;">
-                                                    <c:if test="${reply.name == user.name}">
-
-                                                        <a href="javascript:removeReplyreply('${reply.id}')">remove</a>
-
-                                                    </c:if>
-                                                </div>
-                                                <div class="col-md-2 ccc"
-                                                    style="position: relative; word-wrap:break-word;background-color: #d9e2e0;color: #8e8e8e;">
-                                                    ${reply.createtime}
-                                                </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-9 row">
+                                <c:if test="${not empty reply}">
+                                    <c:forEach varStatus="loop" begin="0" end="${reply.size()-1}" items="${reply}"
+                                        var="s">
+                                        <hr style="color: #569b92; opacity: 1;">
+                                        <div class="row" style="min-height: 70px;">
+                                            <div class="col-md-2" style="color: #569b92;font-size: 18px;">
+                                                ${s.name}</div>
+                                            <div class="col-md-10" style="position: relative; word-wrap:break-word;">
+                                                ${s.content}
+                                                <c:if test="${s.name == user.name}">
+                                                    <form action="${pageContext.request.contextPath}/replyChange"
+                                                        class="replyText showText${s.replyid}" method="post">
+                                                        <textarea name="content" id="" cols="70" rows="3"
+                                                            maxlength="950">${s.content}</textarea>
+                                                        <input type="hidden" name="replyid" value="${s.replyid}">
+                                                        <input type="hidden" name="billboardid"
+                                                            value="${s.billboardid}">
+                                                        <input type="hidden" name="name" value="${s.name}">
+                                                        <button type="submit"
+                                                            style="width: 95%; background-color: #569b92;"
+                                                            class="btn ">修改</button>
+                                                    </form>
+                                                </c:if>
                                             </div>
-                                        </c:forEach>
-                                    </c:if>
+                                        </div>
+                                        <div class="row replyA" style="font-size: 12;">
+                                            <div class="col-md-9 "
+                                                style="position: relative; word-wrap:break-word;color: #8e8e8e; ">
+                                                ${s.createtime}
+                                            </div>
+                                            <div class="col-md-3 ccc" style="text-align: right;">
+                                                <c:if test="${s.name == user.name}">
+                                                    <a href="javascript:replyChange('${s.replyid}')">修改</a>&nbsp;
+                                                    <a
+                                                        href="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</a>&nbsp;
+                                                    
+                                                </c:if>
+                                                <c:if test="${not empty user}">
+                                                    <a href="javascript:showReplyText('${s.replyid}');">回復</a>
+                                                </c:if>
 
+                                            </div>
+                                            <br><br>
+                                        </div>
 
-
-
-                                    <c:if test="${not empty user}">
-                                        <form action="${pageContext.request.contextPath}/saveReplyreply" method="post">
-                                            <div class="row">
-                                                <div class="col-md-1 "></div>
-                                                <div class="col-md-9 ccc">
-                                                    <input type="hidden" name="replyid" value="${s.replyid}">
-                                                    <input type="hidden" name="name" value="${user.name}">
-                                                    <input type="hidden" name="billboardid" value="${bean.billboardid}">
-                                                    <div class="input-group mb-3">
-                                                        <input type="text" class="form-control" name="content"
-                                                            placeholder="" aria-label="Recipient's username"
-                                                            aria-describedby="button-addon2" required maxlength="950">
-                                                        <button class="btn  btn-primary" type="submit"
-                                                            id="button-addon2 ">回覆</button>
+                                        <!-- 評論 -->
+                                        <c:if test="${not empty s.reply}">
+                                            <c:forEach varStatus="loop" begin="0" end="${s.reply.size()-1}"
+                                                items="${s.reply}" var="reply">
+                                                <div class="row">
+                                                    <div class="col-md-1"></div>
+                                                    <div class="col-md-11 ">
+                                                        <div class="row replyA">
+                                                            <hr>
+                                                            <div class="col-md-2 " style="color: #569b92;">${reply.name}
+                                                            </div>
+                                                            <div class="col-md-8" style="word-wrap:break-word;">
+                                                                ${reply.content} </div>
+                                                            <div class="col-md-2 ">
+                                                                <c:if test="${reply.name == user.name}">
+                                                                    <a
+                                                                        href="javascript:removeReplyreply('${reply.id}')">remove</a>
+                                                                </c:if>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-1 "></div>
-                                            </div>
-                                        </form>
-                                    </c:if>
-                                </c:forEach>
-                            </c:if>
+                                                <br><br><br>
+                                            </c:forEach>
+                                        </c:if>
+                                        <c:if test="${not empty user}">
+                                            <form action="${pageContext.request.contextPath}/saveReplyreply"
+                                                method="post">
+                                                <div class="row replyreply show${s.replyid}">
+                                                    <div class="col-md-1 "></div>
+                                                    <div class="col-md-11 ccc">
+                                                        <input type="hidden" name="replyid" value="${s.replyid}">
+                                                        <input type="hidden" name="name" value="${user.name}">
+                                                        <input type="hidden" name="billboardid"
+                                                            value="${bean.billboardid}">
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control" name="content"
+                                                                placeholder="" aria-label="Recipient's username"
+                                                                aria-describedby="button-addon2" required
+                                                                maxlength="950"
+                                                                style="background-color: #E8e8e8; border: 1px solid #ccc;">
+                                                            <button class="btn  btn-primary" type="submit"
+                                                                id="button-addon2 ">回覆</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </c:if>
 
+                                    </c:forEach>
+                                </c:if>
+
+                            </div>
                         </div>
 
                         <c:if test="${not empty user}">
@@ -307,8 +313,8 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-1 cell cellbackgroud">留言</div>
                                     <div class="col-md-8 cell ">
-                                        <textarea class="" name="content" cols="70" rows="5" required
-                                            placeholder="" maxlength="950"></textarea>
+                                        <textarea class="" name="content" cols="70" rows="5" required placeholder=""
+                                            maxlength="950"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -327,7 +333,7 @@
 
 
                     </div>
-               
+
                     <div class="col-md-4">
                         <br><br><br>
 
@@ -344,7 +350,7 @@
                                 <div class="row" draggable="true"
                                     ondragstart="event.dataTransfer.setData('text/plain', '<img width=100% src=${url} onerror=errorOne()>')">
                                     <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
-                                    <div class="col-lg-5 cell" style="word-wrap: break-word;"><a
+                                    <div class="col-lg-5 cell" style="word-wrap: break-word;"><a target="_blank"
                                             href="${pageContext.request.contextPath}/file/${s.url}">${s.name}</a></div>
 
                                 </div>
@@ -373,7 +379,19 @@
                 </div>
             </div>
             <script>
-                $('.replyText').hide();               
+                $('.replyText').hide();
+                $('.replyreply').hide();
+                function showReplyText(replyid) {
+                    $('.show' + replyid).toggle();
+                }
+
+
+
+
+
+
+
+
 
                 function unread(billboardid, adminid) {
                     alert("取消已讀");
@@ -443,13 +461,10 @@
                     $(".content img").attr("width", "50px");
                 }
                 //修改留言
-                function replyChange() {
-                    $('.replyText').toggle();
+                function replyChange(replyid) {
+                    $('.showText'+replyid).toggle();
                 }
-                //刪除留言
-                function replyRemove() {
-                    $('.replyText').toggle();
-                }
+
                 $(".dialog").dialog({
                     autoOpen: false,
                     position: {
@@ -458,9 +473,9 @@
 
                 });
                 //刪除留言的留言
-                function removeReplyreply(replyid){
+                function removeReplyreply(replyid) {
                     $.ajax({
-                        url: '${pageContext.request.contextPath}/removeReplyreply/'+replyid,//接受請求的Servlet地址
+                        url: '${pageContext.request.contextPath}/removeReplyreply/' + replyid,//接受請求的Servlet地址
                         type: 'POST',
                         // data: formdata,
                         // async: false,//同步請求
@@ -478,7 +493,7 @@
 
 
                 }
-               
+
 
             </script>
             <input type="hidden" name="myInput" class="myInput">

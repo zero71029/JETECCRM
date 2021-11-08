@@ -297,10 +297,10 @@
                                         ondragstart="event.dataTransfer.setData('text/plain', '<img width=100% src=${url} onerror=errorOne()>')">
                                         <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
                                         <div class="col-lg-8 cell" style="word-wrap: break-word;"><a
-                                                href="${pageContext.request.contextPath}/file/${s.url}">${s.name} </a>
+                                                href="${pageContext.request.contextPath}/file/${s.url}" target="_blank">${s.name} </a>
                                         </div>
                                         <div class="col-md-2 cell position-relative ">
-                                            <a
+                                            <a 
                                                 href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a>
                                         </div>
                                     </div>

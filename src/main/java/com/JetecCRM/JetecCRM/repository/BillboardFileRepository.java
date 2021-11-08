@@ -10,6 +10,8 @@ public interface BillboardFileRepository extends JpaRepository<BillboardFileBean
 
 	List<BillboardFileBean> findByAuthorize(String authorizeId);
 
+	BillboardFileBean getByUrl(String url);
+
 
 
 }

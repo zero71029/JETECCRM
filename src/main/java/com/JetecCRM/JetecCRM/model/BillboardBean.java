@@ -43,7 +43,7 @@ public class BillboardBean {
 	//回覆
 	@JsonIgnore
 	@OneToMany(targetEntity = BillboardReplyBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
-	@OrderBy("createtime DESC")
+	@OrderBy("createtime ASC")
 	private List<BillboardReplyBean> reply;
 	//分類群組
 	@ManyToOne(targetEntity = BillboardGroupBean.class,fetch = FetchType.EAGER)
