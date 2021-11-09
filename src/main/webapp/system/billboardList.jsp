@@ -58,20 +58,38 @@
                             </form> -->
                         </div>
                         <!-- 分頁 -->
+
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
+
+                                <!-- 首頁 -->
+                                <c:if test="${param.pag > 1}">
+                                    <li class="page-item"><a class="page-link"
+                                            href="${pageContext.request.contextPath}/system/billboardList?pag=1">首頁</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link"
+                                            href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag<=1?1:param.pag-1}">←</a>
+                                    </li>
+                                </c:if>
+
+                                <!-- 如果 pag < 2   ,    pag> max-2 -->
+                                <c:forEach varStatus="loop" begin="${param.pag-2 <1 ? 1:param.pag-2}"
+                                    end="${param.pag+2 >TotalPages ? TotalPages :param.pag+2}">
+                                    <li class='page-item      ${param.pag == loop.index ? "active ":""}         '><a
+                                            class="page-link"
+                                            href="${pageContext.request.contextPath}/system/billboardList?pag=${loop.index}">${loop.index}</a>
+                                    </li>
+
+                                </c:forEach>
+
+                                <c:if test="${param.pag != TotalPages}">
                                 <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag<=1?1:param.pag-1}">←</a>
+                                        href='${pageContext.request.contextPath}/system/billboardList?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}'>→</a>
                                 </li>
                                 <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/system/billboardList?pag=1">1</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/system/billboardList?pag=2">2</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/system/billboardList?pag=3">3</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}">→</a>
+                                        href='${pageContext.request.contextPath}/system/billboardList?pag=${TotalPages}'>尾頁</a>
                                 </li>
+                                </c:if>
                             </ul>
                         </nav>
                         <!-- 分頁 ////////////////////-->

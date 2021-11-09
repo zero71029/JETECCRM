@@ -245,6 +245,7 @@ public class SystemService {
 		BillboardGroupBean bgb = bgr.findByBillboardgroupAndBillboardoption(bean.getBilltowngroup(),
 				bean.getBillboardgroupid());
 		bean.setBillboardgroupid(bgb.getBillboardgroupid());
+		bean.setUser(bean.getUser()+"(被授權)");
 		// 儲存
 		BillboardBean save = br.save(bean);
 		// 如果封存 mail未讀全刪

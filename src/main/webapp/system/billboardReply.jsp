@@ -17,8 +17,13 @@
             <title>CRM客戶管理系統</title>
         </head>
         <style>
+            div {
+                /* border: 1px solid black; */
+            }
+
             .cell {
                 border: 1px solid #8e8e8e;
+                font-size: 16px;
             }
 
             .cellbackgroud {
@@ -46,16 +51,14 @@
                         <!-- <%-- 中間主體--%> -->
                         <br>
                         <br>
-
-
-                        <form action="" method="post" id="myform" style="line-height: 2rem;" class=" g-3" novalidate>
-
-                            <div class="row">
+                        <form action="" method="post" id="myform" style="line-height: 2rem;" class="row g-3" novalidate
+                            c>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-11">
                                 <input type="hidden" name="billboardid" value="${bean.billboardid}">
                                 <input type="hidden" name="user" value="${user.name}">
                                 <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-lg-8">
+                                    <div class="col-md-9">
                                         <!-- 上一頁 -->
                                         <a href="#" onclick="self.location=document.referrer;" .
                                             style="text-decoration: none;">
@@ -64,11 +67,9 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1"></div>
                                     <div class="col-md-9"
-                                        style="background-color: #569b92; border: solid 1px #569b92; position: relative; color: white;font-size: 18px;">
+                                        style="background-color: #569b92; border: solid 1px #569b92; position: relative; color: white;font-size: 14px;">
                                         討論區
-
                                         <!-- 有登入才顯示 -->
                                         <c:if test='${not empty user}'>
                                             <span style="position: absolute; right: 0%; top: 0%;">
@@ -135,16 +136,15 @@
 
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 18px;">
+                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 14px;">
                                         發佈者</div>
                                     <div class="col-md-8 cell">${bean.user}</div>
                                 </div>
 
 
                                 <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 18px;">
+
+                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 14px;">
                                         主題</div>
                                     <div class="col-md-8 cell" style="position: relative;">
                                         ${bean.theme}
@@ -155,16 +155,16 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 18px;">
+
+                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 14px;">
                                         內容</div>
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">
                                         ${bean.content}
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 18px;">
+
+                                    <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 14px;">
                                         標記</div>
                                     <div class="col-md-8 cell content" style="word-wrap:break-word;">&nbsp;
                                         <c:if test="${not empty bean.advice}">
@@ -195,15 +195,19 @@
                         </style>
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-9 row">
+                            <div class="col-md-11">
                                 <c:if test="${not empty reply}">
                                     <c:forEach varStatus="loop" begin="0" end="${reply.size()-1}" items="${reply}"
                                         var="s">
-                                        <hr style="color: #569b92; opacity: 1;">
+                                        <div class="row">
+                                            <div class="col-md-9" style=" padding: 0%;">
+                                                <hr style="color: #569b92; opacity: 1;">
+                                            </div>
+                                        </div>
                                         <div class="row" style="min-height: 70px;">
-                                            <div class="col-md-2" style="color: #569b92;font-size: 18px;">
+                                            <div class="col-md-1" style="color: #569b92;">
                                                 ${s.name}</div>
-                                            <div class="col-md-10" style="position: relative; word-wrap:break-word;">
+                                            <div class="col-md-8" style="position: relative; word-wrap:break-word;">
                                                 ${s.content}
                                                 <c:if test="${s.name == user.name}">
                                                     <form action="${pageContext.request.contextPath}/replyChange"
@@ -222,7 +226,8 @@
                                             </div>
                                         </div>
                                         <div class="row replyA" style="font-size: 12;">
-                                            <div class="col-md-9 "
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-5 "
                                                 style="position: relative; word-wrap:break-word;color: #8e8e8e; ">
                                                 ${s.createtime}
                                             </div>
@@ -231,14 +236,11 @@
                                                     <a href="javascript:replyChange('${s.replyid}')">修改</a>&nbsp;
                                                     <a
                                                         href="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</a>&nbsp;
-                                                    
                                                 </c:if>
                                                 <c:if test="${not empty user}">
                                                     <a href="javascript:showReplyText('${s.replyid}');">回復</a>
                                                 </c:if>
-
                                             </div>
-                                            <br><br>
                                         </div>
 
                                         <!-- 評論 -->
@@ -247,7 +249,7 @@
                                                 items="${s.reply}" var="reply">
                                                 <div class="row">
                                                     <div class="col-md-1"></div>
-                                                    <div class="col-md-11 ">
+                                                    <div class="col-md-8 ">
                                                         <div class="row replyA">
                                                             <hr>
                                                             <div class="col-md-2 " style="color: #569b92;">${reply.name}
@@ -263,7 +265,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <br><br><br>
                                             </c:forEach>
                                         </c:if>
                                         <c:if test="${not empty user}">
@@ -271,7 +272,7 @@
                                                 method="post">
                                                 <div class="row replyreply show${s.replyid}">
                                                     <div class="col-md-1 "></div>
-                                                    <div class="col-md-11 ccc">
+                                                    <div class="col-md-8 ccc">
                                                         <input type="hidden" name="replyid" value="${s.replyid}">
                                                         <input type="hidden" name="name" value="${user.name}">
                                                         <input type="hidden" name="billboardid"
@@ -289,7 +290,6 @@
                                                 </div>
                                             </form>
                                         </c:if>
-
                                     </c:forEach>
                                 </c:if>
 
@@ -297,37 +297,42 @@
                         </div>
 
                         <c:if test="${not empty user}">
-                            <!-- 回覆輸入 -->
-                            <br>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-9"
-                                    style="background-color: #569b92; border: solid 1px #569b92;color: white;">
-                                    回覆</div>
-                            </div>
                             <form action="${pageContext.request.contextPath}/saveReply" method="post" id="formReply"
-                                class=" g-3 needs-validation">
-                                <input type="hidden" name="billboardid" value="${bean.billboardid}">
-                                <input type="hidden" name="name" value="${user.name}">
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-1 cell cellbackgroud">留言</div>
-                                    <div class="col-md-8 cell ">
-                                        <textarea class="" name="content" cols="70" rows="5" required placeholder=""
-                                            maxlength="950"></textarea>
+                                class="row g-3 needs-validation">
+                                <!-- 回覆輸入 -->
+                                <div class="col-md-1"></div>
+                                <div class="col-md-11">
+                                    <div class="row">                                        
+                                        <div class="col-md-9"
+                                            style="background-color: #569b92; border: solid 1px #569b92;color: white;">
+                                            回覆</div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-9">
-                                        <button type="submit"
-                                            style="width: 100%;background-color: #08604f; color: white;"
-                                            class="btn ">留言</button>
+
+                                    <input type="hidden" name="billboardid" value="${bean.billboardid}">
+                                    <input type="hidden" name="name" value="${user.name}">
+                                    <div class="row">                                      
+                                        <div class="col-md-1 cell cellbackgroud">留言</div>
+                                        <div class="col-md-8 cell " style="padding: 0%;">
+                                            <textarea class="" name="content" style="width: 100%; " rows="5" required
+                                                placeholder="" maxlength="950"></textarea>
+                                        </div>
                                     </div>
+                                    <div class="row">
+                                        
+                                        <div class="col-md-9" style="padding: 0%;">
+                                            <button type="submit"
+                                                style="width: 100%;background-color: #08604f; color: white;"
+                                                class="btn ">留言</button>
+                                        </div>
+                                    </div>
+
+
                                 </div>
+
                             </form>
+
                         </c:if>
-                        <br><br><br><br>
+                        <br><br>
                         <div class="row"></div>
 
 
@@ -379,19 +384,12 @@
                 </div>
             </div>
             <script>
+
                 $('.replyText').hide();
                 $('.replyreply').hide();
                 function showReplyText(replyid) {
                     $('.show' + replyid).toggle();
                 }
-
-
-
-
-
-
-
-
 
                 function unread(billboardid, adminid) {
                     alert("取消已讀");
@@ -462,7 +460,7 @@
                 }
                 //修改留言
                 function replyChange(replyid) {
-                    $('.showText'+replyid).toggle();
+                    $('.showText' + replyid).toggle();
                 }
 
                 $(".dialog").dialog({

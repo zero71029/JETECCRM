@@ -71,6 +71,9 @@
         </div>
 
         <script>
+            window.setTimeout(function () {
+                location.reload();
+            }, 600000);
             $(".market").hide();
             $(".client").hide();
             $(".system").hide();

@@ -36,14 +36,14 @@ public class BillboardBean {
 	private String billboardgroupid;
 	private String billtowngroup;
 	
-	//殺掉了
+	//以讀人數
 	@JsonIgnore
 	@OneToMany(targetEntity = BillboardReadBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
 	private List<BillboardReadBean> read;
 	//回覆
 	@JsonIgnore
 	@OneToMany(targetEntity = BillboardReplyBean.class ,mappedBy = "billboardid", cascade = CascadeType.ALL)
-	@OrderBy("createtime ASC")
+	@OrderBy("createtime DESC")
 	private List<BillboardReplyBean> reply;
 	//分類群組
 	@ManyToOne(targetEntity = BillboardGroupBean.class,fetch = FetchType.EAGER)

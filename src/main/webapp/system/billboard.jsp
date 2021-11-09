@@ -84,7 +84,7 @@
                                     name="authorize">
                                     <div class="row">
                                         <div class="col-lg-1 cell cellbackgroud">授權</div>
-                                        <div class="col-lg-5 cell">
+                                        <div class="col-lg-7 cell" style="padding: 0%;">
                                             <select input type="text" class=" form-select cellFrom" name="adminid">
                                                 <option class="selItemOff" value="0">新增</option>
                                                 <c:if test="${not empty admin}">
@@ -96,7 +96,7 @@
                                                 </c:if>
                                             </select>
                                         </div>
-                                        <div class="col-lg-4 cell"><button type="submit"
+                                        <div class="col-lg-2 cell" style="padding: 0%;"><button type="submit"
                                                 style="width: 100%;background-color: #08604f;color: white;"
                                                 class="btn ">發送</button></div>
                                     </div>
@@ -127,15 +127,11 @@
                                     style="text-align: center;color:white;background-color: #569b92; font-size: 20px;">
                                     發布公告</div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-1 cell position-relative cellbackgroud">發佈者</div>
-                                <div class="col-lg-9 cell">${bean.user}${param.authorize}</div>
-                            </div>
 
                             <div class="row">
 
                                 <div class="col-lg-1 cell position-relative cellbackgroud">主題*</div>
-                                <div class="col-lg-9 cell">
+                                <div class="col-lg-9 cell" style="padding: 0%;">
                                     <input type="text" class=" form-control cellFrom" name="theme" value="${bean.theme}"
                                         maxlength="90" required>
                                 </div>
@@ -144,8 +140,8 @@
                             <div class="row">
 
                                 <div class="col-lg-1 cell position-relative cellbackgroud">內容*</div>
-                                <div class="col-lg-9 cell ">
-                                    <textarea class="cellFrom" name="content" cols="80" rows="10" required
+                                <div class="col-lg-9 cell " style="padding: 0%;">
+                                    <textarea class="cellFrom" name="content" style="width: 100%;" rows="10" required
                                         maxlength="950">${bean.content} </textarea>
                                 </div>
 
@@ -153,7 +149,7 @@
                             <div class="row">
 
                                 <div class="col-lg-1 cell cellbackgroud">狀態</div>
-                                <div class="col-lg-4 cell">
+                                <div class="col-lg-4 cell" style="padding: 0%;">
                                     <select input type="text" class=" form-select cellFrom" name="state">
                                         <option ${bean.state=="公開" ?"selected":null} class="selItemOff">公開</option>
                                         <option ${bean.state=="封存" ?"selected":null} class="selItemOff">封存</option>
@@ -164,7 +160,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-1 cell cellbackgroud">群組</div>
-                                <div class="col-lg-4 cell">
+                                <div class="col-lg-4 cell" style="padding: 0%;">
                                     <select input type="text" class=" form-select cellFrom billboardGroup"
                                         name="billtowngroup">
                                         <option ${bean.billtowngroup=="一般公告" ?"selected":null} class="selItemOff"
@@ -183,8 +179,8 @@
                                             value="財務">財務</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-1 cell cellbackgroud">子項</div>
-                                <div class="col-lg-4 cell">
+                                <div class="col-lg-1 cell cellbackgroud" style="padding: 0%;">子項</div>
+                                <div class="col-lg-4 cell" style="padding: 0%;">
                                     <select name="billboardgroupid" id="" class="form-select billtownoption">
                                         <!--  -->
 
@@ -250,7 +246,7 @@
 
                             <c:if test="${bean.user == user.name  || empty bean}">
                                 <div class="row">
-                                    <div class="col-lg-10">
+                                    <div class="col-lg-10" style="padding: 0%;">
                                         <button type="submit"
                                             style="width: 100%;background-color: #08604f;color: white;"
                                             class="btn ">儲存</button>

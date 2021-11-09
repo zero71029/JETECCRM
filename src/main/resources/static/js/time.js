@@ -146,5 +146,5 @@ function changePosition(label, distance, s) {
 }
 $(".month").click(function(){   
     $('input[name="userName"]').val("jeter.tony56@gmail.com");
-    $('input[name="userPassword"]').val("AAA");
+    // $('input[name="userPassword"]').val("AAA");
   })
