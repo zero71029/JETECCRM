@@ -23,8 +23,6 @@
             .body {
                 background-color: white;
                 width: 100%;
-                height: 100px;
-                overflow:visible;
             }
         </style>
 
