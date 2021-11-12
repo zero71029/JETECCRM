@@ -50,62 +50,13 @@
 
 
                         <div class="row">
-                            <!-- 分頁 -->
-
-
-                            <c:if test="${not empty param.pag}">
-
-
-                                <div class="col-lg-3">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-
-                                            <!-- 首頁 -->
-                                            <c:if test="${param.pag > 1}">
-                                                <li class="page-item"><a class="page-link"
-                                                        href="${pageContext.request.contextPath}/system/billboardList?pag=1">首頁</a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link"
-                                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${param.pag<=1?1:param.pag-1}">←</a>
-                                                </li>
-                                            </c:if>
-
-                                            <!-- 如果 pag < 2   ,    pag> max-2 -->
-                                            <c:forEach varStatus="loop" begin="${param.pag-2 <1 ? 1:param.pag-2}"
-                                                end="${param.pag+2 >TotalPages ? TotalPages :param.pag+2}">
-                                                <li
-                                                    class='page-item      ${param.pag == loop.index ? "active ":""}         '>
-                                                    <a class="page-link"
-                                                        href="${pageContext.request.contextPath}/system/billboardList?pag=${loop.index}">${loop.index}</a>
-                                                </li>
-
-                                            </c:forEach>
-
-                                            <c:if test="${param.pag != TotalPages}">
-                                                <li class="page-item"><a class="page-link"
-                                                        href='${pageContext.request.contextPath}/system/billboardList?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}'>→</a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link"
-                                                        href='${pageContext.request.contextPath}/system/billboardList?pag=${TotalPages}'>尾頁</a>
-                                                </li>
-                                            </c:if>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </c:if>
-                            <!-- 分頁 ////////////////////-->
-                            <!-- <%-- 抬頭搜索--%> -->
-                            <div class="col-lg-3">
-                                <form action="${pageContext.request.contextPath}/system/selectBillboard" method="post">
-                                    <div class="input-group mb-3" style="width: 95%; padding-left: 50px;">
-                                        <input type="text" class="form-control" placeholder="主題 or 發佈者 "
-                                            aria-label="Recipient's username" aria-describedby="button-addon2"
-                                            name="search">
-                                        <button class="btn btn-outline-secondary" type="submit"
-                                            id="selectProduct">搜索</button>
-                                    </div>
-                                </form>
+                        <!-- 上一頁 -->
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <a href="javascript:history.back()" style="text-decoration: none;"><img
+                                        src="${pageContext.request.contextPath}/img/Pre.png" alt="上一頁"></a>
                             </div>
+                        </div>
 
                         </div>
                         <!-- <%-- 中間主體--%> -->

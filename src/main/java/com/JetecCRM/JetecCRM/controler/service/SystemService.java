@@ -26,6 +26,7 @@ import com.JetecCRM.JetecCRM.model.BillboardGroupBean;
 import com.JetecCRM.JetecCRM.model.BillboardReadBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.model.BillboardTopBean;
+import com.JetecCRM.JetecCRM.model.ReplyAdviceBbean;
 import com.JetecCRM.JetecCRM.model.ReplyreplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminMailRepository;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
@@ -36,6 +37,7 @@ import com.JetecCRM.JetecCRM.repository.BillboardReadRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReplyRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardTopRepository;
+import com.JetecCRM.JetecCRM.repository.ReplyAdviceRepository;
 import com.JetecCRM.JetecCRM.repository.ReplyreplyRepository;
 
 @Service
@@ -66,6 +68,8 @@ public class SystemService {
 //	留言的留言
 	@Autowired
 	ReplyreplyRepository rrr;
+	@Autowired
+	ReplyAdviceRepository rar;
 	@Autowired
 	ZeroTools zTools;
 
@@ -105,7 +109,7 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //讀取公佈欄列表
-	public List<BillboardBean> getBillboardList(String state, AdminBean adminBean, Integer pag) {
+	public List<BillboardBean> getBillboardList(String state, AdminBean adminBean, Integer pag,Sort sort) {
 //		Sort sort = Sort.by(Direction.DESC, "createtime");		
 //		分頁
 //		Page<BillboardBean> page = br.findAll( PageRequest.of(pag, 12, sort));
@@ -116,7 +120,7 @@ public class SystemService {
 //		page.getTotalPages();全部有幾頁		
 //		List<BillboardBean> result = page.getContent();
 
-		Pageable p = (Pageable) PageRequest.of(pag, 30, Direction.DESC, "createtime");
+		Pageable p = (Pageable) PageRequest.of(pag, 30, sort);
 		//結果容器
 		List<BillboardBean> resulet = new ArrayList<BillboardBean>();
 		//把系統置頂抓出來
@@ -245,7 +249,7 @@ public class SystemService {
 		BillboardGroupBean bgb = bgr.findByBillboardgroupAndBillboardoption(bean.getBilltowngroup(),
 				bean.getBillboardgroupid());
 		bean.setBillboardgroupid(bgb.getBillboardgroupid());
-		bean.setUser(bean.getUser()+"(被授權)");
+		
 		// 儲存
 		BillboardBean save = br.save(bean);
 		// 如果封存 mail未讀全刪
@@ -492,6 +496,7 @@ public class SystemService {
 		BillboardAdviceBean bab = new BillboardAdviceBean();
 		AdminMailBean adminMailBean = new AdminMailBean();
 		// 準備mail資料
+		StringBuilder maillist = new StringBuilder();
 		BillboardBean billboardBean = br.getById(billboardid);
 		AdminBean bos = ar.getById(adminid);
 		String mailTo = bos.getEmail();
@@ -504,7 +509,7 @@ public class SystemService {
 		bab.setReply("1");
 		// 刪除舊資料
 		bar.deleteAllByBillboardid(billboardid);
-		StringBuilder maillist = new StringBuilder();
+		
 		for (Integer a : adviceto) {
 			if (a != 0) {
 				// 插入Advice
@@ -594,6 +599,25 @@ public class SystemService {
 	public String removeReplyreply(String replyreplyId) {
 		rrr.deleteById(replyreplyId);
 		return "刪除成功";
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取留言的@
+	public List<ReplyAdviceBbean> replyAdvice(String replyId) {
+		
+		return rar.findByReplyid(replyId);
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//儲存留言的@
+	public String saveReplyAdvice(ReplyAdviceBbean raBean) {	
+		rar.save(raBean);
+		return null;
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//刪除留言的@
+	public String delReplyAdviceByReplyid(String replyId) {
+		rar.deleteAllByReplyid(replyId);
+		return "全部刪除";
+		
 	}
 
 }

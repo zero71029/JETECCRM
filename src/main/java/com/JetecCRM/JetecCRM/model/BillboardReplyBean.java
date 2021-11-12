@@ -31,7 +31,10 @@ public class BillboardReplyBean {
 	@OneToMany(targetEntity = ReplyreplyBean.class ,mappedBy = "replyid", cascade = CascadeType.ALL)
 	@OrderBy("createtime DESC")
 	private List<BillboardReplyBean> reply;
-	
+	//@他人
+	@JsonIgnore
+	@OneToMany(targetEntity = ReplyAdviceBbean.class ,mappedBy = "replyid", cascade = CascadeType.ALL)
+	private List<BillboardReplyBean> advice;
 	
 	
 	public List<BillboardReplyBean> getReply() {

@@ -1,7 +1,6 @@
 package com.JetecCRM.JetecCRM.controler;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +34,7 @@ import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.LibraryBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 
 @Controller
@@ -48,6 +49,8 @@ public class SystemControler {
 	BillboardRepository br;
 	@Autowired
 	AuthorizeRepository authorizeRepository;
+	@Autowired
+	BillboardFileRepository bfr;
 	@Autowired
 	ZeroTools zTools;
 
@@ -173,7 +176,8 @@ public class SystemControler {
 		Page<BillboardBean> page = (Page<BillboardBean>) br.getByStateAndTop("公開", "", p);
 		model.addAttribute("TotalPages", page.getTotalPages());
 		// 公佈欄列表
-		model.addAttribute("list", ss.getBillboardList("公開", adminBean, pag));
+		Sort sort = Sort.by(Direction.DESC, "createtime");
+		model.addAttribute("list", ss.getBillboardList("公開", adminBean, pag, sort));
 		return "/system/billboardList";
 	}
 
@@ -181,17 +185,19 @@ public class SystemControler {
 //讀取公佈欄列表 封存
 	@RequestMapping("/OffShelf")
 	public String OffShelf(Model model, HttpSession session) {
-		System.out.println("*****讀取公佈欄列表*****");
+		System.out.println("*****讀取公佈欄列表 封存*****");
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
-		model.addAttribute("list", ss.getBillboardList("封存", adminBean, 0));
-		return "/system/billboardList";
+		Sort sort = Sort.by(Direction.DESC, "createtime");
+		model.addAttribute("list", ss.getBillboardList("封存", adminBean, 0, sort));
+		return "/system/OffShelf";
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//儲存公佈欄
+//修改公佈欄
 	@RequestMapping("/SaveBillboard")
 	public String SaveBillboard(BillboardBean bean, HttpSession session) {
-		System.out.println("*****儲存公佈欄*****");
+		System.out.println("*****修改公佈欄*****");
+		// 儲存公佈欄
 		BillboardBean save = ss.SaveBillboard(bean, session);
 		return "redirect:/system/billboard/" + save.getBillboardid();
 	}
@@ -204,6 +210,7 @@ public class SystemControler {
 		BillboardBean bean = ss.getBillboard(id);
 		bean.setContent(bean.getContent().replaceAll("<br>", "\n"));
 		model.addAttribute("bean", bean);
+		model.addAttribute("uuid", zTools.getUUID());
 		return "/system/billboard";
 	}
 
@@ -341,10 +348,8 @@ public class SystemControler {
 //					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 //					ss.saveUrl(billBoardFileBean);
 
-					
-					
 					// 檔案輸出
-					System.out.println("檔案輸出到"+path2 + fileMap.get("file" + i).getOriginalFilename());
+					System.out.println("檔案輸出到" + path2 + fileMap.get("file" + i).getOriginalFilename());
 					fileMap.get("file" + i).transferTo(new File(path2 + fileMap.get("file" + i).getOriginalFilename()));
 					// 檔案複製
 					String pic_path = null;
@@ -409,10 +414,48 @@ public class SystemControler {
 		System.out.println(adviceto[0]);
 
 		if (adviceto.length == 1 & adviceto[0] == 0) {
+			//沒有人 就刪除資料
 			ss.saveAdvice(adminid, billboardid);
 		} else {
 			ss.saveAdvice(adviceto, adminid, billboardid);
 		}
 		return "redirect:/system/billboard/" + billboardid;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//進入新增頁面
+	@RequestMapping("/billboard")
+	public String billboard(Model model) {
+		System.out.println("*****進入新增頁面*****");
+		String uuid = zTools.getUUID();
+		model.addAttribute("uuid", uuid);
+		return "/system/NewBillboard";
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 新增
+	@RequestMapping("/saveNewBillboard/{uuid}")
+	public String saveNewBillboard(@PathVariable("uuid") String uuid, BillboardBean bean, HttpSession session) {
+		System.out.println("*****新增*****");
+
+//存檔		
+		BillboardBean save = ss.SaveBillboard(bean, session);
+//附件處理
+		List<BillboardFileBean> list = bfr.findByAuthorize(uuid);
+		for (BillboardFileBean b : list) {
+			b.setBillboardid(save.getBillboardid());
+			bfr.save(b);
+		}
+
+		return "redirect:/billboardReply/" + save.getBillboardid();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//搜索公布欄
+	@RequestMapping("/selectBillboard")
+	public String selectMarket(Model model, @RequestParam("search") String search) {
+		System.out.println("搜索公布欄");
+		model.addAttribute("list", ss.selectBillboardt(search));
+		return "/system/billboardList";
 	}
 }

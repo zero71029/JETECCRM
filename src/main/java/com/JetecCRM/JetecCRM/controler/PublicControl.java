@@ -1,7 +1,6 @@
 package com.JetecCRM.JetecCRM.controler;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,11 +35,14 @@ import com.JetecCRM.JetecCRM.model.BillboardAdviceBean;
 import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
+import com.JetecCRM.JetecCRM.model.ReplyAdviceBbean;
 import com.JetecCRM.JetecCRM.model.ReplyreplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
+import com.JetecCRM.JetecCRM.repository.BillboardReplyRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
+import com.JetecCRM.JetecCRM.repository.ReplyAdviceRepository;
 
 @Controller
 public class PublicControl {
@@ -56,18 +59,23 @@ public class PublicControl {
 	BillboardRepository br;
 	@Autowired
 	BillboardFileRepository bfr;
+	@Autowired
+	BillboardReplyRepository brr;
+	@Autowired
+	ReplyAdviceRepository rar;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 主頁面
 	@RequestMapping(path = { "/", "/index" })
 	public String index() {
-		return "redirect:/billboard?pag=1";
+		return "redirect:/billboard?pag=1&sort=createtime";
 
 	}
 
 	// 主頁面
 	@RequestMapping(path = { "billboard" })
-	public String billboard(Model model, HttpSession session, @RequestParam("pag") Integer pag) {
+	public String billboard(Model model, HttpSession session, @RequestParam("pag") Integer pag,
+			@RequestParam("sort") String sortString) {
 		System.out.println("*****主頁面*****");
 		List<BillboardBean> advice = new ArrayList<BillboardBean>();
 		List<BillboardBean> unread = new ArrayList<BillboardBean>();
@@ -76,7 +84,9 @@ public class PublicControl {
 		if (pag < 1)
 			pag = 1;
 		pag--;
-		Pageable p = (Pageable) PageRequest.of(pag, 30, Direction.DESC, "createtime");
+		Sort sort = Sort.by(Direction.DESC, sortString);
+		Pageable p = (Pageable) PageRequest.of(pag, 30, sort);
+
 		Page<BillboardBean> page = (Page<BillboardBean>) br.getByStateAndTop("公開", "", p);
 //		全部有幾頁
 		model.addAttribute("TotalPages", page.getTotalPages());
@@ -99,13 +109,13 @@ public class PublicControl {
 			}
 
 			//
-			model.addAttribute("list", ss.getBillboardList("公開", adminBean, pag));
+			model.addAttribute("list", ss.getBillboardList("公開", adminBean, pag, sort));
 			session.setAttribute("user", adminBean);
 			model.addAttribute("advice", advice);// 抓被@的資料
 			model.addAttribute("unread", unread);// 抓被未讀的資料
 		} else {
 			AdminBean xxx = null;
-			model.addAttribute("list", ss.getBillboardList("公開", xxx, pag));
+			model.addAttribute("list", ss.getBillboardList("公開", xxx, pag, sort));
 		}
 		return "/CRM";
 	}
@@ -185,10 +195,10 @@ public class PublicControl {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//授權的公佈欄
+//進入授權
 	@RequestMapping("/authorize/{uuid}")
 	public String authorize(Model model, @PathVariable("uuid") String uuid, HttpSession session) {
-		System.out.println("*****授權的公佈欄****");
+		System.out.println("*****進入授權****");
 		if (authorizeRepository.existsById(uuid)) {
 			AuthorizeBean authorizeBean = authorizeRepository.getById(uuid);
 			AdminBean user = (AdminBean) session.getAttribute("user");
@@ -208,13 +218,16 @@ public class PublicControl {
 	@RequestMapping("/saveAuthorize/{uuid}")
 	public String saveAuthorize(@PathVariable("uuid") String uuid, BillboardBean bean, HttpSession session) {
 		System.out.println("*****儲存授權*****");
-
+		bean.setUser(bean.getUser() + "(被授權)");
+		// 存檔
 		BillboardBean save = ss.SaveBillboard(bean, session);
+		// 附件處理
 		List<BillboardFileBean> list = bfr.findByAuthorize(uuid);
 		for (BillboardFileBean b : list) {
 			b.setBillboardid(save.getBillboardid());
 			bfr.save(b);
 		}
+		// 刪除授權
 		authorizeRepository.deleteById(uuid);
 
 		return "redirect:/billboardReply/" + save.getBillboardid();
@@ -274,12 +287,13 @@ public class PublicControl {
 					String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\") + 1, tomcat_path.length());
 					System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: " + bin_path);
 					System.out.println("bin_path == " + bin_path);
-//					String path2 = "E:/CRMfile/";
-					String path2 = "E:/CRMfile/";
-					String path3 = "C:\\Users\\Rong\\Desktop\\tomcat-9.0.41\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\";
+					String path2 = "E:/CRMfile/" + fileMap.get("file" + i).getOriginalFilename();
+					String path3 = "C:\\Users\\Rong\\Desktop\\tomcat-9.0.41\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\"
+							+ fileMap.get("file" + i).getOriginalFilename();
 					// 檔案輸出
-					System.out.println(path2 + fileMap.get("file" + i).getOriginalFilename());
-					fileMap.get("file" + i).transferTo(new File(path2 + fileMap.get("file" + i).getOriginalFilename()));
+					System.out.println("檔案輸出到" + path2);
+					fileMap.get("file" + i).transferTo(new File(path2));
+					System.out.println("輸出成功");
 					// 檔案複製
 					String pic_path = null;
 					try {
@@ -291,13 +305,13 @@ public class PublicControl {
 									+ "/webapps/CRM/WEB-INF/classes/static/file/";
 							// 列印路徑
 							System.out.println(pic_path + fileMap.get("file" + i).getOriginalFilename());
-							File source = new File(path3 + fileMap.get("file" + i).getOriginalFilename());
+							File source = new File(path3);
 							File dest = new File(pic_path + fileMap.get("file" + i).getOriginalFilename());
 							Files.copy(source.toPath(), dest.toPath());
 							System.out.println("複製成功");
 						} else {
-							File source = new File(path2 + fileMap.get("file" + i).getOriginalFilename());
-							File dest = new File(path3 + fileMap.get("file" + i).getOriginalFilename());
+							File source = new File(path2);
+							File dest = new File(path3);
 							System.out.println(path2 + fileMap.get("file" + i).getOriginalFilename());
 							Files.copy(source.toPath(), dest.toPath());
 							System.out.println("複製成功");
@@ -338,7 +352,7 @@ public class PublicControl {
 	@RequestMapping("/selectFile/{authorizeId}")
 	@ResponseBody
 	public List<BillboardFileBean> selectFile(@PathVariable("authorizeId") String authorizeId) {
-		System.out.println("*****要求附件*****");
+		System.out.println("*****要求附件*****" + authorizeId);
 		return bfr.findByAuthorize(authorizeId);
 	}
 
@@ -441,6 +455,63 @@ public class PublicControl {
 		System.out.println("*****刪除留言的留言*****");
 		String result = ss.removeReplyreply(ReplyreplyId);
 		return result;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//讀取留言的@
+	@RequestMapping("/replyAdvice/{ReplyId}")
+	@ResponseBody
+	public List<ReplyAdviceBbean> replyAdvice(@PathVariable("ReplyId") String ReplyId) {
+		System.out.println("*****讀取留言的@*****");
+		List<ReplyAdviceBbean> result = ss.replyAdvice(ReplyId);
+		return result;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//儲存留言的@
+	@RequestMapping("/saveReplyAdvice/{ReplyId}")
+	@ResponseBody
+	public String saveReplyAdvice(@RequestParam("adviceto") Integer[] adviceto,
+			@PathVariable("ReplyId") String ReplyId ,@RequestParam("billboardid") Integer billboardid) {
+		System.out.println("*****儲存留言的@*****");
+		//準備ReplyAdvice
+		ReplyAdviceBbean raBean = new ReplyAdviceBbean();
+		raBean.setReplyid(ReplyId);
+		//寄信準備
+		BillboardBean billboardBean = br.getById(billboardid);
+		BillboardReplyBean  replyBean = brr.getById(ReplyId);		
+		String mailTo = ar.findByName(replyBean.getName()).getEmail();
+		String Subject = billboardBean.getTheme() + "有回復被標記";
+		String text = replyBean.getContent();
+		StringBuilder maillist = new StringBuilder();	
+		//沒人刪除ReplyAdvice
+		if (adviceto.length == 1 & adviceto[0] == 0) {			
+			return ss.delReplyAdviceByReplyid(ReplyId);//返回刪除結果
+		} else {//有人
+			//刪除舊資料
+			ss.delReplyAdviceByReplyid(ReplyId);
+			//插入新資料
+			for (Integer a : adviceto) {
+				if (a != 0) {
+					//儲存ReplyAdvice
+					raBean.setReplyadvice(zTools.getUUID());
+					raBean.setAdviceto(a);
+					ss.saveReplyAdvice(raBean);					
+					//儲存maill
+					ss.saveMail(a, billboardid, "有回復被標記");
+					//寄信
+					AdminBean adminBean = ar.getById(a);
+					maillist.append(adminBean.getEmail());
+					maillist.append(",");
+				}
+			}
+			maillist.append("jeter.tony56@gmail.com");
+			zTools.mail(mailTo, text, Subject, maillist.toString());
+		}
+		return "@成功";
+		
+		
+
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

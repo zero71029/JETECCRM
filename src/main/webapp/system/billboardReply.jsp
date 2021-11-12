@@ -60,7 +60,9 @@
                                 <div class="row">
                                     <div class="col-md-9">
                                         <!-- 上一頁 -->
-                                        <a href="#" onclick="self.location=document.referrer;" .
+                                        <!-- <a href="#" onclick="self.location=document.referrer;" -->
+                                        <a href="#"
+                                            onclick="location.href='${pageContext.request.contextPath}/billboard?pag=1&sort=createtime';"
                                             style="text-decoration: none;">
                                             <img src="${pageContext.request.contextPath}/img/Pre.png" alt="上一頁">
                                         </a>${bean.bgb.billboardgroup}>${bean.bgb.billboardoption}
@@ -72,7 +74,15 @@
                                         討論區
                                         <!-- 有登入才顯示 -->
                                         <c:if test='${not empty user}'>
+
                                             <span style="position: absolute; right: 0%; top: 0%;">
+
+                                                <c:if test='${bean.user == user.name}'>
+                                                    <img src="${pageContext.request.contextPath}/img/ch.png" alt="修改"
+                                                        onclick="location.href='${pageContext.request.contextPath}/system/billboard/${bean.billboardid}'"
+                                                        style="cursor: pointer;" data-bs-toggle="tooltip"
+                                                        data-bs-placement="bottom" title="修改">
+                                                </c:if>
                                                 <img src="${pageContext.request.contextPath}/img/copy.png" alt="複製"
                                                     onclick="cop()" style="cursor: pointer;" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title="複製">
@@ -212,14 +222,14 @@
                                                 <c:if test="${s.name == user.name}">
                                                     <form action="${pageContext.request.contextPath}/replyChange"
                                                         class="replyText showText${s.replyid}" method="post">
-                                                        <textarea name="content" id="" cols="70" rows="3"
+                                                        <textarea name="content" id="" style="width: 100%;" rows="3"
                                                             maxlength="950">${s.content}</textarea>
                                                         <input type="hidden" name="replyid" value="${s.replyid}">
                                                         <input type="hidden" name="billboardid"
                                                             value="${s.billboardid}">
                                                         <input type="hidden" name="name" value="${s.name}">
                                                         <button type="submit"
-                                                            style="width: 95%; background-color: #569b92;"
+                                                            style="width: 100%; background-color: #569b92;"
                                                             class="btn ">修改</button>
                                                     </form>
                                                 </c:if>
@@ -233,9 +243,11 @@
                                             </div>
                                             <div class="col-md-3 ccc" style="text-align: right;">
                                                 <c:if test="${s.name == user.name}">
-                                                    <a href="javascript:replyChange('${s.replyid}')">修改</a>&nbsp;
+                                                    <a href="javascript:advice('${s.replyid}')">@</a>&nbsp;&nbsp;&nbsp;
                                                     <a
-                                                        href="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</a>&nbsp;
+                                                        href="javascript:replyChange('${s.replyid}')">修改</a>&nbsp;&nbsp;&nbsp;
+                                                    <a
+                                                        href="javascript:if(confirm('確定刪除'))location.href='${pageContext.request.contextPath}/replyRemove/${s.replyid}'">刪除</a>&nbsp;&nbsp;&nbsp;
                                                 </c:if>
                                                 <c:if test="${not empty user}">
                                                     <a href="javascript:showReplyText('${s.replyid}');">回復</a>
@@ -292,7 +304,6 @@
                                         </c:if>
                                     </c:forEach>
                                 </c:if>
-
                             </div>
                         </div>
 
@@ -302,7 +313,7 @@
                                 <!-- 回覆輸入 -->
                                 <div class="col-md-1"></div>
                                 <div class="col-md-11">
-                                    <div class="row">                                        
+                                    <div class="row">
                                         <div class="col-md-9"
                                             style="background-color: #569b92; border: solid 1px #569b92;color: white;">
                                             回覆</div>
@@ -310,7 +321,7 @@
 
                                     <input type="hidden" name="billboardid" value="${bean.billboardid}">
                                     <input type="hidden" name="name" value="${user.name}">
-                                    <div class="row">                                      
+                                    <div class="row">
                                         <div class="col-md-1 cell cellbackgroud">留言</div>
                                         <div class="col-md-8 cell " style="padding: 0%;">
                                             <textarea class="" name="content" style="width: 100%; " rows="5" required
@@ -318,7 +329,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        
+
                                         <div class="col-md-9" style="padding: 0%;">
                                             <button type="submit"
                                                 style="width: 100%;background-color: #08604f; color: white;"
@@ -363,7 +374,7 @@
                         </c:if>
                         <!-- 新訊息 -->
                         <br><br>
-                        <c:if test="${not empty news}">
+                        <!-- <c:if test="${not empty news}">
                             <c:forEach varStatus="loop" begin="0" end="${news.size()-1}" items="${news}" var="s">
                                 <a style="color: #08604f; opacity: 100%; text-decoration: none;"
                                     href="${pageContext.request.contextPath}/billboardReply/${s.billboardid}">
@@ -378,15 +389,296 @@
                                     </div>
                                 </a>
                             </c:forEach>
+                        </c:if> -->
+                        <!-- @表單 -->
+                        <c:if test="${not empty admin}">
+                            <form class="row"
+                                action="${pageContext.request.contextPath}/saveReplyAdvice/91585f7f09b94d8782eda2820a6170f0"
+                                method="post" id="replyAdvice">
+                                <input type="hidden" name="billboardid" value="${bean.billboardid}">
+                                <div class="col-lg-11 advice" style="border: #08604f 1px solid; padding: 0%;">
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="all">全部: </div>
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="group1">生產: </div>
+                                    <!-- admin 迴圈 -->
+                                    <div class="row">
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == '生產'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group1"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>
+                                                </div>
+                                            </c:if>
+                                        </c:forEach><br>
+                                    </div>
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="group2">採購:</div>
+                                    <div class="row">
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == '採購'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group2"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
+                                        </c:forEach><br>
+                                    </div>
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="group3">研發:</div>
+                                    <div class="row">
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == '研發'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group3"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
+                                        </c:forEach><br>
+                                    </div>
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="group4">業務:</div>
+                                    <div class="row">
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == '業務'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group4"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
+                                        </c:forEach><br>
+                                    </div>
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="group5">行銷:</div>
+                                    <div class="row">
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == '行銷'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group5"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
+
+                                        </c:forEach><br>
+                                    </div>
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="group6">財務:</div>
+                                    <div class="row">
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == '財務'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group6"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
+                                        </c:forEach><br>
+                                    </div>
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="group7">IT:</div>
+                                    <div class="row">
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == 'IT'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group7"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
+                                        </c:forEach><br>
+                                    </div>
+                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                            id="group7">總經理:</div>
+                                    <div class="row">
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == '總經理'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group7"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
+                                        </c:forEach><br>
+                                    </div>
+                                    <div class="row" style="margin: 0%;">
+                                    <button type="button" onclick="saveReplyAdvice()"> 標記</button>
+                                </div>
+                                </div>
+
+                                <input type="hidden" name="adviceto" value="0">
+                            </form>
+                            <script>
+
+                                var $all = $("input[name='adviceto']");
+                                var $group1 = $(".group1");
+                                var $group2 = $(".group2");
+                                var $group3 = $(".group3");
+                                var $group4 = $(".group4");
+                                var $group5 = $(".group5");
+                                var $group6 = $(".group6");
+                                var $group7 = $(".group7");
+                                // 勾選單項
+                                $("input[name='adviceto']").change(function () {
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                                $(".group1").change(function () {
+                                    var $zx = $(".group1:checked");
+                                    $("#group1").prop("checked", $zx.length == $group1.length);
+                                });
+                                $(".group2").change(function () {
+                                    var $zx = $(".group2:checked");
+                                    $("#group2").prop("checked", $zx.length == $group2.length);
+                                });
+                                $(".group3").change(function () {
+                                    var $zx = $(".group3:checked");
+                                    $("#group3").prop("checked", $zx.length == $group3.length);
+                                });
+                                $(".group4").change(function () {
+                                    var $zx = $(".group4:checked");
+                                    $("#group4").prop("checked", $zx.length == $group4.length);
+                                });
+                                $(".group5").change(function () {
+                                    var $zx = $(".group5:checked");
+                                    $("#group5").prop("checked", $zx.length == $group5.length);
+                                });
+                                $(".group6").change(function () {
+                                    var $zx = $(".group6:checked");
+                                    $("#group6").prop("checked", $zx.length == $group6.length);
+                                });
+                                $(".group7").change(function () {
+                                    var $zx = $(".group7:checked");
+                                    $("#group7").prop("checked", $zx.length == $group7.length);
+                                });
+                                // 勾選全部
+                                $("#all").change(function () {
+                                    $("input[type='checkbox']").prop("checked", this.checked);
+                                });
+                                $("#group1").change(function () {
+                                    $group1.prop("checked", this.checked);
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                                $("#group2").change(function () {
+                                    $group2.prop("checked", this.checked);
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                                $("#group3").change(function () {
+                                    $group3.prop("checked", this.checked);
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                                $("#group4").change(function () {
+                                    $group4.prop("checked", this.checked);
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                                $("#group5").change(function () {
+                                    $group5.prop("checked", this.checked);
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                                $("#group6").change(function () {
+                                    $group6.prop("checked", this.checked);
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                                $("#group7").change(function () {
+                                    $group7.prop("checked", this.checked);
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                            </script>
                         </c:if>
+                        <!-- @表單 /////////////////////////////////////////////////////////////////-->
 
                     </div>
                 </div>
             </div>
             <script>
+                //顯示reply@標註
+                var Replyid;
+                function advice(replyid) {
+                    Replyid = replyid;
+                    $(".advice").toggle();
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/replyAdvice/' + replyid,//接受請求的Servlet地址
+                        type: 'POST',
+                        // data: formdata,
+                        // async: false,//同步請求
+                        // cache: false,//不快取頁面
+                        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                        success: function (json) {
+                            $("input[name='adviceto']").prop("checked", false);
+                            for (var man of json) {
+                                $("input[type='checkbox'][value='" + man.adviceto + "']").prop("checked", true);
 
+                            }
+
+
+
+                        },
+                        error: function (returndata) {
+                            alert("錯誤  請聯絡資訊人員");
+                            console.log(returndata);
+                        }
+                    });
+                }
+                $(".advice").hide();
                 $('.replyText').hide();
                 $('.replyreply').hide();
+
+                //儲存@標註                
+                function saveReplyAdvice() {
+                    var formData = new FormData($("#replyAdvice")[0]);
+                    console.log(formData.getAll('adviceto'));
+                    $(".advice").toggle();
+                    console.log('${pageContext.request.contextPath}/saveReplyAdvice/' + Replyid);
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/saveReplyAdvice/' + Replyid,//接受請求的Servlet地址
+                        type: 'POST',
+                        data: formData,
+                        // async: false,//同步請求
+                        // cache: false,//不快取頁面
+                        contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                        processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                        success: function (json) {
+                            alert(json);
+
+
+
+
+                        },
+                        error: function (returndata) {
+                            alert("錯誤  請聯絡資訊人員");
+                            console.log(returndata);
+                        }
+                    });
+                }
+
+
                 function showReplyText(replyid) {
                     $('.show' + replyid).toggle();
                 }
@@ -397,30 +689,6 @@
 
                 }
 
-                function read(billboardid, adminid) {
-                    $.ajax({
-                        url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + adminid,//接受請求的Servlet地址
-                        type: 'POST',
-                        // data: formdata,
-                        // async: false,//同步請求
-                        // cache: false,//不快取頁面
-                        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
-                        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
-                        success: function (json) {
-                            alert(json);
-                            location.href = "${pageContext.request.contextPath}/billboardReply/" + billboardid;
-                        },
-                        error: function (returndata) {
-                            console.log(returndata);
-                        }
-                    });
-                }
-                // var reg = "((http|ftp|https)://)(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\\&%_\\./-~-]*)?";
-                // var aaa = $(".content").text();
-                // console.log(aaa);
-                // var ccc = aaa.match(reg);
-                // console.log(ccc);
-                // for (let a of ccc) console.log(a);
 
                 //複製網址
                 function cop() {

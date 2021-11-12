@@ -23,6 +23,8 @@
             .body {
                 background-color: white;
                 width: 100%;
+                height: 100px;
+                overflow:visible;
             }
         </style>
 
@@ -224,8 +226,15 @@
                                 <tr style="text-align:center">
                                     <th scope="col-lg" style="width: 700px;">主題</th>
                                     <th scope="col-lg">發布時間</th>
-                                    <th scope="col-lg"><a
-                                            href="${pageContext.request.contextPath}/billboard?pag=1?sor=replytime?sortType=DESC"></a>最後回覆時間
+                                    <th scope="col-lg">
+                                        <c:if test="${not empty param.sort}">
+                                            <a
+                                                href="${pageContext.request.contextPath}/billboard?pag=${param.pag==''?'1':param.pag}&sort=${param.sort == 'createtime'?'reply.createtime':'createtime'}">最後回覆時間</a>${param.sort
+                                            == 'reply.createtime'?'▼':''}
+                                        </c:if>
+                                        <c:if test="${empty param.sort}">
+                                            最後回覆時間
+                                        </c:if>
                                     </th>
                                     <th scope="col-lg">回應</th>
                                 </tr>
@@ -268,7 +277,7 @@
                                                 <span style="color: #777;font-size: 0.9rem;" class="group">
                                                     <c:if test='${s.billtowngroup == "生產"}'>
                                                         <a
-                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvddd生產">${s.billtowngroup}</a>
+                                                            href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcvddd生產">${s.billtowngroup}?pag=1</a>
                                                     </c:if>
                                                     <c:if test='${s.billtowngroup == "研發"}'>
                                                         <a
@@ -294,10 +303,6 @@
                                                         <a
                                                             href="${pageContext.request.contextPath}/selectBillboardGroup/01dasgregrehvbcv一般公告">${s.billtowngroup}</a>
                                                     </c:if>
-
-
-
-
                                                     →
                                                     <a
                                                         href="${pageContext.request.contextPath}/selectBillboardGroup/${s.billboardgroupid}">${s.bgb.billboardoption}</a>
@@ -359,39 +364,41 @@
 
                     <div class="col-lg-3">
                         <!-- 分頁 -->
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
+                        <c:if test="${not empty param.pag}">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
 
-                                <!-- 首頁 -->
-                                <c:if test="${param.pag > 1}">
-                                    <li class="page-item"><a class="page-link"
-                                            href="${pageContext.request.contextPath}/billboard?pag=1">首頁</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link"
-                                            href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}">←</a>
-                                    </li>
-                                </c:if>
+                                    <!-- 首頁 -->
+                                    <c:if test="${param.pag > 1}">
+                                        <li class="page-item"><a class="page-link"
+                                                href="${pageContext.request.contextPath}/billboard?pag=1&sort=${param.sort}">首頁</a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link"
+                                                href="${pageContext.request.contextPath}/billboard?pag=${param.pag<=1?1:param.pag-1}&sort=${param.sort}">←</a>
+                                        </li>
+                                    </c:if>
 
-                                <!-- 如果 pag < 2   ,    pag> max-2 -->
-                                <c:forEach varStatus="loop" begin="${param.pag-2 <1 ? 1:param.pag-2}"
-                                    end="${param.pag+2 >TotalPages ? TotalPages :param.pag+2}">
-                                    <li class='page-item      ${param.pag == loop.index ? "active ":""}         '><a
-                                            class="page-link"
-                                            href="${pageContext.request.contextPath}/billboard?pag=${loop.index}">${loop.index}</a>
-                                    </li>
+                                    <!-- 如果 pag < 2   ,    pag> max-2 -->
+                                    <c:forEach varStatus="loop" begin="${param.pag-2 <1 ? 1:param.pag-2}"
+                                        end="${param.pag+2 >TotalPages ? TotalPages :param.pag+2}">
+                                        <li class='page-item      ${param.pag == loop.index ? "active ":""}         '><a
+                                                class="page-link"
+                                                href="${pageContext.request.contextPath}/billboard?pag=${loop.index}&sort=${param.sort}">${loop.index}</a>
+                                        </li>
 
-                                </c:forEach>
+                                    </c:forEach>
 
-                                <c:if test="${param.pag != TotalPages}">
-                                <li class="page-item"><a class="page-link"
-                                        href='${pageContext.request.contextPath}/billboard?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}'>→</a>
-                                </li>
-                                <li class="page-item"><a class="page-link"
-                                        href='${pageContext.request.contextPath}/billboard?pag=${TotalPages}'>尾頁</a>
-                                </li>
-                                </c:if>
-                            </ul>
-                        </nav>
+                                    <c:if test="${param.pag != TotalPages}">
+                                        <li class="page-item"><a class="page-link"
+                                                href='${pageContext.request.contextPath}/billboard?pag=${param.pag >= TotalPages?TotalPages: param.pag+1}&sort=${param.sort}'>→</a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link"
+                                                href='${pageContext.request.contextPath}/billboard?pag=${TotalPages}&sort=${param.sort}'>尾頁</a>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </nav>
+                        </c:if>
                         <!-- 分頁 ＿////////////////////-->
                         <!-- 彈窗 -->
                         <c:if test="${not empty unread}">

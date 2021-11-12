@@ -67,7 +67,7 @@
                     <div class="col-lg-7">
                         <!-- <%-- 中間主體--%> -->
                         <br>
-
+                        <!-- 上一頁 -->
                         <div class="row">
                             <div class="col-lg-2">
                                 <a href="javascript:history.back()" style="text-decoration: none;"><img
@@ -84,7 +84,7 @@
                                     name="authorize">
                                     <div class="row">
                                         <div class="col-lg-1 cell cellbackgroud">授權</div>
-                                        <div class="col-lg-7 cell" style="padding: 0%;">
+                                        <div class="col-lg-5 cell" style="padding: 0%;">
                                             <select input type="text" class=" form-select cellFrom" name="adminid">
                                                 <option class="selItemOff" value="0">新增</option>
                                                 <c:if test="${not empty admin}">
@@ -96,7 +96,7 @@
                                                 </c:if>
                                             </select>
                                         </div>
-                                        <div class="col-lg-2 cell" style="padding: 0%;"><button type="submit"
+                                        <div class="col-lg-4 cell" style="padding: 0%;"><button type="submit"
                                                 style="width: 100%;background-color: #08604f;color: white;"
                                                 class="btn ">發送</button></div>
                                     </div>
@@ -126,6 +126,10 @@
                                 <div class="col-lg-10 cell position-relative cellbackgroud"
                                     style="text-align: center;color:white;background-color: #569b92; font-size: 20px;">
                                     發布公告</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-1 cell position-relative cellbackgroud">發佈者</div>
+                                <div class="col-lg-9 cell">${bean.user}${param.authorize}</div>
                             </div>
 
                             <div class="row">
@@ -179,7 +183,7 @@
                                             value="財務">財務</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-1 cell cellbackgroud" style="padding: 0%;">子項</div>
+                                <div class="col-lg-1 cell cellbackgroud">子項</div>
                                 <div class="col-lg-4 cell" style="padding: 0%;">
                                     <select name="billboardgroupid" id="" class="form-select billtownoption">
                                         <!--  -->
@@ -191,7 +195,7 @@
 
                             <div class="row">
 
-                                <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
+                                <div class="col-lg-1 cell cellbackgroud">點讚人數</div>
                                 <div class="col-lg-9 cell"> <a href="javascript:ReadNum()">${bean.read.size()}</a>
                                 </div>
 
@@ -200,8 +204,10 @@
                                 <div class="row">
                                     <div class="col-lg-1 cell cellbackgroud">置頂</div>
                                     <div class="col-lg-9 cell">
-                                        <input type="radio" name="top" id="asd" value="" ${empty bean?"checked" :""}     ${bean.top==""?"checked":""}> <label for="asd">一般</label> 
-                                        <input type="radio" name="top" id="top" value="置頂" ${bean.top=="置頂"?"checked":""}><label for="top">置頂</label> 
+                                        <input type="radio" name="top" id="asd" value="" ${empty bean?"checked" :""}
+                                            ${bean.top=="" ?"checked":""}> <label for="asd">一般</label>
+                                        <input type="radio" name="top" id="top" value="置頂" ${bean.top=="置頂"
+                                            ?"checked":""}><label for="top">置頂</label>
                                     </div>
 
                                 </div>
@@ -249,7 +255,7 @@
                                     <div class="col-lg-10" style="padding: 0%;">
                                         <button type="submit"
                                             style="width: 100%;background-color: #08604f;color: white;"
-                                            class="btn ">儲存</button>
+                                            class="btn ">修改</button>
                                     </div>
                                 </div>
                             </c:if>
@@ -293,10 +299,11 @@
                                         ondragstart="event.dataTransfer.setData('text/plain', '<img width=100% src=${url} onerror=errorOne()>')">
                                         <div class="col-md-2 cell position-relative cellbackgroud">附件</div>
                                         <div class="col-lg-8 cell" style="word-wrap: break-word;"><a
-                                                href="${pageContext.request.contextPath}/file/${s.url}" target="_blank">${s.name} </a>
+                                                href="${pageContext.request.contextPath}/file/${s.url}"
+                                                target="_blank">${s.name} </a>
                                         </div>
                                         <div class="col-md-2 cell position-relative ">
-                                            <a 
+                                            <a
                                                 href="${pageContext.request.contextPath}/system/remove/${s.fileid}/${bean.billboardid}">remove</a>
                                         </div>
                                     </div>
@@ -309,7 +316,7 @@
                                     <input type="file" name="file1" onchange="upfile(0);" class="fileInput" value="" />
                                 </form>
                             </div>
-                            <!-- 基本的对话框 -->
+                            <!-- @表單 -->
                             <c:if test="${not empty admin}">
                                 <form
                                     action="${pageContext.request.contextPath}/system/advice/${user.adminid}/${bean.billboardid}"
@@ -414,7 +421,20 @@
 
                                                 </div>
                                             </c:if>
-                                        </c:forEach>
+                                        </c:forEach><br>
+                                        <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
+                                                id="group7">總經理:</div>
+                                        <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
+                                            var="s">
+                                            <c:if test="${s.department == '總經理'}">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" name="adviceto" id="${s.name}" class="group7"
+                                                        value="${s.adminid}"><label for="${s.name}">${s.name}
+                                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+                                            </c:if>
+                                        </c:forEach><br>
 
                                         <button type="submit">標記</button>
                                     </div>
@@ -505,20 +525,19 @@
                                     });
                                 </script>
                             </c:if>
+                             <!-- @表單 /////////////////////////////////////////////////////////////////-->
                         </c:if>
                     </div>
 
                 </div>
             </div>
         </body>
-        <!-- @ -->
+        <!-- @ java 轉資料給javaScript -->
         <c:forEach varStatus="loop" begin="0" end="${bean.advice.size()}" items="${bean.advice}" var="ad">
             <script>
                 var a = "${ad.formname}"
                 console.log(a);
                 $("#${ad.formname}").prop("checked", true);
-
-
             </script>
         </c:forEach>
 
@@ -658,7 +677,6 @@
                 $(".hazy").hide();
                 $("option[value='全部']").prop("selected", true);
 
-
             });
 
             $(function () {
@@ -668,8 +686,6 @@
                     changeYear: true,
                     dateFormat: "yy-mm-dd"
                 });
-
-
                 // 密碼驗證
                 jQuery.validator.setDefaults({
                     submitHandler: function () {
@@ -733,7 +749,7 @@
             function ReadNum() {
                 $("#dialog").dialog("open");
             }
-            //標註
+            //@標註
             function advice() {
                 $(".advice").toggle();
             }
