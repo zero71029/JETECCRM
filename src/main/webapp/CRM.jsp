@@ -336,7 +336,7 @@
                                             </td>
                                             <!-- //////////////////////////////////////////////////////////////// -->
                                             <!-- 發布時間 -->
-                                            <td style="text-align: center;">${s.user} <br> ${s.createtime}</td>
+                                            <td style="text-align: center;">${s.user}${s.remark}<br> ${s.createtime}</td>
                                             <!-- 最後回覆時間 -->
 
                                             <td style="text-align: center;">
@@ -439,7 +439,7 @@
                 function showUnread() {
                     $('.unread').dialog("open");
                 }
-
+                //已讀按鈕
                 // function read(billboardid, username) {
                 //     console.log(username);
                 //     $.ajax({

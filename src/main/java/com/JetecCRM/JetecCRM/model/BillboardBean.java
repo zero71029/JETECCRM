@@ -35,6 +35,8 @@ public class BillboardBean {
 	private String readcount;//保留給已讀人數用
 	private String billboardgroupid;
 	private String billtowngroup;
+	private String  remark;//備註
+	
 	
 	//以讀人數
 	@JsonIgnore
@@ -60,6 +62,12 @@ public class BillboardBean {
 	
 	
 	
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 	public List<BillboardAdviceBean> getAdvice() {
 		return advice;
 	}

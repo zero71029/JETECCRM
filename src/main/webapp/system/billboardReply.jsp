@@ -148,7 +148,7 @@
                                 <div class="row">
                                     <div class="col-md-1 cell position-relative cellbackgroud" style="font-size: 14px;">
                                         發佈者</div>
-                                    <div class="col-md-8 cell">${bean.user}</div>
+                                    <div class="col-md-8 cell">${bean.user}${bean.remark}</div>
                                 </div>
 
 
@@ -202,8 +202,11 @@
                                 color: #569b92;
                                 text-decoration: none;
                             }
+                            .replyImg img{
+                                width: 100px;
+                            }
                         </style>
-                        <div class="row">
+                        <div class="row replyImg">
                             <div class="col-md-1"></div>
                             <div class="col-md-11">
                                 <c:if test="${not empty reply}">
@@ -214,6 +217,7 @@
                                                 <hr style="color: #569b92; opacity: 1;">
                                             </div>
                                         </div>
+
                                         <div class="row" style="min-height: 70px;">
                                             <div class="col-md-1" style="color: #569b92;">
                                                 ${s.name}</div>
@@ -223,7 +227,10 @@
                                                     <form action="${pageContext.request.contextPath}/replyChange"
                                                         class="replyText showText${s.replyid}" method="post">
                                                         <textarea name="content" id="" style="width: 100%;" rows="3"
-                                                            maxlength="950">${s.content}</textarea>
+                                                            maxlength="950">${s.content}
+                                                          
+                                                        
+                                                        </textarea>
                                                         <input type="hidden" name="replyid" value="${s.replyid}">
                                                         <input type="hidden" name="billboardid"
                                                             value="${s.billboardid}">
@@ -235,6 +242,7 @@
                                                 </c:if>
                                             </div>
                                         </div>
+                                        <!-- 留言的控制 -->
                                         <div class="row replyA" style="font-size: 12;">
                                             <div class="col-md-1"></div>
                                             <div class="col-md-5 "
@@ -254,6 +262,19 @@
                                                 </c:if>
                                             </div>
                                         </div>
+                                        <!-- 留言的附件 -->
+                                        <c:if test="${not empty s.file}">
+                                            <c:forEach varStatus="loop" begin="0" end="${s.file.size()-1}"
+                                                items="${s.file}" var="file">
+                                                <div class="row">
+                                                    <div class="col-md-1" style="color: #569b92;">
+                                                        附件</div>
+                                                    <div class="col-md-5 ">
+                                                       <a href="${pageContext.request.contextPath}/file/${file.url}" target="_blank">${file.name}</a>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </c:if>
 
                                         <!-- 評論 -->
                                         <c:if test="${not empty s.reply}">
@@ -267,7 +288,8 @@
                                                             <div class="col-md-2 " style="color: #569b92;">${reply.name}
                                                             </div>
                                                             <div class="col-md-8" style="word-wrap:break-word;">
-                                                                ${reply.content} </div>
+                                                                ${reply.content}
+                                                            </div>
                                                             <div class="col-md-2 ">
                                                                 <c:if test="${reply.name == user.name}">
                                                                     <a
@@ -308,17 +330,33 @@
                         </div>
 
                         <c:if test="${not empty user}">
-                            <form action="${pageContext.request.contextPath}/saveReply" method="post" id="formReply"
-                                class="row g-3 needs-validation">
+                            <form action="${pageContext.request.contextPath}/saveReply/${uuid}" method="post"
+                                id="formReply" class="row g-3 needs-validation">
                                 <!-- 回覆輸入 -->
                                 <div class="col-md-1"></div>
                                 <div class="col-md-11">
                                     <div class="row">
-                                        <div class="col-md-9"
+                                        <div class="col-md-8"
                                             style="background-color: #569b92; border: solid 1px #569b92;color: white;">
-                                            回覆</div>
-                                    </div>
+                                            回覆
+                                        </div>
+                                        <div class="col-md-1"
+                                            style="background-color: #569b92; border: solid 1px #569b92;color: white;text-align: right;">
+                                            <a href="javascript:upfileToggle()" style="color: white;" title="附件">₪</a>
+                                        </div>
+                                        <div class="col-md-2 ff upDiv">
+                                            <!-- 上傳 -->
 
+
+                                            <!--  -->
+                                        </div>
+                                    </div>
+                                    <div class="row fileDiv">
+                                        <!-- 後來新增 附件 的地方-->
+
+
+                                        <!--  -->
+                                    </div>
                                     <input type="hidden" name="billboardid" value="${bean.billboardid}">
                                     <input type="hidden" name="name" value="${user.name}">
                                     <div class="row">
@@ -327,6 +365,7 @@
                                             <textarea class="" name="content" style="width: 100%; " rows="5" required
                                                 placeholder="" maxlength="950"></textarea>
                                         </div>
+
                                     </div>
                                     <div class="row">
 
@@ -521,8 +560,8 @@
                                         </c:forEach><br>
                                     </div>
                                     <div class="row" style="margin: 0%;">
-                                    <button type="button" onclick="saveReplyAdvice()"> 標記</button>
-                                </div>
+                                        <button type="button" onclick="saveReplyAdvice()"> 標記</button>
+                                    </div>
                                 </div>
 
                                 <input type="hidden" name="adviceto" value="0">
@@ -649,6 +688,14 @@
                 $(".advice").hide();
                 $('.replyText').hide();
                 $('.replyreply').hide();
+                $(".ff").hide();
+                // 留言附件 切換
+                function upfileToggle() {
+                    $(".ff").toggle();
+                }
+
+
+
 
                 //儲存@標註                
                 function saveReplyAdvice() {
@@ -756,9 +803,107 @@
                             console.log(returndata);
                         }
                     });
-
-
                 }
+
+                //已讀按鈕
+                function read(billboardid, username) {
+                    console.log(username);
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/read/' + billboardid + '/' + username,//接受請求的Servlet地址
+                        type: 'POST',
+                        // data: formdata,
+                        // async: false,//同步請求
+                        // cache: false,//不快取頁面
+                        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                        success: function (json) {
+                            alert(json);
+                            location.href = "${pageContext.request.contextPath}/billboardReply/" + billboardid;
+                        },
+                        error: function (returndata) {
+                            console.log(returndata);
+                        }
+                    });
+                }
+                //上傳型錄
+
+                upfile = function (i) {
+                    var formData = new FormData($(".uppdf")[0]);
+                    console.log(formData.values());
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/upFileToReply/${uuid}',//接受請求的Servlet地址
+                        type: 'POST',
+                        data: formData,
+                        async: false,//同步請求
+                        cache: false,//不快取頁面
+                        contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                        processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                        success: function (url) {
+                            alert(url);
+                            selectFile();
+                        },
+                        error: function (returndata) {
+                            console.log(returndata);
+
+                        }
+
+                    });
+                }
+                //要求附件
+                function selectFile() {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/selectReplyFile/${uuid}',//接受請求的Servlet地址
+                        type: 'POST',
+                        // data: formData,
+                        // async: false,//同步請求
+                        // cache: false,//不快取頁面
+                        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                        success: function (json) {
+                            console.log("要求附件");
+                            console.log('${uuid}');
+                            console.log(json);
+                            $(".fileDiv").empty();
+                            for (var f of json) {
+                                var url = "${pageContext.request.contextPath}/file/" + f.url;
+                                $(".fileDiv").append('<div class="col-md-1 cell cellbackgroud">附件</div>' +
+                                    '<div class="col-md-6" style="word-wrap: break-word;border-bottom:  1px solid #8e8e8e;"> <a target="_blank" draggable="true" ondragstart="event.dataTransfer.setData(`text/plain`, `<img src=' + url + ' onerror=errorOne()>`)" href="${pageContext.request.contextPath}/file/' + f.url + '">' + f.name + '</a></div>' +
+                                    '<div class="col-md-2" style="text-align: right;border-right:  1px solid #8e8e8e;;border-bottom:  1px solid #8e8e8e;"><a  href="javascript:removeReplyFile(`' + f.replyfileid + '`)">remove</a></div>' +
+                                    '<div class="col-md-3"></div>');
+                            }
+                            $(".upDiv").empty();
+                            $(".upDiv").append('<form class="row uppdf" action="" method="post" enctype="multipart/form-data">' +
+                                '<input type="file" name="file1" onchange="upfile(0);" class="fileInput" value="" /></form>');
+                        },
+                        error: function (returndata) {
+                            console.log(returndata);
+                        }
+                    });
+                }
+                selectFile();
+                //刪除附件
+                function removeReplyFile(a){
+                    console.log(a);
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/removeReplyFile/'+a,//接受請求的Servlet地址
+                        type: 'POST',
+                        // data: formData,
+                        // async: false,//同步請求
+                        // cache: false,//不快取頁面
+                        // contentType: false,//當form以multipart/form-data方式上傳檔案時，需要設定為false
+                        // processData: false,//如果要傳送Dom樹資訊或其他不需要轉換的資訊，請設定為false
+                        success: function (json) {
+                            console.log("刪除附件");
+                            console.log('${uuid}');
+                            console.log(json);
+                            selectFile();
+                        },
+                        error: function (returndata) {
+                            console.log(returndata);
+                        }
+                    });
+                }
+
 
 
             </script>

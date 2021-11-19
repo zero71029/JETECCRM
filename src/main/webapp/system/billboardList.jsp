@@ -124,14 +124,17 @@
                             <c:if test="${not empty list}">
                                 <c:forEach varStatus="loop" begin="0" end="${list.size()-1}" items="${list}" var="s">
                                     <tr class="item">
+                                        <!--checkbox  -->
                                         <td><input type="checkbox" value="${s.billboardid}" name="mak"></td>
-                                        <td
+                                        <!--編號  -->
+                                        <td style="cursor: pointer;"
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
                                             ${s.billboardid}</td>
-                                        <td style="color: red;"
+                                        <!-- 置頂 -->
+                                        <td style="color: red;cursor: pointer;"
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
                                             ${s.top}</td>
-                                        <td
+                                        <td style="cursor: pointer;"
                                             onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
                                             <!-- 如果 .......就是 個人置頂 -->
                                             <c:if test="${not empty user.top}">
@@ -151,20 +154,9 @@
                                             <!-- 有附件 -->
                                             <span style="color: #569b92;"> ${empty s.file?"":"📎"}</span>
                                         </td>
-                                        <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
-                                            ${s.user}
-                                        </td>
-                                        <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
-
-                                            ${s.state}</td>
-                                        <td
-                                            onclick="javascript:location.href='${pageContext.request.contextPath}/system/billboard/${s.billboardid}'">
-
-                                            ${s.createtime}
-
-                                        </td>
+                                        <td> ${s.user}</td>
+                                        <td> ${s.state}</td>
+                                        <td> ${s.createtime}</td>
                                     </tr>
                                 </c:forEach>
                             </c:if>

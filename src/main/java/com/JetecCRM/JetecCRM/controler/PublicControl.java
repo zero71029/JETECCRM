@@ -36,6 +36,7 @@ import com.JetecCRM.JetecCRM.model.BillboardBean;
 import com.JetecCRM.JetecCRM.model.BillboardFileBean;
 import com.JetecCRM.JetecCRM.model.BillboardReplyBean;
 import com.JetecCRM.JetecCRM.model.ReplyAdviceBbean;
+import com.JetecCRM.JetecCRM.model.ReplyFileBean;
 import com.JetecCRM.JetecCRM.model.ReplyreplyBean;
 import com.JetecCRM.JetecCRM.repository.AdminRepository;
 import com.JetecCRM.JetecCRM.repository.AuthorizeRepository;
@@ -43,6 +44,7 @@ import com.JetecCRM.JetecCRM.repository.BillboardFileRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardReplyRepository;
 import com.JetecCRM.JetecCRM.repository.BillboardRepository;
 import com.JetecCRM.JetecCRM.repository.ReplyAdviceRepository;
+import com.JetecCRM.JetecCRM.repository.ReplyFileRepository;
 
 @Controller
 public class PublicControl {
@@ -63,6 +65,8 @@ public class PublicControl {
 	BillboardReplyRepository brr;
 	@Autowired
 	ReplyAdviceRepository rar;
+	@Autowired
+	ReplyFileRepository rfr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 主頁面
@@ -181,6 +185,8 @@ public class PublicControl {
 	@RequestMapping("/billboardReply/{id}")
 	public String billboardReply(Model model, @PathVariable("id") Integer id, HttpSession session) {
 		System.out.println("*****讀取公佈欄細節****");
+		//上傳檔案用
+		model.addAttribute("uuid",zTools.getUUID());
 		AdminBean adminBean = (AdminBean) session.getAttribute("user");
 		// 讀取公佈欄細節 如果有登入就已讀
 		model.addAttribute("bean", ss.getBillboardById(id, adminBean));
@@ -218,7 +224,8 @@ public class PublicControl {
 	@RequestMapping("/saveAuthorize/{uuid}")
 	public String saveAuthorize(@PathVariable("uuid") String uuid, BillboardBean bean, HttpSession session) {
 		System.out.println("*****儲存授權*****");
-		bean.setUser(bean.getUser() + "(被授權)");
+		bean.setRemark("(被授權)");
+		bean.setUser(bean.getUser());
 		// 存檔
 		BillboardBean save = ss.SaveBillboard(bean, session);
 		// 附件處理
@@ -287,7 +294,8 @@ public class PublicControl {
 					String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\") + 1, tomcat_path.length());
 					System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: " + bin_path);
 					System.out.println("bin_path == " + bin_path);
-					String path2 = "E:/CRMfile/" + fileMap.get("file" + i).getOriginalFilename();
+					String path2 = "C:/CRMfile/" + fileMap.get("file" + i).getOriginalFilename();
+
 					String path3 = "C:\\Users\\Rong\\Desktop\\tomcat-9.0.41\\webapps\\CRM\\WEB-INF\\classes\\static\\file\\"
 							+ fileMap.get("file" + i).getOriginalFilename();
 					// 檔案輸出
@@ -330,14 +338,6 @@ public class PublicControl {
 					billBoardFileBean.setUrl(fileMap.get("file" + i).getOriginalFilename());
 					billBoardFileBean.setName(fileMap.get("file" + i).getOriginalFilename());
 					ss.saveUrl(billBoardFileBean);
-
-//ProductPictureBean pBean = productPictureJpaReposit.findProducturl(Productmodel + "-" + i);
-//if (pBean == null) {
-//pBean = new ProductPictureBean();
-//}
-//pBean.setProducturl(Productmodel + "-" + i);
-//pBean.setProductid(Productid);
-//productPictureJpaReposit.save(pBean);
 				}
 			}
 		} catch (Exception e) {
@@ -381,10 +381,20 @@ public class PublicControl {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
-	@RequestMapping("/saveReply")
-	public String saveReply(BillboardReplyBean bean, HttpSession session) {
+	@RequestMapping("/saveReply/{fileuuid}")
+	public String saveReply(@PathVariable("fileuuid")String fileuuid, BillboardReplyBean bean, HttpSession session) {
 		System.out.println("*****儲存公佈欄留言*****");
-		if (ss.SaveReply(bean)) {// 如果儲存成功
+		// 儲存留言
+		BillboardReplyBean save =ss.SaveReply(bean);
+			
+			// 附件處理
+			List<ReplyFileBean> list = rfr.findByAuthorize(fileuuid);
+			for (ReplyFileBean b : list) {
+				b.setReplyid(save.getReplyid());
+				rfr.save(b);
+			}
+			
+			
 			BillboardBean bb = br.getById(bean.getBillboardid());// 取出公布欄的訊息
 			AdminBean user = (AdminBean) session.getAttribute("user");// 登入者
 			// 插入最後回覆時間時間
@@ -413,7 +423,7 @@ public class PublicControl {
 					ss.saveMail(ar.findByName(reply.getName()).getAdminid(), bean.getBillboardid(), "新留言");// 用名子去admin找人
 																											// 找到後取出Adminid
 			}
-		}
+		
 		return "redirect:/billboardReply/" + bean.getBillboardid();
 	}
 
@@ -422,9 +432,7 @@ public class PublicControl {
 	@RequestMapping("/replyChange")
 	public String replyChange(BillboardReplyBean bean) {
 		System.out.println("*****修改留言*****");
-		if (ss.SaveReply(bean)) {
-
-		}
+		ss.SaveReply(bean) ;
 		return "redirect:/billboardReply/" + bean.getBillboardid();
 	}
 
@@ -471,35 +479,35 @@ public class PublicControl {
 //儲存留言的@
 	@RequestMapping("/saveReplyAdvice/{ReplyId}")
 	@ResponseBody
-	public String saveReplyAdvice(@RequestParam("adviceto") Integer[] adviceto,
-			@PathVariable("ReplyId") String ReplyId ,@RequestParam("billboardid") Integer billboardid) {
+	public String saveReplyAdvice(@RequestParam("adviceto") Integer[] adviceto, @PathVariable("ReplyId") String ReplyId,
+			@RequestParam("billboardid") Integer billboardid) {
 		System.out.println("*****儲存留言的@*****");
-		//準備ReplyAdvice
+		// 準備ReplyAdvice
 		ReplyAdviceBbean raBean = new ReplyAdviceBbean();
 		raBean.setReplyid(ReplyId);
-		//寄信準備
+		// 寄信準備
 		BillboardBean billboardBean = br.getById(billboardid);
-		BillboardReplyBean  replyBean = brr.getById(ReplyId);		
+		BillboardReplyBean replyBean = brr.getById(ReplyId);
 		String mailTo = ar.findByName(replyBean.getName()).getEmail();
 		String Subject = billboardBean.getTheme() + "有回復被標記";
 		String text = replyBean.getContent();
-		StringBuilder maillist = new StringBuilder();	
-		//沒人刪除ReplyAdvice
-		if (adviceto.length == 1 & adviceto[0] == 0) {			
-			return ss.delReplyAdviceByReplyid(ReplyId);//返回刪除結果
-		} else {//有人
-			//刪除舊資料
+		StringBuilder maillist = new StringBuilder();
+		// 沒人刪除ReplyAdvice
+		if (adviceto.length == 1 & adviceto[0] == 0) {
+			return ss.delReplyAdviceByReplyid(ReplyId);// 返回刪除結果
+		} else {// 有人
+			// 刪除舊資料
 			ss.delReplyAdviceByReplyid(ReplyId);
-			//插入新資料
+			// 插入新資料
 			for (Integer a : adviceto) {
 				if (a != 0) {
-					//儲存ReplyAdvice
+					// 儲存ReplyAdvice
 					raBean.setReplyadvice(zTools.getUUID());
 					raBean.setAdviceto(a);
-					ss.saveReplyAdvice(raBean);					
-					//儲存maill
+					ss.saveReplyAdvice(raBean);
+					// 儲存maill
 					ss.saveMail(a, billboardid, "有回復被標記");
-					//寄信
+					// 寄信
 					AdminBean adminBean = ar.getById(a);
 					maillist.append(adminBean.getEmail());
 					maillist.append(",");
@@ -509,56 +517,9 @@ public class PublicControl {
 			zTools.mail(mailTo, text, Subject, maillist.toString());
 		}
 		return "@成功";
-		
-		
 
 	}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//下載檔案
-//	@RequestMapping("/download/{fileUrl}")	
-//	public String download(@PathVariable("fileUrl") String fileUrl) {
-//		System.out.println("*****下載檔案*****");
-//		BillboardFileBean billBoardFileBean = bfr.getByUrl(fileUrl);
-//		// 獲取Tomcat伺服器所在的路徑
-//		String tomcat_path = System.getProperty("user.dir");
-//		System.out.println("Tomcat伺服器所在的路徑: " + tomcat_path);
-//		// 獲取Tomcat伺服器所在路徑的最後一個檔案目錄
-//		String bin_path = tomcat_path.substring(tomcat_path.lastIndexOf("\\") + 1, tomcat_path.length());
-//		// 判斷最後一個檔案目錄是否為bin目錄
-//		String pic_path = null;
-//		System.out.println("Tomcat伺服器所在路徑的最後一個檔案目錄: " + bin_path);
-//		// 獲取儲存上傳圖片的檔案路徑
-//		pic_path = tomcat_path.substring(0, System.getProperty("user.dir").lastIndexOf("\\")) + "/webapps/CRM/WEB-INF/classes/static/file/";
-//		System.out.println(pic_path);
-//		System.out.println("來源:"+pic_path + billBoardFileBean.getUrl());
-//		File source = new File(pic_path + billBoardFileBean.getUrl());
-//		System.out.println("輸出:"+pic_path + billBoardFileBean.getName());
-//		File dest = new File(pic_path + billBoardFileBean.getName());
-//		try {
-//			System.out.println("複製前");
-//			Files.copy(source.toPath(), dest.toPath());			
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			System.out.println("失敗1******************************************************************");
-//			e.printStackTrace();
-////				Rong
-//			pic_path = "E:/CRMfile/";
-//			System.out.println("來源2:"+pic_path + billBoardFileBean.getUrl());
-//			source = new File(pic_path + billBoardFileBean.getUrl());
-//			System.out.println("輸出2:"+pic_path + billBoardFileBean.getName());
-//			dest = new File(pic_path + billBoardFileBean.getName());
-//			try {
-//				System.out.println("複製2前");
-//				Files.copy(source.toPath(), dest.toPath());
-//			} catch (IOException ee) {
-//				System.out.println("失敗2");
-//				// TODO Auto-generated catch block
-//				ee.printStackTrace();			
-//			}
-//		}
-//
-//		return "redirect:/file/" + billBoardFileBean.getName();
-//	}
+
 
 }

@@ -137,14 +137,13 @@
                                 <div class="row">
 
                                     <div class="col-lg-1 cell cellbackgroud">狀態</div>
-                                    <div class="col-lg-4 cell" style="padding: 0%;">
+                                    <div class="col-lg-9 cell" style="padding: 0%;">
                                         <select input type="text" class=" form-select cellFrom" name="state">
                                             <option ${bean.state=="公開" ?"selected":null} class="selItemOff">公開</option>
                                             <option ${bean.state=="封存" ?"selected":null} class="selItemOff">封存</option>
                                         </select>
                                     </div>
-                                    <div class="col-lg-1 cell cellbackgroud">日期</div>
-                                    <div class="col-lg-4 cell">${bean.createtime}</div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-1 cell cellbackgroud">群組</div>
@@ -177,13 +176,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
 
-                                    <div class="col-lg-1 cell cellbackgroud">閱讀人數</div>
-                                    <div class="col-lg-9 cell"> <a href="javascript:ReadNum()">${bean.read.size()}</a>
-                                    </div>
-
-                                </div>
                                 <c:if test='${user.position == "系統" || user.position == "總經理"}'>
                                     <div class="row">
                                         <div class="col-lg-1 cell cellbackgroud">置頂</div>
@@ -404,7 +397,7 @@
 
                                             </div>
                                         </c:if>
-                                    </c:forEach><br>
+                  .                  </c:forEach><br>
                                     <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
                                             id="group7">IT:</div>
                                     <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
@@ -418,16 +411,17 @@
                                             </div>
                                         </c:if>
                                     </c:forEach><br>
-                                    <div class="col-lg-12" style="background-color: #569b92;"><input type="checkbox"
-                                            id="group7">總經理:</div>
+
+                                    <div class="col-lg-12" style="background-color: #569b92;">
+                                        <input type="checkbox"   id="group8">總經理:
+                                    </div>
                                     <c:forEach varStatus="loop" begin="0" end="${admin.size()}" items="${admin}"
                                         var="s">
                                         <c:if test="${s.department == '總經理'}">
                                             <div class="col-lg-4">
-                                                <input type="checkbox" name="adviceto" id="${s.name}" class="group7"
+                                                <input type="checkbox" name="adviceto" id="${s.name}" class="group8"
                                                     value="${s.adminid}"><label for="${s.name}">${s.name}
                                                 </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
                                             </div>
                                         </c:if>
                                     </c:forEach><br>
@@ -446,6 +440,7 @@
                                 var $group5 = $(".group5");
                                 var $group6 = $(".group6");
                                 var $group7 = $(".group7");
+                                var $group8 = $(".group8");
                                 // 勾選單項
                                 $("input[name='adviceto']").change(function () {
                                     var $aa = $("input[name='adviceto']:checked");
@@ -479,15 +474,20 @@
                                     var $zx = $(".group7:checked");
                                     $("#group7").prop("checked", $zx.length == $group7.length);
                                 });
+                                $(".group8").change(function () {
+                                    var $zx = $(".group8:checked");
+                                    $("#group8").prop("checked", $zx.length == $group8.length);
+                                });
                                 // 勾選全部
                                 $("#all").change(function () {
                                     $("input[type='checkbox']").prop("checked", this.checked);
                                 });
+                                // 勾選部門
                                 $("#group1").change(function () {
                                     $group1.prop("checked", this.checked);
                                     var $aa = $("input[name='adviceto']:checked");
                                     $("#all").prop("checked", $aa.length == $all.length);
-                                });
+                                });                                
                                 $("#group2").change(function () {
                                     $group2.prop("checked", this.checked);
                                     var $aa = $("input[name='adviceto']:checked");
@@ -515,6 +515,11 @@
                                 });
                                 $("#group7").change(function () {
                                     $group7.prop("checked", this.checked);
+                                    var $aa = $("input[name='adviceto']:checked");
+                                    $("#all").prop("checked", $aa.length == $all.length);
+                                });
+                                $("#group8").change(function () {
+                                    $group8.prop("checked", this.checked);
                                     var $aa = $("input[name='adviceto']:checked");
                                     $("#all").prop("checked", $aa.length == $all.length);
                                 });
@@ -618,7 +623,7 @@
                     success: function (json) {
                         alert(json);
                         if ("${bean.billboardid}" == "") {
-                            location.href = '${pageContext.request.contextPath}/system/billboard.jsp';
+                            location.href = '${pageContext.request.contextPath}/system/NewBillboard.jsp';
                             console.log("ddd" + "${bean.billboardid}");
                         } else {
                             location.href = '${pageContext.request.contextPath}/system/billboard/${bean.billboardid}';
@@ -645,7 +650,7 @@
                     success: function (json) {
                         alert(json);
                         if ("${bean.billboardid}" == "") {
-                            location.href = '${pageContext.request.contextPath}/system/billboard.jsp';
+                            location.href = '${pageContext.request.contextPath}/system/NewBillboard.jsp.jsp';
                         }
                         else {
                             location.href = '${pageContext.request.contextPath}/system/billboard/${bean.billboardid}';
@@ -723,6 +728,7 @@
           
             upfile = function (i) {
                 var formData = new FormData($(".uppdf")[0]);
+                console.log(formData);
                 $.ajax({
                     url: '${pageContext.request.contextPath}/upFile/${uuid}',//接受請求的Servlet地址
                     type: 'POST',

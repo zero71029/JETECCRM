@@ -35,8 +35,28 @@ public class BillboardReplyBean {
 	@JsonIgnore
 	@OneToMany(targetEntity = ReplyAdviceBbean.class ,mappedBy = "replyid", cascade = CascadeType.ALL)
 	private List<BillboardReplyBean> advice;
+	//留言附件
+	@JsonIgnore
+	@OneToMany(targetEntity = ReplyFileBean.class ,mappedBy = "replyid", cascade = CascadeType.ALL)
+	private List<ReplyFileBean> file;
 	
 	
+	
+	
+	
+	
+	public List<BillboardReplyBean> getAdvice() {
+		return advice;
+	}
+	public void setAdvice(List<BillboardReplyBean> advice) {
+		this.advice = advice;
+	}
+	public List<ReplyFileBean> getFile() {
+		return file;
+	}
+	public void setFile(List<ReplyFileBean> file) {
+		this.file = file;
+	}
 	public List<BillboardReplyBean> getReply() {
 		return reply;
 	}

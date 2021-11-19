@@ -371,10 +371,12 @@ public class SystemService {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //儲存公佈欄留言
-	public boolean SaveReply(BillboardReplyBean bean) {
+	public BillboardReplyBean SaveReply(BillboardReplyBean bean) {
 		if (bean.getReplyid() == null || bean.getReplyid().length() == 0)bean.setReplyid(zTools.getUUID());
-			billboardReplyRepository.save(bean);
-		return true;
+		// 插入換行
+		String content = bean.getContent();
+		bean.setContent(content.replaceAll("\\n", "<br>"));
+		return billboardReplyRepository.save(bean);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
